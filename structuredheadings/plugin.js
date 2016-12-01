@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 (function () {
-	CKEDITOR.plugins.add('structuredheadings', {
-		init: function (editor) {
+  CKEDITOR.plugins.add("structuredheadings", {
+    init: function (editor) {
 
-		}
-	});
+    }
+  });
 })();

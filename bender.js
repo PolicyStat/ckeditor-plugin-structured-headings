@@ -24,39 +24,39 @@
  */
 
 var config = {
-    applications: {
-        ckeditor: {
-            path: 'ckeditor/',
-            files: [
-                'ckeditor.js',
-            ],
-        },
-    },
+  applications: {
+    ckeditor: {
+      path: "ckeditor/",
+      files: [
+        "ckeditor.js"
+      ]
+    }
+  },
 
-    framework: 'yui', // use for entire project
+  framework: "yui", // use for entire project
 
-    plugins: [
-        'benderjs-yui',
-        'benderjs-jquery',
-        'benderjs-sinon',
-        'ckeditor/tests/_benderjs/ckeditor'
-    ],
+  plugins: [
+    "benderjs-yui",
+    "benderjs-jquery",
+    "benderjs-sinon",
+    "ckeditor/tests/_benderjs/ckeditor"
+  ],
 
-    tests: {
-        structureheadings: {
-            applications: ['ckeditor'],
-            basePath: 'tests/',
-            paths: [
-                'smoke/**',
-                'structuredheadings/**',
-                '!**/_*/**'
-            ],
+  tests: {
+    structureheadings: {
+      applications: ["ckeditor"],
+      basePath: "tests/",
+      paths: [
+        "smoke/**",
+        "structuredheadings/**",
+        "!**/_*/**"
+      ],
             // Latest of the old API (1.8.3)
             // Latest of the 1.* branch
             // Latest of the 2.* branch
-            jQuery: ['1.8.3', '1.11.1', '2.1.1']
-        }
+      jQuery: ["1.8.3", "1.11.1", "2.1.1"]
     }
+  }
 
 };
 
