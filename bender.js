@@ -26,11 +26,11 @@
 var config = {
     applications: {
         ckeditor: {
-            path: '.',
+            path: 'ckeditor/',
             files: [
                 'ckeditor.js',
-            ]
-        }
+            ],
+        },
     },
 
     framework: 'yui', // use for entire project
@@ -39,7 +39,7 @@ var config = {
         'benderjs-yui',
         'benderjs-jquery',
         'benderjs-sinon',
-        'tests/_benderjs/ckeditor'
+        'ckeditor/tests/_benderjs/ckeditor'
     ],
 
     tests: {
