@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "bender run",
-    "symlink-plugin-to-ckeditor": "ln -s structuredheadings ckeditor/plugins/structuredheadings"
+    "symlink-plugin-to-ckeditor": "ln -s ../../structuredheadings ckeditor/plugins/structuredheadings"
   },
   "author": "",
   "license": "MIT",
