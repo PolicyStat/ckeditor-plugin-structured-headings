@@ -7,6 +7,8 @@
   },
   "scripts": {
     "test": "bender run",
+    "lint": "eslint --format compact .",
+    "fix-lint": "eslint --fix --format compact .",
     "symlink-plugin-to-ckeditor": "ln -s ../../structuredheadings ckeditor/plugins/structuredheadings"
   },
   "author": "",
@@ -17,6 +19,18 @@
     "benderjs-cli": "^0.1.1",
     "benderjs-jquery": "^0.3.0",
     "benderjs-sinon": "^0.3.1",
-    "benderjs-yui": "^0.3.3"
+    "benderjs-yui": "^0.3.3",
+    "eslint": "^3.10.1",
+    "eslint-config-walmart": "^1.1.0",
+    "eslint-plugin-filenames": "^1.1.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "walmart/configurations/es5-browser"
+    ],
+    "globals": {
+      "CKEDITOR": false,
+      "bender": false
+    }
   }
 }
