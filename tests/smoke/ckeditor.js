@@ -3,13 +3,12 @@
 
 // Clean up all instances been created on the page.
 (function () {
-  "use strict";
-  function removeAllInstances() {
+  var removeAllInstances = function () {
     var allInstances = CKEDITOR.instances;
     for (var i in allInstances) {
       CKEDITOR.remove(allInstances[i]);
     }
-  }
+  };
 
   bender.test({
     setUp: function () {
