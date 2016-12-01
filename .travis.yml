@@ -6,8 +6,9 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - npm run-script symlink-plugin-to-ckeditor
+  - npm install
 env:
-  - TEST_DIR=.
+  - NPM_CMD=test
+  - NPM_CMD=lint
 script: 
-  - npm run-script lint
-  - cd $TEST_DIR && npm install && npm test
+  - npm run-script lint $NPM_CMD
