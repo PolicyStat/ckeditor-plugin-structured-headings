@@ -43,7 +43,7 @@ var config = {
     ],
 
     tests: {
-        detabler: {
+        structureheadings: {
             applications: ['ckeditor'],
             basePath: 'tests/',
             paths: [
