@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * Bender configuration file
  *
@@ -22,6 +23,8 @@
  * @param {Object}   tests              Test groups for the project (Required)
  * @param {Number}   testTimeout        Timeout after which a test will be fetched again
  */
+
+/* eslint-enable max-len */
 
 var config = {
   applications: {
