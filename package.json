@@ -30,7 +30,8 @@
     ],
     "globals": {
       "CKEDITOR": false,
-      "bender": false
+      "bender": false,
+      "assert": false
     }
   }
 }
