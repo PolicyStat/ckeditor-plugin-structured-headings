@@ -8,9 +8,7 @@
 					/* Get all header elements and assign classes
 					 * only if needed
 					 */
-					assignClassToList(editor.document.find('h1'));
-					assignClassToList(editor.document.find('h2'));
-					assignClassToList(editor.document.find('h3'));
+					assignClassToList(editor.document.find('h1,h2. h3'));
 				}
 			});
 			
