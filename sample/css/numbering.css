@@ -1,0 +1,24 @@
+/* Stuff for Counters */
+body {
+    counter-rest: h1 h2 h3;
+}
+h1.autonumber {
+    counter-increment: h1;
+    counter-reset: h2;
+}
+h1.autonumber:before {
+	content: "Section " counter(h1) ": ";
+}
+h2.autonumber {
+	counter-increment: h2;
+	counter-reset: h3;
+}
+h2.autonumber:before {
+	content: "Section " counter(h1) "." counter(h2) ": ";
+}
+h3.autonumber {
+	counter-increment: h3;
+}
+h3.autonumber:before {
+	content: "Section " counter(h1) "." counter(h2) "." counter(h3) ": ";
+}
