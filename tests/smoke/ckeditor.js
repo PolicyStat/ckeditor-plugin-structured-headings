@@ -1,5 +1,5 @@
 /* bender-tags: editor */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles */
 
 // Clean up all instances been created on the page.
 (function () {
@@ -11,16 +11,16 @@
   };
 
   bender.test({
-    setUp: () => {
+    setUp: function() {
       removeAllInstances();
     },
 
-    "CKEditor Loads": () => {
-      CKEDITOR.replace("editor1");
-      assert.isObject(CKEDITOR.instances.editor1, "editor instance not found");
+    "CKEditor Loads": function() {
+    	CKEDITOR.replace("editor1");
+    	assert.isObject(CKEDITOR.instances.editor1, "editor instance not found");
     },
     
-    "Structured Headings Plugin Available": () => {
+    "Structured Headings Plugin Available": function() {
     	assert.isObject(CKEDITOR.plugins.get('structuredheadings'), "plugin not available");
     }
     
