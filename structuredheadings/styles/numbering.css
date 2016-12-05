@@ -1,0 +1,48 @@
+/* Counter Configuration */
+body {
+    counter-reset: h1 h2 h3 h4 h5 h6;
+}
+h1.autonumber {
+    counter-increment: h1;
+    counter-reset: h2;
+}
+h2.autonumber {
+	counter-increment: h2;
+	counter-reset: h3;
+}
+h3.autonumber {
+	counter-increment: h3;
+	counter-reset: h4;
+}
+h4.autonumber {
+	counter-increment: h4;
+	counter-reset: h5;
+}
+h5.autonumber {
+	counter-increment: h5;
+	counter-reset: h6;
+}
+h6.autonumber {
+	counter-increment: h6;
+}
+
+
+/* Counter Content */
+h1.autonumber:before {
+    content: "Section " counter(h1) ": ";
+}
+h2.autonumber:before {
+    content: "Section " counter(h1) "." counter(h2) ": ";
+}
+h3.autonumber:before {
+    content: "Section " counter(h1) "." counter(h2) "." counter(h3) ": ";
+}
+h4.autonumber:before {
+    content: "Section " counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) ": ";
+}
+h5.autonumber:before {
+    content: "Section " counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ": ";
+}
+h6.autonumber:before {
+    content: "Section " counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ": ";
+}
