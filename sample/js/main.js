@@ -1,11 +1,10 @@
-CKEDITOR.config.extraPlugins = 'structuredheadings';
+CKEDITOR.config.extraPlugins = "structuredheadings";
 
 var initSample = ( function() {
 
-	return function() {
-		var editorElement = CKEDITOR.document.getById( 'editor' );
-		CKEDITOR.replace( 'editor');
-	};
-
+    return function() {
+      var editorElement = CKEDITOR.document.getById("editor");
+      CKEDITOR.replace("editor");
+    };
 })();
 

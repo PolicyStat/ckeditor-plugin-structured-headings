@@ -16,13 +16,12 @@
     },
 
     "CKEditor Loads": function() {
-    	CKEDITOR.replace("editor1");
-    	assert.isObject(CKEDITOR.instances.editor1, "editor instance not found");
+      CKEDITOR.replace("editor1");
+      assert.isObject(CKEDITOR.instances.editor1, "editor instance not found");
     },
     
     "Structured Headings Plugin Available": function() {
-    	assert.isObject(CKEDITOR.plugins.get('structuredheadings'), "plugin not available");
+      assert.isObject(CKEDITOR.plugins.get("structuredheadings"), "plugin not available");
     }
-    
   });
 })();
