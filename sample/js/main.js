@@ -3,5 +3,4 @@ CKEDITOR.config.extraPlugins = "structuredheadings";
 
 var initSample = function () {
   CKEDITOR.replace("editor");
-  return;
 };
