@@ -65,8 +65,6 @@
         }
 
       });
-
-      return editor; // actually, no return is required, but this shuts eslint up
     }
   });
 })();
