@@ -54,7 +54,7 @@
       // On/off for element style, disabled for invalid element
       editor.on("selectionChange", function (e) {
         var element = e.data.selection.getStartElement();
-        if (allowedElements.indexOf(element.$.localName.toString()) >= 0) {
+        if (allowedElements.indexOf(element.getName()) >= 0) {
           if (element.hasClass("autonumber")) {
               setCommandState("on");
           } else {
