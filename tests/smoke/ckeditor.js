@@ -53,6 +53,38 @@
         "autoNumberHeading DISABLEd in P"
       );
 
+    },
+
+    "Command Adds Class, Sets State On": function () {
+      this.editorBot.setHtmlWithSelection("<h1>^Heading</h1>");
+      var testCommand = this.editor.getCommand("autoNumberHeading");
+      this.editorBot.execCommand("autoNumberHeading");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
+	"<h1 class=\"autonumber\">^Heading</h1>", updatedContent,
+	"CSS class applied"
+      );
+      assert.areSame(
+	CKEDITOR.TRISTATE_ON, testCommand.state,
+	"autoNumberHeading ON"
+      );
+    },
+
+    "Command Removes Class, Sets State Off": function () {
+      this.editorBot.setHtmlWithSelection("<h1 class='autonumber'>^Heading</h1>");
+      var testCommand = this.editor.getCommand("autoNumberHeading");
+      this.editorBot.execCommand("autoNumberHeading");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
+          "<h1>^Heading</h1>", updatedContent,
+          "CSS class removed"
+        );
+      assert.areSame(
+          CKEDITOR.TRISTATE_OFF, testCommand.state,
+          "autoNumberHeading OFF"
+        );
     }
 
   });
