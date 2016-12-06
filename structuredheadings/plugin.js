@@ -8,7 +8,7 @@
       editor.addContentsCss(this.path + "styles/numbering.css");
 
       // Helper function to set button state
-      var setState = function (state) {
+      var setCommandState = function (state) {
         switch (state) {
         case "on":
           editor.getCommand("autoNumberHeading").setState(CKEDITOR.TRISTATE_ON);
@@ -33,10 +33,10 @@
 
           if (!element.hasClass("autonumber")) {
             element.addClass("autonumber");
-            setState("on");
+            setCommandState("on");
           } else {
             element.removeClass("autonumber");
-            setState("off");
+            setCommandState("off");
           }
         }
       });
@@ -56,12 +56,12 @@
         var element = e.data.selection.getStartElement();
         if (allowedElements.indexOf(element.$.localName.toString()) >= 0) {
           if (element.hasClass("autonumber")) {
-            setState("on");
+              setCommandState("on");
           } else {
-            setState("off");
+              setCommandState("off");
           }
         } else {
-          setState("disabled");
+            setCommandState("disabled");
         }
 
       });
