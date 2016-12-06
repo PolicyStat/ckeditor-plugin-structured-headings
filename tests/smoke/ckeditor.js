@@ -23,13 +23,8 @@
     },
 
     "Command Active but Off Inside Header Tag": function () {
-      this.editorBot.setHtmlWithSelection("<h1>Heading</h1>");
+      this.editorBot.setHtmlWithSelection("<h1>^Heading</h1>");
       var testCommand = this.editor.getCommand("autoNumberHeading");
-
-        // This is the only way I've found to position the cursor in the element
-      var range = this.editor.createRange();
-      range.moveToElementEditablePosition(this.editor.editable(), true);
-      this.editor.getSelection().selectRanges([ range ]);
 
       assert.areSame(
         CKEDITOR.TRISTATE_OFF, testCommand.state,
@@ -39,13 +34,8 @@
     },
 
     "Command Active and On Inside AutoNumbered Header": function () {
-      this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber\">Heading</h1>");
+      this.editorBot.setHtmlWithSelection("<h1 class='autonumber'>^Heading</h1>");
       var testCommand = this.editor.getCommand("autoNumberHeading");
-
-        // This is the only way I've found to position the cursor in the element
-      var range = this.editor.createRange();
-      range.moveToElementEditablePosition(this.editor.editable(), true);
-      this.editor.getSelection().selectRanges([ range ]);
 
       assert.areSame(
         CKEDITOR.TRISTATE_ON, testCommand.state,
@@ -55,13 +45,8 @@
     },
 
     "Command Disabled Outside Header": function () {
-      this.editorBot.setHtmlWithSelection("<p> Paragraph </p>");
+      this.editorBot.setHtmlWithSelection("<p>^Paragraph</p>");
       var testCommand = this.editor.getCommand("autoNumberHeading");
-
-        // This is the only way I've found to position the cursor in the element
-      var range = this.editor.createRange();
-      range.moveToElementEditablePosition(this.editor.editable(), true);
-      this.editor.getSelection().selectRanges([ range ]);
 
       assert.areSame(
         CKEDITOR.TRISTATE_DISABLED, testCommand.state,
@@ -69,5 +54,6 @@
       );
 
     }
+
   });
 })();
