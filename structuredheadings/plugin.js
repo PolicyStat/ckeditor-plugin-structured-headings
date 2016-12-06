@@ -56,12 +56,12 @@
         var element = e.data.selection.getStartElement();
         if (allowedElements.indexOf(element.getName()) >= 0) {
           if (element.hasClass("autonumber")) {
-              setCommandState("on");
+            setCommandState("on");
           } else {
-              setCommandState("off");
+            setCommandState("off");
           }
         } else {
-            setCommandState("disabled");
+          setCommandState("disabled");
         }
 
       });
