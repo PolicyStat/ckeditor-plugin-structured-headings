@@ -1,17 +1,6 @@
-CKEDITOR.config.extraPlugins = 'structuredheadings';
-CKEDITOR.config.contentsCss = './css/numbering.css';
-CKEDITOR.config.allowedContent = true;
+/* exported initSample */
+CKEDITOR.config.extraPlugins = "structuredheadings";
 
-var initSample = ( function() {
-
-	var isStructuredHeadingsAvailable = () => {
-		return !!CKEDITOR.plugins.get('structuredheadings');
-	};
-
-	return function() {
-		var editorElement = CKEDITOR.document.getById( 'editor' );
-		CKEDITOR.replace( 'editor');
-	};
-
-})();
-
+var initSample = function () {
+  CKEDITOR.replace("editor");
+};
