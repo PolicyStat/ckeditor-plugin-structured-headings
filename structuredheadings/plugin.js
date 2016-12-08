@@ -52,7 +52,8 @@
         startDisabled: true,
         exec: function () {
           var element = editor.getSelection().getStartElement();
-        //find previous element that matches allowedElements
+          var style;
+          //find previous element that matches allowedElements
           var previousHeader = element.getPrevious(function (node) {
             if (allowedElements.indexOf(node.getName()) >= 0) {
               return true;
@@ -61,20 +62,29 @@
             }
           });
 
-        //Get previous element style (type) and apply to current selection, otherwise new H1
-          if (previousHeader) {
+          // if already in header, set back to p
+          if (allowedElements.indexOf(element.getName()) >= 0) {
             //eslint-disable-next-line new-cap
-            var style = new CKEDITOR.style({ element: previousHeader.getName()});
-          // if previous was numbered, set the new  one to numbered also
+            style = new CKEDITOR.style({ element: "p" });
+            editor.applyStyle(style);
+
+          // else get previous element style (type) and apply to selection
+          } else if (previousHeader) {
+            //eslint-disable-next-line new-cap
+            style = new CKEDITOR.style({ element: previousHeader.getName()});
+            // if previous was numbered, set the new  one to numbered also
             if (isNumbered(previousHeader)) {
               //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: previousHeader.getName(),
                 attributes: {"class": "autonumber"}});
             }
             editor.applyStyle(style);
+
+          // else set it as new H1 and autonumber
           } else {
             //eslint-disable-next-line new-cap
-            style = new CKEDITOR.style({ element: "h1" });
+            style = new CKEDITOR.style({ element: "h1",
+              attributes: {"class": "autonumber"}});
             editor.applyStyle(style);
           }
 

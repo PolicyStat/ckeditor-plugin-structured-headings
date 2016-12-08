@@ -120,13 +120,13 @@
 
     },
 
-    "MatchHeading Updates P Tag to H1 if No Previous": function () {
+    "MatchHeading Updates P Tag to H1 and autonumber if No Previous": function () {
       this.editorBot.setHtmlWithSelection("<p>^Paragraph</p>");
       this.editorBot.execCommand("matchHeading");
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-        "<h1>^Paragraph</h1>", updatedContent,
+        "<h1 class=\"autonumber\">^Paragraph</h1>", updatedContent,
         "P changed to H1"
       );
 
@@ -163,15 +163,27 @@
     "MatchHeading Does Not Match Previous if Different Parent": function () {
       this.editorBot.setHtmlWithSelection(
         "<h4>Header</h4>" +
-        "<div><p>^Paragraph</p></div>"
+        "<div><h2>SubHeader</h2><p>^Paragraph</p></div>"
       );
       this.editorBot.execCommand("matchHeading");
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
         "<h4>Header</h4>" +
-        "<div><h1>^Paragraph</h1></div>", updatedContent,
+        "<div><h2>SubHeader</h2><h2>^Paragraph</h2></div>", updatedContent,
         "P Only Matches Siblings"
+      );
+
+    },
+
+    "MatchHeading Updates Header Tag back to P": function () {
+      this.editorBot.setHtmlWithSelection("<h6>^Header</h6>");
+      this.editorBot.execCommand("matchHeading");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
+        "<p>^Header</p>", updatedContent,
+        "H6 changed back to P"
       );
 
     }
