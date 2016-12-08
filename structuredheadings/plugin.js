@@ -63,16 +63,18 @@
 
         //Get previous element style (type) and apply to current selection, otherwise new H1
           if (previousHeader) {
-            var StyleHack = CKEDITOR.style; //stupid Lint
-            var style = new StyleHack({ element: previousHeader.getName()});
+            //eslint-disable-next-line new-cap
+            var style = new CKEDITOR.style({ element: previousHeader.getName()});
           // if previous was numbered, set the new  one to numbered also
             if (isNumbered(previousHeader)) {
-              style = new StyleHack({ element: previousHeader.getName(),
+              //eslint-disable-next-line new-cap
+              style = new CKEDITOR.style({ element: previousHeader.getName(),
                 attributes: {"class": "autonumber"}});
             }
             editor.applyStyle(style);
           } else {
-            style = new StyleHack({ element: "h1" });
+            //eslint-disable-next-line new-cap
+            style = new CKEDITOR.style({ element: "h1" });
             editor.applyStyle(style);
           }
 
