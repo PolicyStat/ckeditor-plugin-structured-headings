@@ -3,7 +3,14 @@
     icons: "autonumberheading, matchheading",
     init: function (editor) {
       // list of elements allowed to be numbered
-      var allowedElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
+      var allowedElements = {
+        h1: 1,
+        h2: 1,
+        h3: 1,
+        h4: 1,
+        h5: 1,
+        h6: 1
+      };
 
       editor.addContentsCss(this.path + "styles/numbering.css");
 
@@ -31,12 +38,39 @@
         }
       };
 
+      var getCurrentBlock = function (element) {
+        return element.getAscendant({
+          div: 1,
+          p: 1,
+          pre: 1,
+          address: 1,
+          h1: 1,
+          h2: 1,
+          h3: 1,
+          h4: 1,
+          h5: 1,
+          h6: 1
+        }, true);
+      };
+
+      var getPreviousHeader = function (element) {
+        return element.getPrevious(function (node) {
+          if (node.type === CKEDITOR.NODE_ELEMENT &&
+              node.is(allowedElements)
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+      };
+
       // The command to add an autonumbering class to selection
       editor.addCommand("autoNumberHeading", {
         allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*)",
         startDisabled: true,
         exec: function () {
-          var element = editor.getSelection().getStartElement();
+          var element = getCurrentBlock(editor.getSelection().getStartElement());
 
           if (!isNumbered(element)) {
             element.addClass("autonumber");
@@ -51,21 +85,24 @@
       editor.addCommand("matchHeading", {
         startDisabled: true,
         exec: function () {
-          var element = editor.getSelection().getStartElement();
+          var element = getCurrentBlock(editor.getSelection().getStartElement());
           var style;
           //find previous element that matches allowedElements
-          var previousHeader = element.getPrevious(function (node) {
-            if (allowedElements.indexOf(node.getName()) >= 0) {
-              return true;
-            } else {
-              return false;
-            }
-          });
+          var previousHeader = getPreviousHeader(element);
 
-          // if already in header, set back to p
-          if (allowedElements.indexOf(element.getName()) >= 0) {
-            //eslint-disable-next-line new-cap
-            style = new CKEDITOR.style({ element: "p" });
+          // if already in header, set back to default
+          if (element.is(allowedElements)) {
+            switch (editor.config.enterMode) {
+            case CKEDITOR.ENTER_DIV:
+                  //eslint-disable-next-line new-cap
+              style = new CKEDITOR.style({ element: "div" });
+              break;
+            default:
+                  //eslint-disable-next-line new-cap
+              style = new CKEDITOR.style({ element: "p" });
+              element.removeClass("autonumber");
+              break;
+            }
             editor.applyStyle(style);
 
           // else get previous element style (type) and apply to selection
@@ -110,9 +147,9 @@
       * On/off for element style, disabled for invalid element
       */
       editor.on("selectionChange", function (e) {
-        var element = e.data.selection.getStartElement();
+        var element = getCurrentBlock(e.data.selection.getStartElement());
 
-        if (allowedElements.indexOf(element.getName()) >= 0) {
+        if (element && element.is(allowedElements)) {
           //if is autonumbered, update state appropriately
           if (isNumbered(element)) {
             setCommandState("autoNumberHeading", "on");
@@ -127,7 +164,7 @@
         * this is to allow toggleHeading active on p tags without including it in
         * our allowedElements for autonumbering
         */
-        } else if (element.getName() === "p") {
+        } else if (element && element.is("p")) {
           setCommandState("matchHeading", "off");
           setCommandState("autoNumberHeading", "disabled");
         //disable otherwise

@@ -109,13 +109,13 @@
 
     },
 
-    "MatchHeading Disabled Inside Span Tag": function () {
-      this.editorBot.setHtmlWithSelection("<span>^Span</span>");
+    "Plugin Selects Enclosing Block-ish Tag": function () {
+      this.editorBot.setHtmlWithSelection("<p><span><strong>^Span</strong></span></p>");
       var testCommand = this.editor.getCommand("matchHeading");
 
       assert.areSame(
-       CKEDITOR.TRISTATE_DISABLED, testCommand.state,
-       "MatchHeading DISABLED in SPAN"
+       CKEDITOR.TRISTATE_OFF, testCommand.state,
+       "MatchHeading OFF in STRONG in SPAN in P"
       );
 
     },
