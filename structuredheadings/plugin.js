@@ -1,3 +1,4 @@
+/*eslint max-statements: [2, 20]*/ //I'll need to refactor somehow to meet this rule
 (function () {
   CKEDITOR.plugins.add("structuredheadings", {
     icons: "autonumberheading,matchheading,increaseheadinglevel,decreaseheadinglevel",
@@ -64,7 +65,7 @@
           }
         });
       };
-      
+
       //some friendly setup for level changes
       var headerList = Object.keys(allowedElements);
       var firstHeaderKey = 0;
@@ -99,11 +100,11 @@
           if (element.is(allowedElements)) {
             switch (editor.config.enterMode) {
             case CKEDITOR.ENTER_DIV:
-                  //eslint-disable-next-line new-cap
+              //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: "div" });
               break;
             default:
-                  //eslint-disable-next-line new-cap
+              //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: "p" });
               element.removeClass("autonumber");
               break;
@@ -134,7 +135,7 @@
         }
 
       });
-      
+
       editor.addCommand("increaseHeadingLevel", {
         startDisabled: true,
         exec: function () {
@@ -145,7 +146,7 @@
           editor.applyStyle(style);
         }
       });
-      
+
       editor.addCommand("decreaseHeadingLevel", {
         startDisabled: true,
         exec: function () {
@@ -188,7 +189,7 @@
         var element = getCurrentBlock(e.data.selection.getStartElement());
 
         if (element && element.is(allowedElements)) {
-                    
+
           //if is autonumbered, update state appropriately
           if (isNumbered(element)) {
             setCommandState("autoNumberHeading", "on");
@@ -200,12 +201,12 @@
           setCommandState("matchHeading", "on");
           setCommandState("increaseHeadingLevel", "off");
           setCommandState("decreaseHeadingLevel", "off");
-          
+
           //disable level change if start or end of header list..
           if (firstHeaderKey === headerList.indexOf(element.getName())) {
-              setCommandState("decreaseHeadingLevel", "disabled");
+            setCommandState("decreaseHeadingLevel", "disabled");
           } else if (lastHeaderKey === headerList.indexOf(element.getName())) {
-              setCommandState("increaseHeadingLevel", "disabled");
+            setCommandState("increaseHeadingLevel", "disabled");
           }
 
         /* special case for p tags, for toggleHeading command, could be handled better
