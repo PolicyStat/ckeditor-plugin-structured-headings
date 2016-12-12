@@ -50,7 +50,6 @@ var config = {
       applications: ["ckeditor"],
       basePath: "tests/",
       paths: [
-        "smoke/**",
         "structuredheadings/**",
         "!**/_*/**"
       ],
