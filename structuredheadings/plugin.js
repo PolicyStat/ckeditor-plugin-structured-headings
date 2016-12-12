@@ -1,6 +1,6 @@
 (function () {
   CKEDITOR.plugins.add("structuredheadings", {
-    icons: "autonumberheading, matchheading",
+    icons: "autonumberheading,matchheading",
     init: function (editor) {
       // list of elements allowed to be numbered
       var allowedElements = {
@@ -90,7 +90,7 @@
           //find previous element that matches allowedElements
           var previousHeader = getPreviousHeader(element);
 
-          // if already in header, set back to default
+          // if already in header, set back to default based on enter mode
           if (element.is(allowedElements)) {
             switch (editor.config.enterMode) {
             case CKEDITOR.ENTER_DIV:
@@ -107,13 +107,14 @@
 
           // else get previous element style (type) and apply to selection
           } else if (previousHeader) {
-            //eslint-disable-next-line new-cap
-            style = new CKEDITOR.style({ element: previousHeader.getName()});
             // if previous was numbered, set the new  one to numbered also
             if (isNumbered(previousHeader)) {
               //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: previousHeader.getName(),
                 attributes: {"class": "autonumber"}});
+            } else {
+              //eslint-disable-next-line new-cap
+              style = new CKEDITOR.style({ element: previousHeader.getName()});
             }
             editor.applyStyle(style);
 
