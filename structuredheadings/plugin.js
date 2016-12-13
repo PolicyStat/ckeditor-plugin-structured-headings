@@ -1,6 +1,11 @@
+/*eslint max-statements: [2, 25]*/ //I'll need to refactor somehow to meet this rule
 (function () {
   CKEDITOR.plugins.add("structuredheadings", {
-    icons: "autonumberheading,matchheading",
+    icons: "autonumberheading," +
+           "matchheading," +
+           "increaseheadinglevel," +
+           "decreaseheadinglevel",
+
     init: function (editor) {
       // list of elements allowed to be numbered
       var allowedElements = {
@@ -11,6 +16,11 @@
         h5: 1,
         h6: 1
       };
+
+      //some friendly setup for level changes
+      var headerList = ["h1", "h2", "h3", "h4", "h5", "h6"];
+      var firstHeaderKey = 0;
+      var lastHeaderKey = headerList.length - 1;
 
       editor.addContentsCss(this.path + "styles/numbering.css");
 
@@ -94,11 +104,11 @@
           if (element.is(allowedElements)) {
             switch (editor.config.enterMode) {
             case CKEDITOR.ENTER_DIV:
-                  //eslint-disable-next-line new-cap
+              //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: "div" });
               break;
             default:
-                  //eslint-disable-next-line new-cap
+              //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: "p" });
               element.removeClass("autonumber");
               break;
@@ -130,6 +140,38 @@
 
       });
 
+      editor.addCommand("increaseHeadingLevel", {
+        startDisabled: true,
+        exec: function () {
+          var element = getCurrentBlock(editor.getSelection().getStartElement());
+          var nextElement = headerList[headerList.indexOf(element.getName()) + 1];
+
+          //set a maximum level of the previous level + 1
+          var previousHeader = getPreviousHeader(element);
+          if (previousHeader) {
+            var maxElement = headerList[headerList.indexOf(previousHeader.getName()) + 1];
+            if (headerList.indexOf(nextElement) > headerList.indexOf(maxElement)) {
+              nextElement = maxElement;
+            }
+          }
+
+          //eslint-disable-next-line new-cap
+          var style = new CKEDITOR.style({ element: nextElement});
+          editor.applyStyle(style);
+        }
+      });
+
+      editor.addCommand("decreaseHeadingLevel", {
+        startDisabled: true,
+        exec: function () {
+          var element = getCurrentBlock(editor.getSelection().getStartElement());
+          var prevElement = headerList[headerList.indexOf(element.getName()) - 1];
+          //eslint-disable-next-line new-cap
+          var style = new CKEDITOR.style({ element: prevElement});
+          editor.applyStyle(style);
+        }
+      });
+
       // Add the button to the toolbar only if toolbar plugin or button plugin is loaded
       if (!!CKEDITOR.plugins.get("toolbar") || !!CKEDITOR.plugins.get("button")) {
         editor.ui.addButton("autonumberheading", {
@@ -142,6 +184,16 @@
           command: "matchHeading",
           toolbar: "styles,1"
         });
+        editor.ui.addButton("increaseheadinglevel", {
+          label: "Increase Heading Level",
+          command: "increaseHeadingLevel",
+          toolbar: "styles,2"
+        });
+        editor.ui.addButton("decreaseheadinglevel", {
+          label: "Decrease Heading Level",
+          command: "decreaseHeadingLevel",
+          toolbar: "styles,3"
+        });
       }
 
       /* Set button state on selection change.
@@ -151,6 +203,7 @@
         var element = getCurrentBlock(e.data.selection.getStartElement());
 
         if (element && element.is(allowedElements)) {
+
           //if is autonumbered, update state appropriately
           if (isNumbered(element)) {
             setCommandState("autoNumberHeading", "on");
@@ -160,6 +213,24 @@
 
           // if it's any header, turn set toggle heading on
           setCommandState("matchHeading", "on");
+          setCommandState("increaseHeadingLevel", "off");
+          setCommandState("decreaseHeadingLevel", "off");
+
+          //disable level change if start or end of header list..
+          if (firstHeaderKey === headerList.indexOf(element.getName())) {
+            setCommandState("decreaseHeadingLevel", "disabled");
+          } else if (lastHeaderKey === headerList.indexOf(element.getName())) {
+            setCommandState("increaseHeadingLevel", "disabled");
+          }
+
+          //disable increase if already 1 level from of previous
+          var previousHeader = getPreviousHeader(element);
+          if (previousHeader) {
+            if (element.getName() ===
+                headerList[headerList.indexOf(previousHeader.getName()) + 1]) {
+              setCommandState("increaseHeadingLevel", "disabled");
+            }
+          }
 
         /* special case for p tags, for toggleHeading command, could be handled better
         * this is to allow toggleHeading active on p tags without including it in
@@ -168,6 +239,8 @@
         } else if (element && element.is("p")) {
           setCommandState("matchHeading", "off");
           setCommandState("autoNumberHeading", "disabled");
+          setCommandState("decreaseHeadingLevel", "disabled");
+          setCommandState("increaseHeadingLevel", "disabled");
         //disable otherwise
         } else {
           setCommandState("autoNumberHeading", "disabled");
