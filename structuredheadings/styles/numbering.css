@@ -26,6 +26,10 @@ h6.autonumber {
 	counter-increment: h6;
 }
 
+h1.autonumber-restart {
+	counter-reset: h1;
+}
+
 
 /* Counter Content */
 h1.autonumber:before {

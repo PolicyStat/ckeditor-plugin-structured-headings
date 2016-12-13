@@ -1,10 +1,11 @@
-/*eslint max-statements: [2, 25]*/ //I'll need to refactor somehow to meet this rule
+/*eslint max-statements: [2, 50]*/ //I'll need to refactor somehow to meet this rule
 (function () {
   CKEDITOR.plugins.add("structuredheadings", {
     icons: "autonumberheading," +
            "matchheading," +
            "increaseheadinglevel," +
-           "decreaseheadinglevel",
+           "decreaseheadinglevel," +
+           "restartNumbering",
 
     init: function (editor) {
       // list of elements allowed to be numbered
@@ -172,27 +173,48 @@
         }
       });
 
+      editor.addCommand("restartNumbering", {
+        startDisabled: true,
+        exec: function () {
+          var element = getCurrentBlock(editor.getSelection().getStartElement());
+
+          if (!element.hasClass("autonumber-restart")) {
+            element.addClass("autonumber");
+            element.addClass("autonumber-restart");
+            setCommandState("restartNumbering", "on");
+          } else {
+            element.removeClass("autonumber-restart");
+            setCommandState("restartNumbering", "off");
+          }
+        }
+      });
+
       // Add the button to the toolbar only if toolbar plugin or button plugin is loaded
       if (!!CKEDITOR.plugins.get("toolbar") || !!CKEDITOR.plugins.get("button")) {
-        editor.ui.addButton("autonumberheading", {
+        editor.ui.addButton("autoNumberHeading", {
           label: "Autonumber Heading",
           command: "autoNumberHeading",
           toolbar: "styles,0"
         });
-        editor.ui.addButton("matchheading", {
-          label: "Match Heading",
-          command: "matchHeading",
+        editor.ui.addButton("restartNumbering", {
+          label: "Restart Numbering",
+          command: "restartNumbering",
           toolbar: "styles,1"
         });
-        editor.ui.addButton("increaseheadinglevel", {
-          label: "Increase Heading Level",
-          command: "increaseHeadingLevel",
+        editor.ui.addButton("matchHeading", {
+          label: "Match Heading",
+          command: "matchHeading",
           toolbar: "styles,2"
         });
-        editor.ui.addButton("decreaseheadinglevel", {
+        editor.ui.addButton("increaseHeadingLevel", {
+          label: "Increase Heading Level",
+          command: "increaseHeadingLevel",
+          toolbar: "styles,3"
+        });
+        editor.ui.addButton("decreaseHeadingLevel", {
           label: "Decrease Heading Level",
           command: "decreaseHeadingLevel",
-          toolbar: "styles,3"
+          toolbar: "styles,4"
         });
       }
 
@@ -209,6 +231,16 @@
             setCommandState("autoNumberHeading", "on");
           } else {
             setCommandState("autoNumberHeading", "off");
+          }
+
+          if (element.getName() === "h1") {
+            if (element.hasClass("autonumber-restart")) {
+              setCommandState("restartNumbering", "on");
+            } else {
+              setCommandState("restartNumbering", "off");
+            }
+          } else {
+            setCommandState("restartNumbering", "disabled");
           }
 
           // if it's any header, turn set toggle heading on
@@ -241,10 +273,12 @@
           setCommandState("autoNumberHeading", "disabled");
           setCommandState("decreaseHeadingLevel", "disabled");
           setCommandState("increaseHeadingLevel", "disabled");
+          setCommandState("restartNumbering", "disabled");
         //disable otherwise
         } else {
           setCommandState("autoNumberHeading", "disabled");
           setCommandState("matchHeading", "disabled");
+          setCommandState("restartNumbering", "disabled");
         }
 
       });
