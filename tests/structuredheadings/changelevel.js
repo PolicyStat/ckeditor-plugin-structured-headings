@@ -102,6 +102,16 @@
         "<h3 class=\"autonumber\">^Heading</h3>", updatedContent,
         "Header Increased with Numbering Intact"
           );
+    },
+
+    "Increase disabled if already at Previous + 1": function () {
+      this.editorBot.setHtmlWithSelection("<h1>Previous</h1><h2>^Heading</h2>");
+      var testCommand = this.editor.getCommand("increaseHeadingLevel");
+
+      assert.areSame(
+            CKEDITOR.TRISTATE_DISABLED, testCommand.state,
+            "increaseHeaderLevel DISABLED in previous +1"
+          );
     }
 
   });
