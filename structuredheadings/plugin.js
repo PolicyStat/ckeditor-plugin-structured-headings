@@ -1,5 +1,42 @@
 (function () {
 /*
+ * Style Config
+ */
+ 
+  CKEDITOR.config.autonumber_baseClass = "autonumber";
+  CKEDITOR.config.autonumber_styles = {
+    Narara: {
+      h1: "autonumber-N",
+      h2: "autonumber-a",
+      h3: "autonumber-r",
+      h4: "autonumber-a",
+      h5: "autonumber-r",
+      h6: "autonumber-a"
+    },
+    Aarara: {
+      h1: "autonumber-A",
+      h2: "autonumber-a",
+      h3: "autonumber-r",
+      h4: "autonumber-a",
+      h5: "autonumber-r",
+      h6: "autonumber-a"
+    },
+    RANaNa: {
+      h1: "autonumber-R",
+      h2: "autonumber-A",
+      h3: "autonumber-N",
+      h4: "autonumber-a",
+      h5: "autonumber-N",
+      h6: "autonumber-a"
+    }
+  };
+  CKEDITOR.config.autonumber_currentStyle = null; //hold current style or null if default
+  
+  var baseClass = CKEDITOR.config.autonumber_baseClass;
+  var styleList = CKEDITOR.config.autonumber_styles;
+  var currentStyle = CKEDITOR.config.autonumber_currentStyle;
+
+/*
  * Helper Functions
  */
 
@@ -18,8 +55,29 @@
   var firstHeaderKey = 0;
   var lastHeaderKey = headerList.length - 1;
 
+//style helpers
+
+
+  var clearStyles = function (element) {
+    for (var styleName in styleList) {
+      var style = styleList[styleName];
+      for (var className in style) {
+        element.removeClass(className);
+      }
+    }
+  };
+  
+  var setStyle = function (element, styleName) {
+    var elementType = element.getName();
+    var style = styleList[styleName];
+    if(elementType && style) {
+      clearStyles(element);
+      element.addClass(style[elementType]);
+    }
+  };
+  
   var isNumbered = function (element) {
-    if (element.hasClass("autonumber")) {
+    if (element.hasClass(baseClass)) {
       return true;
     } else {
       return false;
@@ -41,7 +99,7 @@
 /*
  * Structured Headings Plugin Setup
  */
-
+ 
   CKEDITOR.plugins.add("structuredheadings", {
     icons: "autonumberheading," +
          "matchheading," +
@@ -110,9 +168,11 @@
 
           if (!isNumbered(element)) {
             element.addClass("autonumber");
+            setStyle(element, currentStyle);
             this.setState(CKEDITOR.TRISTATE_ON);
           } else {
             element.removeClass("autonumber");
+            clearStyles(element);
             this.setState(CKEDITOR.TRISTATE_OFF);
           }
 
@@ -148,6 +208,7 @@
             case CKEDITOR.ENTER_DIV:
             //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: "div" });
+              element.removeClass("autonumber");
               break;
             default:
             //eslint-disable-next-line new-cap
@@ -169,6 +230,7 @@
               style = new CKEDITOR.style({ element: previousHeader.getName()});
             }
             editor.applyStyle(style);
+            setStyle(element, currentStyle);
 
         // else set it as new H1 and autonumber
           } else {
@@ -176,6 +238,7 @@
             style = new CKEDITOR.style({ element: "h1",
               attributes: {"class": "autonumber"}});
             editor.applyStyle(style);
+            setStyle(element, currentStyle);
           }
         },
         refresh: function (editor, path) {
@@ -211,6 +274,7 @@
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: nextElement});
           editor.applyStyle(style);
+          setStyle(element, currentStyle);
         },
         refresh: function (editor, path) {
           if (path.block && path.block.is(allowedElements)) {
@@ -246,6 +310,7 @@
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: prevElement});
           editor.applyStyle(style);
+          setStyle(element, currentStyle);
         },
         refresh: function (editor, path) {
           if (path.block && path.block.is(allowedElements)) {
@@ -272,6 +337,7 @@
           if (!element.hasClass("autonumber-restart")) {
             element.addClass("autonumber");
             element.addClass("autonumber-restart");
+            setStyle(element, currentStyle);
             this.setState(CKEDITOR.TRISTATE_ON);
           } else {
             element.removeClass("autonumber-restart");
