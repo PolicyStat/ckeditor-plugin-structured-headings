@@ -20,17 +20,15 @@ CKEDITOR.dialog.add("selectStyle", function (editor) {
         elements: [
           {
             type: "radio",
-            id: "style",
-            label: "Styles",
-            items: styleOptions,
-            default: null
+            id: "styleChooser",
+            items: styleOptions
           }
         ]
       }
     ],
     onOk: function () {
-      var style = this.getValueOf("tab-style", "style");
-      CKEDITOR.config.autonumberCurrentStyle = style;
+      var style = this.getValueOf("tab-style", "styleChooser");
+      editor.execCommand("setCurrentStyle", style);
       editor.execCommand("reapplyStyle");
     }
   };
