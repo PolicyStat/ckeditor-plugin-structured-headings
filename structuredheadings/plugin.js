@@ -3,9 +3,12 @@
  * Style Config
  */
 
-  CKEDITOR.config.autonumberBaseClass = "autonumber";
-  CKEDITOR.config.autonumberRestartClass = "autonumber-restart";
-  CKEDITOR.config.autonumberStyles = {
+  CKEDITOR.config.autonumberBaseClass =
+      CKEDITOR.config.autonumberBaseClass || "autonumber";
+  CKEDITOR.config.autonumberRestartClass = 
+      CKEDITOR.config.autonumberRestartClass || "autonumber-restart";
+  CKEDITOR.config.autonumberStyles = 
+      CKEDITOR.config.autonumberStyles || {
     Narara: {
       h1: "autonumber-N",
       h2: "autonumber-a",
@@ -68,14 +71,14 @@
   };
 
   var setStyle = function (element, styleName) {
-    var elementType = element.getName();
     var style = config.autonumberStyles[styleName];
-    if (elementType) {
+    if(element.type === CKEDITOR.NODE_ELEMENT) {
       clearStyles(element);
+      if (style) {
+        element.addClass(style[element.getName()]);
+      }
     }
-    if (style) {
-      element.addClass(style[elementType]);
-    }
+    
   };
 
   var isNumbered = function (element) {
