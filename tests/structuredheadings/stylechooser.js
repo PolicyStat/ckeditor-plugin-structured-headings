@@ -35,18 +35,18 @@
         "Header Style Applied"
           );
     },
-    
-    "Style removed": function () {
-        this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-A\">^Heading</h1>");
-        this.editorBot.execCommand("setCurrentStyle", null);
-        this.editorBot.execCommand("reapplyStyle");
-        var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
-        assert.areSame(
+    "Style removed": function () {
+      this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-A\">^Heading</h1>");
+      this.editorBot.execCommand("setCurrentStyle", null);
+      this.editorBot.execCommand("reapplyStyle");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
           "<h1 class=\"autonumber\">^Heading</h1>", updatedContent,
           "Header Style Removed"
             );
-      }
+    }
 
   });
 })();

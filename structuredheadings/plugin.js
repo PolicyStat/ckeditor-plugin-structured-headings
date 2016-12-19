@@ -31,7 +31,7 @@
       h6: "autonumber-a"
     }
   };
-  
+
   var autonumberCurrentStyle = null; //hold current style or null if default
 
   var config = CKEDITOR.config;
@@ -332,7 +332,7 @@
         startDisabled: true,
         exec: function (editor) {
           var element = editor.elementPath().block;
-          var prevElement = hereapplyStyleaderList[headerList.indexOf(element.getName()) - 1];
+          var prevElement = headerList[headerList.indexOf(element.getName()) - 1];
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: prevElement});
           editor.applyStyle(style);
@@ -382,13 +382,13 @@
           }
         }
       },
-      
+
       /*
        * setCurrentStyle
        */
       setCurrentStyle: {
         exec: function (editor, style) {
-            autonumberCurrentStyle = style;
+          autonumberCurrentStyle = style;
         }
       },
 
