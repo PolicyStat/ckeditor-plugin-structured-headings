@@ -4,7 +4,7 @@ CKEDITOR.dialog.add("selectStyle", function (editor) {
 
   //Build out the style options
   (function () {
-    for (var style in CKEDITOR.config.autonumberStyles) {
+    for (var style in editor.config.autonumberStyles) {
       styleOptions.push([style, style]);
     }
   })();
@@ -29,7 +29,17 @@ CKEDITOR.dialog.add("selectStyle", function (editor) {
     onOk: function () {
       var style = this.getValueOf("tab-style", "styleChooser");
       if (editor.execCommand("setCurrentStyle", style)) {
-         editor.execCommand("reapplyStyle"); 
+        editor.execCommand("reapplyStyle");
+      }
+    },
+    onShow: function () {
+      var document = this.getElement().getDocument();
+      var elementList = document.find("input[value='" +
+              editor.config.autonumberCurrentStyle + "']");
+      if (elementList.count() > 0) {
+        var element = elementList.getItem(0);
+        element.$.checked = true;
+        element.focus();
       }
     }
   };
