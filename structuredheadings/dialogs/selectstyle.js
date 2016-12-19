@@ -29,7 +29,7 @@ CKEDITOR.dialog.add("selectStyle", function (editor) {
     onOk: function () {
       var style = this.getValueOf("tab-style", "styleChooser");
       if (editor.execCommand("setCurrentStyle", style)) {
-         editor.execCommand("reapplyStyle"); 
+        editor.execCommand("reapplyStyle");
       }
     }
   };

@@ -5,35 +5,35 @@
 
   CKEDITOR.config.autonumberBaseClass =
       CKEDITOR.config.autonumberBaseClass || "autonumber";
-  CKEDITOR.config.autonumberRestartClass = 
+  CKEDITOR.config.autonumberRestartClass =
       CKEDITOR.config.autonumberRestartClass || "autonumber-restart";
-  CKEDITOR.config.autonumberStyles = 
+  CKEDITOR.config.autonumberStyles =
       CKEDITOR.config.autonumberStyles || {
-    Narara: {
-      h1: "autonumber-N",
-      h2: "autonumber-a",
-      h3: "autonumber-r",
-      h4: "autonumber-a",
-      h5: "autonumber-r",
-      h6: "autonumber-a"
-    },
-    Aarara: {
-      h1: "autonumber-A",
-      h2: "autonumber-a",
-      h3: "autonumber-r",
-      h4: "autonumber-a",
-      h5: "autonumber-r",
-      h6: "autonumber-a"
-    },
-    RANaNa: {
-      h1: "autonumber-R",
-      h2: "autonumber-A",
-      h3: "autonumber-N",
-      h4: "autonumber-a",
-      h5: "autonumber-N",
-      h6: "autonumber-a"
-    }
-  };
+        Narara: {
+          h1: "autonumber-N",
+          h2: "autonumber-a",
+          h3: "autonumber-r",
+          h4: "autonumber-a",
+          h5: "autonumber-r",
+          h6: "autonumber-a"
+        },
+        Aarara: {
+          h1: "autonumber-A",
+          h2: "autonumber-a",
+          h3: "autonumber-r",
+          h4: "autonumber-a",
+          h5: "autonumber-r",
+          h6: "autonumber-a"
+        },
+        RANaNa: {
+          h1: "autonumber-R",
+          h2: "autonumber-A",
+          h3: "autonumber-N",
+          h4: "autonumber-a",
+          h5: "autonumber-N",
+          h6: "autonumber-a"
+        }
+      };
 
   var autonumberCurrentStyle = null; //hold current style or null if default
 
@@ -72,13 +72,13 @@
 
   var setStyle = function (element, styleName) {
     var style = config.autonumberStyles[styleName];
-    if(element.type === CKEDITOR.NODE_ELEMENT) {
+    if (element.type === CKEDITOR.NODE_ELEMENT) {
       clearStyles(element);
       if (style) {
         element.addClass(style[element.getName()]);
       }
     }
-    
+
   };
 
   var isNumbered = function (element) {
