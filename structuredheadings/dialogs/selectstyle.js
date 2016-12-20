@@ -11,6 +11,32 @@ CKEDITOR.dialog.add("selectStyle", function (editor) {
   }
   htmlContent += "><tbody>";
 
+  var selectedStyle;
+
+  var markActive = function (element) {
+    element.setStyles({
+      color: "red"
+    });
+  };
+
+  var clearSelection = function (document) {
+    var elementList = document.find("*[id*=\"style_\"]");
+    for (var i = 0; i < elementList.count(); i++) {
+      var node = elementList.getItem(i);
+      node.removeStyle("color");
+    }
+  };
+
+  var onSelect = CKEDITOR.tools.addFunction(function (ev, element) {
+    //eslint-disable-next-line new-cap
+    ev = new CKEDITOR.dom.event(ev);
+    //eslint-disable-next-line new-cap
+    element = new CKEDITOR.dom.element(element);
+    selectedStyle = element.getAttribute("name");
+    clearSelection(element.getDocument());
+    markActive(element);
+  });
+
   //build out HTML
   (function () {
     var i = 0;
@@ -24,10 +50,11 @@ CKEDITOR.dialog.add("selectStyle", function (editor) {
 
       //Setup for each style item
       var styleOption = [];
-      styleOption += "<input type=\"radio\" name=\"styleChooser\" style=\"text-align: center;\"" +
+      styleOption += "<div name=\"" + style + "\" style=\"text-align: center;\"" +
       "id=\" style_label_" + i + "_" + CKEDITOR.tools.getNextNumber() + "\"" +
+      "onClick=\"CKEDITOR.tools.callFunction(" + onSelect + ", event, this );\"" +
       "value=\"" + style + "\">" + style +
-      "</input>";
+      "</div>";
 
       htmlContent += "<td class=\"cke_dark_background cke_centered\"" +
       "style=\"vertical-align: middle;\">" +
@@ -76,23 +103,21 @@ CKEDITOR.dialog.add("selectStyle", function (editor) {
 
     ],
     onOk: function () {
-      var style = this.getElement().getDocument().findOne("input:checked").getValue();
-      if (editor.execCommand("setCurrentStyle", style)) {
+      if (editor.execCommand("setCurrentStyle", selectedStyle)) {
         editor.execCommand("reapplyStyle");
       }
     },
     onShow: function () {
       var document = this.getElement().getDocument();
 
-      //Set current style input as active
-      var elementList = document.find("input[value='" +
-              editor.config.autonumberCurrentStyle + "']");
-      if (elementList.count() > 0) {
-        var element = elementList.getItem(0);
-        element.$.checked = true;
-        element.focus();
-      } else {
-        document.find("input").getItem(0).$.checked = true;
+      clearSelection(document);
+
+      //Set current style as active
+      var element = document.findOne("*[name='" +
+          editor.config.autonumberCurrentStyle + "']");
+
+      if (element) {
+        markActive(element);
       }
     }
   };
