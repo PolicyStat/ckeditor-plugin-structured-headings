@@ -1,5 +1,45 @@
 (function () {
 /*
+ * Style Config
+ */
+
+  CKEDITOR.config.autonumberBaseClass =
+      CKEDITOR.config.autonumberBaseClass || "autonumber";
+  CKEDITOR.config.autonumberRestartClass =
+      CKEDITOR.config.autonumberRestartClass || "autonumber-restart";
+  CKEDITOR.config.autonumberStyles =
+      CKEDITOR.config.autonumberStyles || {
+        Narara: {
+          h1: "autonumber-N",
+          h2: "autonumber-a",
+          h3: "autonumber-r",
+          h4: "autonumber-a",
+          h5: "autonumber-r",
+          h6: "autonumber-a"
+        },
+        Aarara: {
+          h1: "autonumber-A",
+          h2: "autonumber-a",
+          h3: "autonumber-r",
+          h4: "autonumber-a",
+          h5: "autonumber-r",
+          h6: "autonumber-a"
+        },
+        RANaNa: {
+          h1: "autonumber-R",
+          h2: "autonumber-A",
+          h3: "autonumber-N",
+          h4: "autonumber-a",
+          h5: "autonumber-N",
+          h6: "autonumber-a"
+        }
+      };
+
+  var autonumberCurrentStyle = null; //hold current style or null if default
+
+  var config = CKEDITOR.config;
+
+/*
  * Helper Functions
  */
 
@@ -18,8 +58,31 @@
   var firstHeaderKey = 0;
   var lastHeaderKey = headerList.length - 1;
 
+//style helpers
+
+
+  var clearStyles = function (element) {
+    for (var styleName in config.autonumberStyles) {
+      var style = config.autonumberStyles[styleName];
+      for (var className in style) {
+        element.removeClass(style[className]);
+      }
+    }
+  };
+
+  var setStyle = function (element, styleName) {
+    var style = config.autonumberStyles[styleName];
+    if (element.type === CKEDITOR.NODE_ELEMENT) {
+      clearStyles(element);
+      if (style) {
+        element.addClass(style[element.getName()]);
+      }
+    }
+
+  };
+
   var isNumbered = function (element) {
-    if (element.hasClass("autonumber")) {
+    if (element.hasClass(config.autonumberBaseClass)) {
       return true;
     } else {
       return false;
@@ -47,19 +110,34 @@
          "matchheading," +
          "increaseheadinglevel," +
          "decreaseheadinglevel," +
-         "restartNumbering",
+         "restartNumbering," +
+         "selectStyle",
+    hidpi: true,
     init: function (editor) {
       editor.addContentsCss(this.path + "styles/numbering.css");
-      editor.addCommand("autoNumberHeading",
-        CKEDITOR.plugins.structuredheadings.commands.autoNumberHeading);
-      editor.addCommand("matchHeading",
-        CKEDITOR.plugins.structuredheadings.commands.matchHeading);
-      editor.addCommand("increaseHeadingLevel",
-        CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
-      editor.addCommand("decreaseHeadingLevel",
-        CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
-      editor.addCommand("restartNumbering",
-        CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
+
+      //Wrap addCommands in an iffy to get around lint max-statements in init
+      (function () {
+        editor.addCommand("autoNumberHeading",
+          CKEDITOR.plugins.structuredheadings.commands.autoNumberHeading);
+        editor.addCommand("matchHeading",
+          CKEDITOR.plugins.structuredheadings.commands.matchHeading);
+        editor.addCommand("increaseHeadingLevel",
+          CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
+        editor.addCommand("decreaseHeadingLevel",
+          CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
+        editor.addCommand("restartNumbering",
+          CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
+        editor.addCommand("setCurrentStyle",
+                CKEDITOR.plugins.structuredheadings.commands.setCurrentStyle);
+        editor.addCommand("reapplyStyle",
+          CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
+      })();
+
+      //Dialogs
+      //eslint-disable-next-line new-cap
+      editor.addCommand("selectStyle", new CKEDITOR.dialogCommand("selectStyle"));
+      CKEDITOR.dialog.add("selectStyle", this.path + "dialogs/selectstyle.js");
 
     // Add the button to the toolbar only if toolbar plugin or button plugin is loaded
       if (CKEDITOR.plugins.get("toolbar")) {
@@ -78,19 +156,28 @@
           command: "matchHeading",
           toolbar: "styles,2"
         });
+        editor.ui.addButton("selectStyle", {
+          label: "Select Style",
+          command: "selectStyle",
+          toolbar: "styles,3"
+        });
         editor.ui.addButton("increaseHeadingLevel", {
           label: "Increase Heading Level",
           command: "increaseHeadingLevel",
-          toolbar: "styles,3"
+          toolbar: "styles,4"
         });
         editor.ui.addButton("decreaseHeadingLevel", {
           label: "Decrease Heading Level",
           command: "decreaseHeadingLevel",
-          toolbar: "styles,4"
+          toolbar: "styles,5"
         });
       }
     }
   });
+
+/*
+ * Structured Headings Dialogs
+ */
 
 /*
  * Structured Headings Plugin Commands
@@ -109,10 +196,12 @@
           var element = editor.elementPath().block;
 
           if (!isNumbered(element)) {
-            element.addClass("autonumber");
+            element.addClass(config.autonumberBaseClass);
+            setStyle(element, autonumberCurrentStyle);
             this.setState(CKEDITOR.TRISTATE_ON);
           } else {
-            element.removeClass("autonumber");
+            element.removeClass(config.autonumberBaseClass);
+            clearStyles(element);
             this.setState(CKEDITOR.TRISTATE_OFF);
           }
 
@@ -148,11 +237,12 @@
             case CKEDITOR.ENTER_DIV:
             //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: "div" });
+              element.removeClass(config.autonumberBaseClass);
               break;
             default:
             //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: "p" });
-              element.removeClass("autonumber");
+              element.removeClass(config.autonumberBaseClass);
               break;
             }
             editor.applyStyle(style);
@@ -163,19 +253,21 @@
             if (isNumbered(previousHeader)) {
             //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: previousHeader.getName(),
-                attributes: {"class": "autonumber"}});
+                attributes: {"class": config.autonumberBaseClass}});
             } else {
             //eslint-disable-next-line new-cap
               style = new CKEDITOR.style({ element: previousHeader.getName()});
             }
             editor.applyStyle(style);
+            setStyle(element, autonumberCurrentStyle);
 
         // else set it as new H1 and autonumber
           } else {
           //eslint-disable-next-line new-cap
             style = new CKEDITOR.style({ element: "h1",
-              attributes: {"class": "autonumber"}});
+              attributes: {"class": config.autonumberBaseClass}});
             editor.applyStyle(style);
+            setStyle(element, autonumberCurrentStyle);
           }
         },
         refresh: function (editor, path) {
@@ -211,6 +303,7 @@
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: nextElement});
           editor.applyStyle(style);
+          setStyle(element, autonumberCurrentStyle);
         },
         refresh: function (editor, path) {
           if (path.block && path.block.is(allowedElements)) {
@@ -246,6 +339,7 @@
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: prevElement});
           editor.applyStyle(style);
+          setStyle(element, autonumberCurrentStyle);
         },
         refresh: function (editor, path) {
           if (path.block && path.block.is(allowedElements)) {
@@ -269,24 +363,48 @@
         exec: function (editor) {
           var element = editor.elementPath().block;
 
-          if (!element.hasClass("autonumber-restart")) {
-            element.addClass("autonumber");
-            element.addClass("autonumber-restart");
+          if (!element.hasClass(config.autonumberRestartClass)) {
+            element.addClass(config.autonumberBaseClass);
+            element.addClass(config.autonumberRestartClass);
+            setStyle(element, autonumberCurrentStyle);
             this.setState(CKEDITOR.TRISTATE_ON);
           } else {
-            element.removeClass("autonumber-restart");
+            element.removeClass(config.autonumberRestartClass);
             this.setState(CKEDITOR.TRISTATE_OFF);
           }
         },
         refresh: function (editor, path) {
           if (path.block && path.block.is({h1: 1})) {
-            if (path.block.hasClass("autonumber-restart")) {
+            if (path.block.hasClass(config.autonumberRestartClass)) {
               this.setState(CKEDITOR.TRISTATE_ON);
             } else {
               this.setState(CKEDITOR.TRISTATE_OFF);
             }
           } else {
             this.setState(CKEDITOR.TRISTATE_DISABLED);
+          }
+        }
+      },
+
+      /*
+       * setCurrentStyle
+       */
+      setCurrentStyle: {
+        exec: function (editor, style) {
+          autonumberCurrentStyle = style;
+        }
+      },
+
+      /*
+       * reapplyStyle
+       */
+      reapplyStyle: {
+        exec: function (editor) {
+          var nodeList = editor.document.find("." + config.autonumberBaseClass);
+
+          for (var i = 0; i < nodeList.count(); i++) {
+            var node = nodeList.getItem(i);
+            setStyle(node, autonumberCurrentStyle);
           }
         }
       }

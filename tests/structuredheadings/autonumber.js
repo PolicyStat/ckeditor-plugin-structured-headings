@@ -1,5 +1,5 @@
 /* bender-tags: editor,unit */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog */
 
 // Clean up all instances been created on the page.
 (function () {
