@@ -1,6 +1,6 @@
 CKEDITOR.dialog.add("selectStyle", function (editor) {
 
-  var styleOptions = [["Default", null]];
+  var styleOptions = [];
 
   //Build out the style options
   (function () {
@@ -40,6 +40,8 @@ CKEDITOR.dialog.add("selectStyle", function (editor) {
         var element = elementList.getItem(0);
         element.$.checked = true;
         element.focus();
+      } else {
+        document.find("input").getItem(0).$.checked = true;
       }
     }
   };
