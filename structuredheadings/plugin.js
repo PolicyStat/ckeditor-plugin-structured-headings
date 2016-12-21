@@ -93,36 +93,86 @@
       editor.ui.addButton("autoNumberHeading", {
         label: "Autonumber Heading",
         command: "autoNumberHeading",
-        toolbar: "styles,0"
+        toolbar: "styles,4"
       });
       editor.ui.addButton("restartNumbering", {
         label: "Restart Numbering",
         command: "restartNumbering",
-        toolbar: "styles,1"
+        toolbar: "styles,6"
       });
       editor.ui.addButton("matchHeading", {
         label: "Match Heading",
         command: "matchHeading",
-        toolbar: "styles,2"
+        toolbar: "styles,1"
       });
       editor.ui.addButton("selectStyle", {
         label: "Select Style",
         command: "selectStyle",
-        toolbar: "styles,3"
+        toolbar: "styles,5"
       });
       editor.ui.addButton("increaseHeadingLevel", {
-        label: "Increase Heading Level",
-        command: "increaseHeadingLevel",
-        toolbar: "styles,4"
+        label: "Increase Heading",
+        command: "decreaseHeadingLevel",
+        toolbar: "styles,2"
       });
       editor.ui.addButton("decreaseHeadingLevel", {
-        label: "Decrease Heading Level",
-        command: "decreaseHeadingLevel",
-        toolbar: "styles,5"
+        label: "Decrease Heading",
+        command: "increaseHeadingLevel",
+        toolbar: "styles,3"
       });
     }
   };
 
+  /*
+   * Style Config
+   */
+  var setupStyles = function (editor) {
+
+    editor.config.autonumberBaseClass =
+    editor.config.autonumberBaseClass || "autonumber";
+
+    editor.config.autonumberRestartClass =
+    editor.config.autonumberRestartClass || "autonumber-restart";
+
+    editor.config.autonumberStyles =
+    editor.config.autonumberStyles || {
+      Default: null,
+      Narara: {
+        h1: "autonumber-N",
+        h2: "autonumber-a",
+        h3: "autonumber-r",
+        h4: "autonumber-a",
+        h5: "autonumber-r",
+        h6: "autonumber-a"
+      },
+      Aarara: {
+        h1: "autonumber-A",
+        h2: "autonumber-a",
+        h3: "autonumber-r",
+        h4: "autonumber-a",
+        h5: "autonumber-r",
+        h6: "autonumber-a"
+      },
+      RANaNa: {
+        h1: "autonumber-R",
+        h2: "autonumber-A",
+        h3: "autonumber-N",
+        h4: "autonumber-a",
+        h5: "autonumber-N",
+        h6: "autonumber-a"
+      }
+    };
+
+    editor.config.autonumberStyleImages =
+      editor.config.autonumberStyleImages || {
+        Default: "Default.png",
+        Narara: "Narara.png",
+        Aarara: "Aarara.png",
+        RANaNa: "RANaNa.png"
+      };
+
+    editor.config.autonumberCurrentStyle = null; //hold current style or null if default
+  };
 
 /*
  * Structured Headings Plugin Setup
@@ -137,10 +187,12 @@
          "selectStyle",
     hidpi: true,
     init: function (editor) {
+      editor.config.autonumberStyleImgPath = this.path + "dialogs/img";
       editor.addContentsCss(this.path + "styles/numbering.css");
 
       setupCommands(editor);
       addButtons(editor);
+      setupStyles(editor);
 
       //Dialogs
       //eslint-disable-next-line new-cap
@@ -158,46 +210,6 @@
 
       CKEDITOR.dialog.add("selectStyle", this.path + "dialogs/selectstyle.js");
 
-      /*
-       * Style Config
-       */
-
-      editor.config.autonumberBaseClass =
-        editor.config.autonumberBaseClass || "autonumber";
-
-      editor.config.autonumberRestartClass =
-        editor.config.autonumberRestartClass || "autonumber-restart";
-
-      editor.config.autonumberStyles =
-        editor.config.autonumberStyles || {
-          Default: null,
-          Narara: {
-            h1: "autonumber-N",
-            h2: "autonumber-a",
-            h3: "autonumber-r",
-            h4: "autonumber-a",
-            h5: "autonumber-r",
-            h6: "autonumber-a"
-          },
-          Aarara: {
-            h1: "autonumber-A",
-            h2: "autonumber-a",
-            h3: "autonumber-r",
-            h4: "autonumber-a",
-            h5: "autonumber-r",
-            h6: "autonumber-a"
-          },
-          RANaNa: {
-            h1: "autonumber-R",
-            h2: "autonumber-A",
-            h3: "autonumber-N",
-            h4: "autonumber-a",
-            h5: "autonumber-N",
-            h6: "autonumber-a"
-          }
-        };
-
-      editor.config.autonumberCurrentStyle = null; //hold current style or null if default
     }
   });
 
@@ -291,11 +303,11 @@
               setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
             }
 
-        // else set it as new H1 and autonumber
+        // else set it as new H1
           } else {
             editor.applyStyle(elementStyles.h1);
-            editor.elementPath().block.addClass(editor.config.autonumberBaseClass);
-            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+            //editor.elementPath().block.addClass(editor.config.autonumberBaseClass);
+            //setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
         },
         refresh: function (editor, path) {
