@@ -8,12 +8,13 @@ CSS class to add to any heading to restart numbering at that point.
 string, default: `"autonumber-restart"`
 ### autonumberStyles
 Listing of style definitions by name, each specifying what additional CSS
-class to apply to each header element.
+class to apply to each header element. A value of `null` signifies using the
+BaseClass only.
 object, default:
 ```
 { 
-Default: null,
-Narara: {
+  Default: null,
+  Narara: {
     h1: "autonumber-N",
     h2: "autonumber-a",
     h3: "autonumber-r",
@@ -37,6 +38,18 @@ Narara: {
     h5: "autonumber-N",
     h6: "autonumber-a"
   }
+}
+```
+### autonumberStyleImages
+A Listing of style definitions by name, with each value pointing to an image file name
+to be used as a thumbnail display on the style chooser dialog. (Should be 72px by 72px)
+object, default:
+```
+{
+  Default: "Default.png",
+  Narara: "Narara.png",
+  Aarara: "Aarara.png",
+  RANaNa: "RANaNa.png"
 }
 ```
 ### autonumberCurrentStyle
