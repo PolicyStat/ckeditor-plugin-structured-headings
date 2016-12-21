@@ -2,14 +2,15 @@
 ## Configuration Options
 ### autonumberBaseClass
 Base CSS class to apply to any autonumbered heading.
-string, default: "autonumber"
+string, default: `"autonumber"`
 ### autonumberRestartClass
 CSS class to add to any heading to restart numbering at that point.
-string, default: "autonumber-restart"
+string, default: `"autonumber-restart"`
 ### autonumberStyles
 Listing of style definitions by name, each specifying what additional CSS
 class to apply to each header element.
 object, default:
+```
 { 
 Default: null,
 Narara: {
@@ -37,6 +38,7 @@ Narara: {
     h6: "autonumber-a"
   }
 }
+```
 ### autonumberCurrentStyle
 The name of the currently active style to be applied.
-string, default: null
+string, default: `null`
