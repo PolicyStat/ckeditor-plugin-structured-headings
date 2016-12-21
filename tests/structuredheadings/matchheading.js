@@ -46,13 +46,13 @@
 
     },
 
-    "MatchHeading Updates P Tag to H1 and autonumber if No Previous": function () {
+    "MatchHeading Updates P Tag to H1 if No Previous": function () {
       this.editorBot.setHtmlWithSelection("<p>^Paragraph</p>");
       this.editorBot.execCommand("matchHeading");
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-          "<h1 class=\"autonumber\">^Paragraph</h1>", updatedContent,
+          "<h1>^Paragraph</h1>", updatedContent,
           "P changed to H1"
         );
 
