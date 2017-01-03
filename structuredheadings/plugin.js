@@ -34,7 +34,7 @@
     var style = editor.config.autonumberStyles[styleName];
     if (element.type === CKEDITOR.NODE_ELEMENT) {
       clearStyles(editor, element);
-      if (style) {
+      if (style && style[element.getName()]) {
         element.addClass(style[element.getName()]);
       }
     }
@@ -171,7 +171,7 @@
         RANaNa: "RANaNa.png"
       };
 
-    editor.config.autonumberCurrentStyle = null; //hold current style or null if default
+    editor.config.autonumberCurrentStyle = "Default"; //hold current style or null if default
   };
 
 /*
