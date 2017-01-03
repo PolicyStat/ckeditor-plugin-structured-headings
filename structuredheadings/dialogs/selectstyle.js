@@ -48,8 +48,9 @@
       var styleImg = CKEDITOR.tools.htmlEncode(editor.config.autonumberStyleImgPath +
               "/" + style + ".png");
 
-      insertion = "<img style=\"width:100%;height:100%;text-align:center;line-height:72px;\"" +
-      "alt=\"" + style + "\" onError=\"this.src = ''\" src=\"" + styleImg + "\" />";
+      insertion = "<div><img style=\"width:100%;height:100%;text-align:center;line-height:72px;\"" +
+      "alt=\"" + style + "\" onError=\"this.src = ''\" src=\"" + styleImg + "\" /> " +
+      		"</div><span>"+style+"</span>";
     } else {
       insertion = "<div style=\"width:100%;height:100%;text-align:center;line-height:72px;\"" +
       ">" + style + "</div>";
