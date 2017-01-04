@@ -136,8 +136,8 @@
 
     editor.config.autonumberStyles =
     editor.config.autonumberStyles || {
-      Default: null,
-      Narara: {
+      "Numeric": null,
+      "Number Lowercase Roman": {
         h1: "autonumber-N",
         h2: "autonumber-a",
         h3: "autonumber-r",
@@ -145,7 +145,7 @@
         h5: "autonumber-r",
         h6: "autonumber-a"
       },
-      Aarara: {
+      "Letter Lowercase Roman": {
         h1: "autonumber-A",
         h2: "autonumber-a",
         h3: "autonumber-r",
@@ -153,7 +153,7 @@
         h5: "autonumber-r",
         h6: "autonumber-a"
       },
-      RANaNa: {
+      "Roman Uppercase Number": {
         h1: "autonumber-R",
         h2: "autonumber-A",
         h3: "autonumber-N",
@@ -165,13 +165,13 @@
 
     editor.config.autonumberStyleImages =
       editor.config.autonumberStyleImages || {
-        Default: "Default.png",
-        Narara: "Narara.png",
-        Aarara: "Aarara.png",
-        RANaNa: "RANaNa.png"
+        "Numeric": "Default.png",
+        "Number Lowercase Roman": "Narara.png",
+        "Letter Lowercase Roman": "Aarara.png",
+        "Roman Uppercase Number": "RANaNa.png",
       };
 
-    editor.config.autonumberCurrentStyle = "Default"; //hold current style or null if default
+    editor.config.autonumberCurrentStyle = "Numeric"; //hold current style or null if default
   };
 
 /*
@@ -212,10 +212,6 @@
 
     }
   });
-
-/*
- * Structured Headings Dialogs
- */
 
 /*
  * Structured Headings Plugin Commands

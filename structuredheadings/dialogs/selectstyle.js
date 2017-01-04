@@ -46,20 +46,20 @@
 
     if (hasImage) {
       var styleImg = CKEDITOR.tools.htmlEncode(editor.config.autonumberStyleImgPath +
-              "/" + style + ".png");
+              "/" + hasImage);
 
-      insertion = "<div><img style=\"width:100%;height:100%;text-align:center;line-height:72px;\"" +
-      "alt=\"" + style + "\" onError=\"this.src = ''\" src=\"" + styleImg + "\" /> " +
-          "</div><span>" + style + "</span>";
+      insertion = "<div><img style=\"width:100%;height:100%;\"" +
+      "alt=\"" + style + "\" src=\"" + styleImg + "\" /> " +
+          "<div style=\"margin:0.5em;text-align:center;white-space:normal;\">" + style + "</div></div>";
     } else {
-      insertion = "<div style=\"width:100%;height:100%;text-align:center;line-height:72px;\"" +
-      ">" + style + "</div>";
+      insertion = "<div style=\"display:table;width:100%;height:100%;text-align:center;\"" +
+      "><span style=\"vertical-align:middle;text-align:center;white-space:normal;display:table-cell;\">" + style + "</span></div>";
     }
 
 
     //Setup for each style item
     return "<div name=\"" + style + "\"" +
-    "style=\"cursor:pointer;display:inline-block;text-align:center;border:1px solid;" +
+    "style=\"margin:0em 0em 5em;cursor:pointer;display:inline-block;vertical-align:top;text-align:center;border:1px solid;" +
         "height:72px;width:72px;\"" +
     "id=\" style_label_" + CKEDITOR.tools.getNextNumber() + "\"" +
     "onClick=\"CKEDITOR.tools.callFunction(" + onSelect + ", event, this );\"" +
@@ -107,7 +107,7 @@
     return {
       title: "Style Selection",
       minWidth: 400,
-      minHeight: 200,
+      minHeight: 100,
       contents: [
         {
           id: "tab-style",
