@@ -50,16 +50,20 @@
 
       insertion = "<div><img style=\"width:100%;height:100%;\"" +
       "alt=\"" + style + "\" src=\"" + styleImg + "\" /> " +
-          "<div style=\"margin:0.5em;text-align:center;white-space:normal;\">" + style + "</div></div>";
+          "<div style=\"margin:0.5em;text-align:center;white-space:normal;\">" + style +
+          "</div></div>";
     } else {
       insertion = "<div style=\"display:table;width:100%;height:100%;text-align:center;\"" +
-      "><span style=\"vertical-align:middle;text-align:center;white-space:normal;display:table-cell;\">" + style + "</span></div>";
+      "><span " +
+      "style=\"vertical-align:middle;text-align:center;white-space:normal;display:table-cell;\">" +
+      style + "</span></div>";
     }
 
 
     //Setup for each style item
     return "<div name=\"" + style + "\"" +
-    "style=\"margin:0em 0em 5em;cursor:pointer;display:inline-block;vertical-align:top;text-align:center;border:1px solid;" +
+    "style=\"margin:0em 0em 5em;cursor:pointer;display:inline-block;" +
+    "vertical-align:top;text-align:center;border:1px solid;" +
         "height:72px;width:72px;\"" +
     "id=\" style_label_" + CKEDITOR.tools.getNextNumber() + "\"" +
     "onClick=\"CKEDITOR.tools.callFunction(" + onSelect + ", event, this );\"" +

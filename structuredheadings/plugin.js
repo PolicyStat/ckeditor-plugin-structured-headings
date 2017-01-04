@@ -168,7 +168,7 @@
         "Numeric": "Default.png",
         "Number Lowercase Roman": "Narara.png",
         "Letter Lowercase Roman": "Aarara.png",
-        "Roman Uppercase Number": "RANaNa.png",
+        "Roman Uppercase Number": "RANaNa.png"
       };
 
     editor.config.autonumberCurrentStyle = "Numeric"; //hold current style or null if default
