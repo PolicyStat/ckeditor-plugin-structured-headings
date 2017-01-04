@@ -26,7 +26,7 @@
 
     "Style applied": function () {
       this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber\">^Heading</h1>");
-      this.editorBot.execCommand("setCurrentStyle", "Aarara");
+      this.editorBot.execCommand("setCurrentStyle", "Letter Lowercase Roman");
       this.editorBot.execCommand("reapplyStyle");
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
