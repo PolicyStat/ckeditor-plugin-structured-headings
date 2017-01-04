@@ -54,4 +54,4 @@ object, default:
 ```
 ### autonumberCurrentStyle
 The name of the currently active style to be applied.
-string, default: `null`
+string, default: `"Default"`

@@ -2,5 +2,7 @@
 CKEDITOR.config.extraPlugins = "structuredheadings";
 
 var initSample = function () {
-  CKEDITOR.replace("editor");
+  CKEDITOR.replace("editor", {
+      removeButtons: "Format"
+  });
 };
