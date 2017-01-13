@@ -41,125 +41,125 @@ h1.autonumber-restart {
 
 /* Default */
 h1.autonumber:before {
-    content: counter(h1) ": ";
+    content: counter(h1) ". ";
 }
 h2.autonumber:before {
-    content: counter(h1) "." counter(h2) ": ";
+    content: counter(h1) "." counter(h2) ". ";
 }
 h3.autonumber:before {
-    content: counter(h1) "." counter(h2) "." counter(h3) ": ";
+    content: counter(h1) "." counter(h2) "." counter(h3) ". ";
 }
 h4.autonumber:before {
-    content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) ": ";
+    content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) ". ";
 }
 h5.autonumber:before {
-    content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ": ";
+    content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ". ";
 }
 h6.autonumber:before {
-    content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ": ";
+    content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". ";
 }
 
 /* N */
 
 h1.autonumber.autonumber-N:before {
-    content: counter(h1) ": ";
+    content: counter(h1) ". ";
 }
 h2.autonumber.autonumber-N:before {
-    content: counter(h2) ": ";
+    content: counter(h2) ". ";
 }
 h3.autonumber.autonumber-N:before {
-    content: counter(h3) ": ";
+    content: counter(h3) ". ";
 }
 h4.autonumber.autonumber-N:before {
-    content: counter(h4) ": ";
+    content: counter(h4) ". ";
 }
 h5.autonumber.autonumber-N:before {
-    content: counter(h5) ": ";
+    content: counter(h5) ". ";
 }
 h6.autonumber.autonumber-N:before {
-    content: counter(h6) ": ";
+    content: counter(h6) ". ";
 }
 
 /* A */
 
 h1.autonumber.autonumber-A:before {
-    content: counter(h1, upper-alpha) ": ";
+    content: counter(h1, upper-alpha) ". ";
 }
 h2.autonumber.autonumber-A:before {
-    content: counter(h2, upper-alpha) ": ";
+    content: counter(h2, upper-alpha) ". ";
 }
 h3.autonumber.autonumber-A:before {
-    content: counter(h3, upper-alpha) ": ";
+    content: counter(h3, upper-alpha) ". ";
 }
 h4.autonumber.autonumber-A:before {
-    content: counter(h4, upper-alpha) ": ";
+    content: counter(h4, upper-alpha) ". ";
 }
 h5.autonumber.autonumber-A:before {
-    content: counter(h5, upper-alpha) ": ";
+    content: counter(h5, upper-alpha) ". ";
 }
 h6.autonumber.autonumber-A:before {
-    content: counter(h6, upper-alpha) ": ";
+    content: counter(h6, upper-alpha) ". ";
 }
 
 /* a */
 
 h1.autonumber.autonumber-a:before {
-    content: counter(h1, lower-alpha) ": ";
+    content: counter(h1, lower-alpha) ". ";
 }
 h2.autonumber.autonumber-a:before {
-    content: counter(h2, lower-alpha) ": ";
+    content: counter(h2, lower-alpha) ". ";
 }
 h3.autonumber.autonumber-a:before {
-    content: counter(h3, lower-alpha) ": ";
+    content: counter(h3, lower-alpha) ". ";
 }
 h4.autonumber.autonumber-a:before {
-    content: counter(h4, lower-alpha) ": ";
+    content: counter(h4, lower-alpha) ". ";
 }
 h5.autonumber.autonumber-a:before {
-    content: counter(h5, lower-alpha) ": ";
+    content: counter(h5, lower-alpha) ". ";
 }
 h6.autonumber.autonumber-a:before {
-    content: counter(h6, lower-alpha) ": ";
+    content: counter(h6, lower-alpha) ". ";
 }
 
 /* R */
 
 h1.autonumber.autonumber-R:before {
-    content: counter(h1, upper-roman) ": ";
+    content: counter(h1, upper-roman) ". ";
 }
 h2.autonumber.autonumber-R:before {
-    content: counter(h2, upper-roman) ": ";
+    content: counter(h2, upper-roman) ". ";
 }
 h3.autonumber.autonumber-R:before {
-    content: counter(h3, upper-roman) ": ";
+    content: counter(h3, upper-roman) ". ";
 }
 h4.autonumber.autonumber-R:before {
-    content: counter(h4, upper-roman) ": ";
+    content: counter(h4, upper-roman) ". ";
 }
 h5.autonumber.autonumber-R:before {
-    content: counter(h5, upper-roman) ": ";
+    content: counter(h5, upper-roman) ". ";
 }
 h6.autonumber.autonumber-R:before {
-    content: counter(h6, upper-roman) ": ";
+    content: counter(h6, upper-roman) ". ";
 }
 
 /* r */
 
 h1.autonumber.autonumber-r:before {
-    content: counter(h1, lower-roman) ": ";
+    content: counter(h1, lower-roman) ". ";
 }
 h2.autonumber.autonumber-r:before {
-    content: counter(h2, lower-roman) ": ";
+    content: counter(h2, lower-roman) ". ";
 }
 h3.autonumber.autonumber-r:before {
-    content: counter(h3, lower-roman) ": ";
+    content: counter(h3, lower-roman) ". ";
 }
 h4.autonumber.autonumber-r:before {
-    content: counter(h4, lower-roman) ": ";
+    content: counter(h4, lower-roman) ". ";
 }
 h5.autonumber.autonumber-r:before {
-    content: counter(h5, lower-roman) ": ";
+    content: counter(h5, lower-roman) ". ";
 }
 h6.autonumber.autonumber-r:before {
-    content: counter(h6, lower-roman) ": ";
+    content: counter(h6, lower-roman) ". ";
 }
