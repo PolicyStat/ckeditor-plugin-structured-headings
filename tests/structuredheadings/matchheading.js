@@ -72,7 +72,7 @@
 
     "MatchHeading Updates P Tag to H2 and Autonumbered if Previous": function () {
       this.editorBot.setHtmlWithSelection(
-          "<h2 class=\"autonumber\">Header</h2>" +
+          "<h2 class=\"autonumber autonumber-1\">Header</h2>" +
           "<p>^Paragraph</p>"
         );
       this.editorBot.execCommand("matchHeading");
