@@ -53,7 +53,7 @@
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-      "<h1 class=\"autonumber autonumner-0\">^Heading</h1>", updatedContent,
+      "<h1 class=\"autonumber autonumber-0\">^Heading</h1>", updatedContent,
       "CSS class applied"
         );
       assert.areSame(
