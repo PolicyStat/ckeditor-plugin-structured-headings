@@ -2,32 +2,47 @@
 body {
     counter-reset: h1 h2 h3 h4 h5 h6;
 }
-h1.autonumber {
+.autonumber.autonumber-0 {
     counter-increment: h1;
     counter-reset: h2;
 }
-h2.autonumber {
+.autonumber.autonumber-1 {
 	counter-increment: h2;
 	counter-reset: h3;
 }
-h3.autonumber {
+.autonumber.autonumber-2 {
 	counter-increment: h3;
 	counter-reset: h4;
 }
-h4.autonumber {
+.autonumber.autonumber-3 {
 	counter-increment: h4;
 	counter-reset: h5;
 }
-h5.autonumber {
+.autonumber.autonumber-4 {
 	counter-increment: h5;
 	counter-reset: h6;
 }
-h6.autonumber {
+.autonumber.autonumber-5 {
 	counter-increment: h6;
 }
 
-h1.autonumber-restart {
+.autonumber.autonumber-0.autonumber-restart {
 	counter-reset: h1;
+}
+.autonumber.autonumber-1.autonumber-restart {
+  counter-reset: h2;
+}
+.autonumber.autonumber-2.autonumber-restart {
+  counter-reset: h3;
+}
+.autonumber.autonumber-3.autonumber-restart {
+  counter-reset: h4;
+}
+.autonumber.autonumber-4.autonumber-restart {
+  counter-reset: h5;
+}
+.autonumber.autonumber-5.autonumber-restart {
+  counter-reset: h6;
 }
 
 
@@ -40,126 +55,126 @@ h1.autonumber-restart {
  */
 
 /* Default */
-h1.autonumber:before {
+.autonumber.autonumber-0:before {
     content: counter(h1) ". ";
 }
-h2.autonumber:before {
+.autonumber.autonumber-1:before {
     content: counter(h1) "." counter(h2) ". ";
 }
-h3.autonumber:before {
+.autonumber.autonumber-2:before {
     content: counter(h1) "." counter(h2) "." counter(h3) ". ";
 }
-h4.autonumber:before {
+.autonumber.autonumber-3:before {
     content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) ". ";
 }
-h5.autonumber:before {
+.autonumber.autonumber-4:before {
     content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ". ";
 }
-h6.autonumber:before {
+.autonumber.autonumber-5:before {
     content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". ";
 }
 
 /* N */
 
-h1.autonumber.autonumber-N:before {
+.autonumber.autonumber-0.autonumber-N:before {
     content: counter(h1) ". ";
 }
-h2.autonumber.autonumber-N:before {
+.autonumber.autonumber-1.autonumber-N:before {
     content: counter(h2) ". ";
 }
-h3.autonumber.autonumber-N:before {
+.autonumber.autonumber-2.autonumber-N:before {
     content: counter(h3) ". ";
 }
-h4.autonumber.autonumber-N:before {
+.autonumber.autonumber-3.autonumber-N:before {
     content: counter(h4) ". ";
 }
-h5.autonumber.autonumber-N:before {
+.autonumber.autonumber-4.autonumber-N:before {
     content: counter(h5) ". ";
 }
-h6.autonumber.autonumber-N:before {
+.autonumber.autonumber-5.autonumber-N:before {
     content: counter(h6) ". ";
 }
 
 /* A */
 
-h1.autonumber.autonumber-A:before {
+.autonumber.autonumber-0.autonumber-A:before {
     content: counter(h1, upper-alpha) ". ";
 }
-h2.autonumber.autonumber-A:before {
+.autonumber.autonumber-1.autonumber-A:before {
     content: counter(h2, upper-alpha) ". ";
 }
-h3.autonumber.autonumber-A:before {
+.autonumber.autonumber-2.autonumber-A:before {
     content: counter(h3, upper-alpha) ". ";
 }
-h4.autonumber.autonumber-A:before {
+.autonumber.autonumber-3.autonumber-A:before {
     content: counter(h4, upper-alpha) ". ";
 }
-h5.autonumber.autonumber-A:before {
+.autonumber.autonumber-4.autonumber-A:before {
     content: counter(h5, upper-alpha) ". ";
 }
-h6.autonumber.autonumber-A:before {
+.autonumber.autonumber-5.autonumber-A:before {
     content: counter(h6, upper-alpha) ". ";
 }
 
 /* a */
 
-h1.autonumber.autonumber-a:before {
+.autonumber.autonumber-0.autonumber-a:before {
     content: counter(h1, lower-alpha) ". ";
 }
-h2.autonumber.autonumber-a:before {
+.autonumber.autonumber-1.autonumber-a:before {
     content: counter(h2, lower-alpha) ". ";
 }
-h3.autonumber.autonumber-a:before {
+.autonumber.autonumber-2.autonumber-a:before {
     content: counter(h3, lower-alpha) ". ";
 }
-h4.autonumber.autonumber-a:before {
+.autonumber.autonumber-3.autonumber-a:before {
     content: counter(h4, lower-alpha) ". ";
 }
-h5.autonumber.autonumber-a:before {
+.autonumber.autonumber-4.autonumber-a:before {
     content: counter(h5, lower-alpha) ". ";
 }
-h6.autonumber.autonumber-a:before {
+.autonumber.autonumber-5.autonumber-a:before {
     content: counter(h6, lower-alpha) ". ";
 }
 
 /* R */
 
-h1.autonumber.autonumber-R:before {
+.autonumber.autonumber-0.autonumber-R:before {
     content: counter(h1, upper-roman) ". ";
 }
-h2.autonumber.autonumber-R:before {
+.autonumber.autonumber-1.autonumber-R:before {
     content: counter(h2, upper-roman) ". ";
 }
-h3.autonumber.autonumber-R:before {
+.autonumber.autonumber-2.autonumber-R:before {
     content: counter(h3, upper-roman) ". ";
 }
-h4.autonumber.autonumber-R:before {
+.autonumber.autonumber-3.autonumber-R:before {
     content: counter(h4, upper-roman) ". ";
 }
-h5.autonumber.autonumber-R:before {
+.autonumber.autonumber-4.autonumber-R:before {
     content: counter(h5, upper-roman) ". ";
 }
-h6.autonumber.autonumber-R:before {
+.autonumber.autonumber-5.autonumber-R:before {
     content: counter(h6, upper-roman) ". ";
 }
 
 /* r */
 
-h1.autonumber.autonumber-r:before {
+.autonumber.autonumber-0.autonumber-r:before {
     content: counter(h1, lower-roman) ". ";
 }
-h2.autonumber.autonumber-r:before {
+.autonumber.autonumber-1.autonumber-r:before {
     content: counter(h2, lower-roman) ". ";
 }
-h3.autonumber.autonumber-r:before {
+.autonumber.autonumber-2.autonumber-r:before {
     content: counter(h3, lower-roman) ". ";
 }
-h4.autonumber.autonumber-r:before {
+.autonumber.autonumber-3.autonumber-r:before {
     content: counter(h4, lower-roman) ". ";
 }
-h5.autonumber.autonumber-r:before {
+.autonumber.autonumber-4.autonumber-r:before {
     content: counter(h5, lower-roman) ". ";
 }
-h6.autonumber.autonumber-r:before {
+.autonumber.autonumber-5.autonumber-r:before {
     content: counter(h6, lower-roman) ". ";
 }
