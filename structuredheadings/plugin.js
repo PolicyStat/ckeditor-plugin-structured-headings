@@ -353,8 +353,9 @@
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: nextElement});
           editor.applyStyle(style);
-          if(isNumbered(editor, element))
+          if (isNumbered(editor, element)) {
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+          }
         },
         refresh: function (editor, path) {
           if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
@@ -393,8 +394,9 @@
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: prevElement});
           editor.applyStyle(style);
-          if(isNumbered(editor, element))
+          if (isNumbered(editor, element)) {
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+          }
         },
         refresh: function (editor, path) {
           if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
