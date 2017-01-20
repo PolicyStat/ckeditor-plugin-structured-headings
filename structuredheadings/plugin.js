@@ -20,6 +20,13 @@
 
 //style helpers
 
+  var isNumbered = function (editor, element) {
+    if (element.hasClass(editor.config.autonumberBaseClass)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   var clearStyles = function (editor, element) {
     for (var styleName in editor.config.autonumberStyles) {
@@ -42,14 +49,6 @@
       }
     }
 
-  };
-
-  var isNumbered = function (editor, element) {
-    if (element.hasClass(editor.config.autonumberBaseClass)) {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   var getPreviousHeader = function (editor, element) {
