@@ -291,7 +291,7 @@
           var previousHeader = getPreviousHeader(editor, editor.elementPath().block);
 
         // if already in header, set back to default based on enter mode
-          if (editor.elementPath().block.is(editor.config.allowedElements)) {
+          if (editor.config.numberedElements.indexOf(editor.elementPath().block.getName()) >= 0) {
             if (editor.config.enterMode === CKEDITOR.ENTER_DIV) {
               editor.applyStyle(elementStyles.div);
             } else {

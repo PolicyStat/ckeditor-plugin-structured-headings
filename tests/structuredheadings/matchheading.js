@@ -79,8 +79,8 @@
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-          "<h2 class=\"autonumber\">Header</h2>" +
-          "<h2 class=\"autonumber\">^Paragraph</h2>", updatedContent,
+          "<h2 class=\"autonumber autonumber-1\">Header</h2>" +
+          "<h2 class=\"autonumber autonumber-1\">^Paragraph</h2>", updatedContent,
           "P changed to previous H2 autonumber"
         );
 

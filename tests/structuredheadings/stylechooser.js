@@ -25,13 +25,13 @@
     },
 
     "Style applied": function () {
-      this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber\">^Heading</h1>");
+      this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-0\">^Heading</h1>");
       this.editorBot.execCommand("setCurrentStyle", "Letter Lowercase Roman");
       this.editorBot.execCommand("reapplyStyle");
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-        "<h1 class=\"autonumber autonumber-A\">^Heading</h1>", updatedContent,
+        "<h1 class=\"autonumber autonumber-0 autonumber-A\">^Heading</h1>", updatedContent,
         "Header Style Applied"
           );
     },
