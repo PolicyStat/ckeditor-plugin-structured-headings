@@ -6,7 +6,7 @@
   var setupElements = function (editor) {
 
     // list of elements allowed to be numbered
-    editor.config.numberedElements = 
+    editor.config.numberedElements =
     editor.config.numberedElements || [
       "h1",
       "h2",
