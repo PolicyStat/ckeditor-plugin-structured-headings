@@ -1,43 +1,63 @@
 # Automatically Structured Headings [![Build Status](https://travis-ci.org/PolicyStat/ckeditor-plugin-structured-headings.svg?branch=master)](https://travis-ci.org/PolicyStat/ckeditor-plugin-structured-headings)
 ## Configuration Options
+### numberedElements
+Array of elements (in order) that will be a part of numbering.
+array, default:
+```
+[
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6"
+];
+```
 ### autonumberBaseClass
-Base CSS class to apply to any autonumbered heading.
+Base CSS class to apply to any autonumbered heading. Also appended with the index number of the
+current level. H1 = autonumber-0, H2 = autonumber-1, etc.
 string, default: `"autonumber"`
 ### autonumberRestartClass
 CSS class to add to any heading to restart numbering at that point.
 string, default: `"autonumber-restart"`
 ### autonumberStyles
-Listing of style definitions by name, each specifying what additional CSS
-class to apply to each header element. A value of `null` signifies using the
-BaseClass only.
+Listing of style definitions by name, each style definition is an array specifying what additional
+CSS class to apply to each index level of the element as specified in numberedElements.
 object, default:
 ```
 { 
-  Default: null,
-  Narara: {
-    h1: "autonumber-N",
-    h2: "autonumber-a",
-    h3: "autonumber-r",
-    h4: "autonumber-a",
-    h5: "autonumber-r",
-    h6: "autonumber-a"
-  },
-  Aarara: {
-    h1: "autonumber-A",
-    h2: "autonumber-a",
-    h3: "autonumber-r",
-    h4: "autonumber-a",
-    h5: "autonumber-r",
-    h6: "autonumber-a"
-  },
-  RANaNa: {
-    h1: "autonumber-R",
-    h2: "autonumber-A",
-    h3: "autonumber-N",
-    h4: "autonumber-a",
-    h5: "autonumber-N",
-    h6: "autonumber-a"
-  }
+  "Numeric": [
+    "autonumber-0",
+    "autonumber-1",
+    "autonumber-2",
+    "autonumber-3",
+    "autonumber-4",
+    "autonumbe4-5"
+  ],
+  "Number Lowercase Roman": [
+    "autonumber-N",
+    "autonumber-a",
+    "autonumber-r",
+    "autonumber-a",
+    "autonumber-r",
+    "autonumber-a"
+  ],
+  "Letter Lowercase Roman": [
+    "autonumber-A",
+    "autonumber-a",
+    "autonumber-r",
+    "autonumber-a",
+    "autonumber-r",
+    "autonumber-a"
+  ],
+  "Roman Uppercase Number": [
+    "autonumber-R",
+    "autonumber-A",
+    "autonumber-N",
+    "autonumber-a",
+    "autonumber-N",
+    "autonumber-a"
+  ]
 }
 ```
 ### autonumberStyleImages
@@ -54,4 +74,4 @@ object, default:
 ```
 ### autonumberCurrentStyle
 The name of the currently active style to be applied.
-string, default: `"Default"`
+string, default: `"Numeric"`

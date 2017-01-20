@@ -41,8 +41,7 @@
     var style = editor.config.autonumberStyles[styleName];
     if (element.type === CKEDITOR.NODE_ELEMENT) {
       clearStyles(editor, element);
-      if (isNumbered(editor, element) &&
-      style && style[editor.config.numberedElements.indexOf(element.getName())]) {
+      if (style && style[editor.config.numberedElements.indexOf(element.getName())]) {
         element.addClass(editor.config.autonumberBaseClass + "-" +
           editor.config.numberedElements.indexOf(element.getName()));
         element.addClass(style[editor.config.numberedElements.indexOf(element.getName())]);
@@ -354,7 +353,8 @@
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: nextElement});
           editor.applyStyle(style);
-          setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+          if(isNumbered(editor, element))
+            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
         },
         refresh: function (editor, path) {
           if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
@@ -393,7 +393,8 @@
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: prevElement});
           editor.applyStyle(style);
-          setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+          if(isNumbered(editor, element))
+            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
         },
         refresh: function (editor, path) {
           if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
