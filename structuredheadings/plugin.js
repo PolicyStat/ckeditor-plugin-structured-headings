@@ -41,7 +41,7 @@
     var style = editor.config.autonumberStyles[styleName];
     if (element.type === CKEDITOR.NODE_ELEMENT) {
       clearStyles(editor, element);
-      if (isNumbered(element) &&
+      if (isNumbered(editor, element) &&
       style && style[editor.config.numberedElements.indexOf(element.getName())]) {
         element.addClass(editor.config.autonumberBaseClass + "-" +
           editor.config.numberedElements.indexOf(element.getName()));
