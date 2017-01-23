@@ -49,19 +49,19 @@
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-        "<h1 class=\"autonumber autonumber-restart\">^Heading</h1>", updatedContent,
-        "Header Increased"
+        "<h1 class=\"autonumber autonumber-restart autonumber-0\">^Heading</h1>", updatedContent,
+        "Header Numbered and Restarted"
           );
     },
 
     "Remove only restart class": function () {
       this.editorBot.setHtmlWithSelection(
-              "<h1 class=\"autonumber autonumber-restart\">^Heading</h1>");
+              "<h1 class=\"autonumber autonumber-0 autonumber-restart\">^Heading</h1>");
       this.editorBot.execCommand("restartNumbering");
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-          "<h1 class=\"autonumber\">^Heading</h1>", updatedContent,
+          "<h1 class=\"autonumber autonumber-0\">^Heading</h1>", updatedContent,
           "Header Decreased"
             );
     }

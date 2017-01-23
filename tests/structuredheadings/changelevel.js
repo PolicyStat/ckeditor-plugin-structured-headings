@@ -13,6 +13,34 @@
       //Anything to be run before each test if needed
     },
 
+    "Decrease Inactive in H2 with excluded H1": function () {
+      var testCommand = this.editor.getCommand("decreaseHeadingLevel");
+      var previousElements = this.editor.config.numberedElements;
+      this.editor.config.numberedElements = ["h2", "h3"];
+      this.editorBot.setHtmlWithSelection("<h2>^Heading</h2>");
+
+      assert.areSame(
+            CKEDITOR.TRISTATE_DISABLED, testCommand.state,
+            "decreaseHeadingLevel DISABLED with excluded H1"
+          );
+      this.editor.config.numberedElements = previousElements;
+
+    },
+
+    "Increase Inactive in H5 with excluded H6": function () {
+      var testCommand = this.editor.getCommand("increaseHeadingLevel");
+      var previousElements = this.editor.config.numberedElements;
+      this.editor.config.numberedElements = ["h4", "h5"];
+      this.editorBot.setHtmlWithSelection("<h5>^Heading</h5>");
+
+      assert.areSame(
+              CKEDITOR.TRISTATE_DISABLED, testCommand.state,
+              "increaseHeadingLevel DISABLED with excluded H6"
+            );
+      this.editor.config.numberedElements = previousElements;
+
+    },
+
     "Increase and Decrease Level Disabled on P": function () {
       this.editorBot.setHtmlWithSelection("<p>^Paragraph</p>");
       var testCommand = this.editor.getCommand("increaseHeadingLevel");
@@ -94,12 +122,12 @@
     },
 
     "Increase doesn't affect numbering": function () {
-      this.editorBot.setHtmlWithSelection("<h2 class=\"autonumber\">^Heading</h2>");
+      this.editorBot.setHtmlWithSelection("<h2 class=\"autonumber autonumber-2\">^Heading</h2>");
       this.editorBot.execCommand("increaseHeadingLevel");
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-        "<h3 class=\"autonumber\">^Heading</h3>", updatedContent,
+        "<h3 class=\"autonumber autonumber-2\">^Heading</h3>", updatedContent,
         "Header Increased with Numbering Intact"
           );
     },
