@@ -24,6 +24,20 @@
 
     },
 
+    "AutoNumber Inactive in excluded Header Tag": function () {
+      var testCommand = this.editor.getCommand("autoNumberHeading");
+      var previousElements = this.editor.config.numberedElements;
+      this.editor.config.numberedElements = ["h2", "h3"];
+      this.editorBot.setHtmlWithSelection("<h1>^Heading</h1>");
+
+      assert.areSame(
+            CKEDITOR.TRISTATE_DISABLED, testCommand.state,
+            "autoNumberHeading DISABLED in excluded H1"
+          );
+      this.editor.config.numberedElements = previousElements;
+
+    },
+
     "AutoNumber Active and On Inside AutoNumbered Header": function () {
       this.editorBot.setHtmlWithSelection("<h1 class='autonumber'>^Heading</h1>");
       var testCommand = this.editor.getCommand("autoNumberHeading");
