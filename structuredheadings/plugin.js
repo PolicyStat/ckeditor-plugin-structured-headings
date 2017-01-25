@@ -112,12 +112,12 @@
         toolbar: "styles,5"
       });
       editor.ui.addButton("increaseHeadingLevel", {
-        label: "Increase Heading",
+        label: "Decrease Level",
         command: "decreaseHeadingLevel",
         toolbar: "styles,2"
       });
       editor.ui.addButton("decreaseHeadingLevel", {
-        label: "Decrease Heading",
+        label: "Increase Level",
         command: "increaseHeadingLevel",
         toolbar: "styles,3"
       });
@@ -332,7 +332,7 @@
      */
       increaseHeadingLevel: {
         contextSensitive: 1,
-        startDisabled: true,
+        //startDisabled: true,
         exec: function (editor) {
           var element = editor.elementPath().block;
           var nextElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
@@ -352,7 +352,12 @@
 
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: nextElement});
-          editor.applyStyle(style);
+          if(editor.config.numberedElements.indexOf(element.getName()) >= 0) {
+              editor.applyStyle(style);
+          } else {
+              editor.execCommand('indent');
+          }
+          
           if (isNumbered(editor, element)) {
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
@@ -363,19 +368,19 @@
 
             if (editor.config.numberedElements.length - 1 ===
               editor.config.numberedElements.indexOf(path.block.getName())) {
-              this.setState(CKEDITOR.TRISTATE_DISABLED);
+              //this.setState(CKEDITOR.TRISTATE_DISABLED);
             } else if (
             previousHeader && path.block.getName() ===
             editor.config.numberedElements[editor.config.numberedElements.indexOf(
               previousHeader.getName()) + 1]
           ) {
-              this.setState(CKEDITOR.TRISTATE_DISABLED);
+              //this.setState(CKEDITOR.TRISTATE_DISABLED);
             } else {
               this.setState(CKEDITOR.TRISTATE_OFF);
             }
 
           } else {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
+            //this.setState(CKEDITOR.TRISTATE_DISABLED);
           }
 
         }
@@ -386,13 +391,18 @@
      */
       decreaseHeadingLevel: {
         contextSensitive: 1,
-        startDisabled: true,
+        //startDisabled: true,
         exec: function (editor) {
           var element = editor.elementPath().block;
           var prevElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
             element.getName()) - 1];
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: prevElement});
+          if(editor.config.numberedElements.indexOf(element.getName()) >= 0) {
+              editor.applyStyle(style);
+          } else {
+              editor.execCommand('outdent');
+          }
           editor.applyStyle(style);
           if (isNumbered(editor, element)) {
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
@@ -401,12 +411,12 @@
         refresh: function (editor, path) {
           if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
             if (editor.config.numberedElements.indexOf(path.block.getName()) === 0) {
-              this.setState(CKEDITOR.TRISTATE_DISABLED);
+              //this.setState(CKEDITOR.TRISTATE_DISABLED);
             } else {
               this.setState(CKEDITOR.TRISTATE_OFF);
             }
           } else {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
+            //this.setState(CKEDITOR.TRISTATE_DISABLED);
           }
         }
       },
