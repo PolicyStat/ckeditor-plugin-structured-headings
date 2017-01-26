@@ -352,12 +352,12 @@
 
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: nextElement});
-          if(editor.config.numberedElements.indexOf(element.getName()) >= 0) {
-              editor.applyStyle(style);
-          } else {
-              editor.execCommand('indent');
+          if (editor.config.numberedElements.indexOf(element.getName()) >= 0) {
+            editor.applyStyle(style);
+          } else if (CKEDITOR.plugins.loaded.indent) {
+            editor.execCommand("indent");
           }
-          
+
           if (isNumbered(editor, element)) {
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
@@ -374,7 +374,7 @@
             editor.config.numberedElements[editor.config.numberedElements.indexOf(
               previousHeader.getName()) + 1]
           ) {
-              //this.setState(CKEDITOR.TRISTATE_DISABLED);
+              this.setState(CKEDITOR.TRISTATE_DISABLED);
             } else {
               this.setState(CKEDITOR.TRISTATE_OFF);
             }
@@ -398,10 +398,10 @@
             element.getName()) - 1];
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: prevElement});
-          if(editor.config.numberedElements.indexOf(element.getName()) >= 0) {
-              editor.applyStyle(style);
-          } else {
-              editor.execCommand('outdent');
+          if (editor.config.numberedElements.indexOf(element.getName()) >= 0) {
+            editor.applyStyle(style);
+          } else if (CKEDITOR.plugins.loaded.indent) {
+            editor.execCommand("outdent");
           }
           editor.applyStyle(style);
           if (isNumbered(editor, element)) {
@@ -411,7 +411,7 @@
         refresh: function (editor, path) {
           if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
             if (editor.config.numberedElements.indexOf(path.block.getName()) === 0) {
-              //this.setState(CKEDITOR.TRISTATE_DISABLED);
+              this.setState(CKEDITOR.TRISTATE_DISABLED);
             } else {
               this.setState(CKEDITOR.TRISTATE_OFF);
             }
