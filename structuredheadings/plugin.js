@@ -86,6 +86,8 @@
               CKEDITOR.plugins.structuredheadings.commands.setCurrentStyle);
     editor.addCommand("reapplyStyle",
         CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
+    editor.addCommand("convertList",
+            CKEDITOR.plugins.structuredheadings.commands.convertList);
   };
 
   var addButtons = function (editor) {
@@ -121,6 +123,11 @@
         command: "increaseHeadingLevel",
         toolbar: "styles,3"
       });
+      editor.ui.addButton("convertList", {
+      label: "Convert List",
+      command: "convertList",
+      toolbar: "styles,7"
+    });
     }
   };
 
@@ -463,6 +470,37 @@
             var node = nodeList.getItem(i);
             setStyle(editor, node, editor.config.autonumberCurrentStyle);
           }
+        }
+      },
+      
+      /*
+       * convertList
+       */
+      convertList: {
+        exec: function (editor) {
+            /* The Worker */
+            var processList = function (listElement, level) {
+                level = level ? level : 0;
+                console.log(level);
+                var childCount = listElement.getChildren().count();
+                for (var i = 0; i < childCount; i++) {
+                    var child = listElement.getChild(i);
+                    console.log(child.getName());
+                    if(child.getFirst(function (node) {
+                        if (node.type === CKEDITOR.NODE_ELEMENT && node.is({ul:1,ol:1})) {
+                          return true;
+                        } else {
+                          return false;
+                        }
+                    })) {
+                        processList(child, level + 1);
+                    }
+                }
+            }
+          var listRoot = editor.elementPath().contains(['ol','ul'],false,true);
+          
+          processList(listRoot);
+
         }
       }
     }
