@@ -368,7 +368,7 @@
 
             if (editor.config.numberedElements.length - 1 ===
               editor.config.numberedElements.indexOf(path.block.getName())) {
-              //this.setState(CKEDITOR.TRISTATE_DISABLED);
+              this.setState(CKEDITOR.TRISTATE_DISABLED);
             } else if (
             previousHeader && path.block.getName() ===
             editor.config.numberedElements[editor.config.numberedElements.indexOf(
@@ -379,8 +379,10 @@
               this.setState(CKEDITOR.TRISTATE_OFF);
             }
 
+          } else if (CKEDITOR.plugins.loaded.indent) {
+            this.setState(CKEDITOR.TRISTATE_OFF);
           } else {
-            //this.setState(CKEDITOR.TRISTATE_DISABLED);
+            this.setState(CKEDITOR.TRISTATE_DISABLED);
           }
 
         }
@@ -415,8 +417,10 @@
             } else {
               this.setState(CKEDITOR.TRISTATE_OFF);
             }
+          } else if (CKEDITOR.plugins.loaded.indent) {
+            this.setState(CKEDITOR.TRISTATE_OFF);
           } else {
-            //this.setState(CKEDITOR.TRISTATE_DISABLED);
+            this.setState(CKEDITOR.TRISTATE_DISABLED);
           }
         }
       },
