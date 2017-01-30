@@ -218,14 +218,13 @@
       }));
 
       CKEDITOR.dialog.add("selectStyle", this.path + "dialogs/selectstyle.js");
-
+      
       // Indent and outdent with TAB/SHIFT+TAB key
+      var tabKey = 9;
       editor.on("key", function (evt) {
         if (editor.mode !== "wysiwyg") {
           return;
         }
-
-        var tabKey = 9;
 
         if (evt.data.keyCode === tabKey) {
           editor.execCommand("increaseHeadingLevel");

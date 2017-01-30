@@ -4,6 +4,8 @@
 // Clean up all instances been created on the page.
 (function () {
 
+  var tabKey = 9;
+
   bender.editor = {
     allowedForTests: "h1; h2; h3"
   };
@@ -15,7 +17,6 @@
 
     "H2 to H3 from Tab": function () {
       this.editorBot.setHtmlWithSelection("<h2>^Heading</h2>");
-      var tabKey = 9;
       this.editor.fire("key", { keyCode: tabKey });
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
@@ -27,13 +28,12 @@
 
     "H2 to H1 from Shift-Tab": function () {
       this.editorBot.setHtmlWithSelection("<h2>^Heading</h2>");
-      var tabKey = 9;
       this.editor.fire("key", { keyCode: CKEDITOR.SHIFT + tabKey });
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
           "<h1>^Heading</h1>", updatedContent,
-          "Header increased from Shift-TAB"
+          "Header decreased from Shift-TAB"
         );
     }
 
