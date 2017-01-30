@@ -218,6 +218,22 @@
       }));
 
       CKEDITOR.dialog.add("selectStyle", this.path + "dialogs/selectstyle.js");
+      
+      // Indent and outdent with TAB/SHIFT+TAB key
+      editor.on( 'key', function( evt ) {
+          if ( editor.mode != 'wysiwyg' ) {
+              return;
+          }
+          
+          if ( evt.data.keyCode == 9 ) {
+              editor.execCommand( "increaseHeadingLevel" );
+              evt.cancel();
+          } else if ( evt.data.keyCode == CKEDITOR.SHIFT + 9 ) {
+              editor.execCommand( "decreaseHeadingLevel" );
+              evt.cancel();
+          }
+          
+      }, this );
 
     }
   });
