@@ -195,6 +195,9 @@
          "selectStyle",
     hidpi: true,
     init: function (editor) {
+
+      var TAB_KEY_CODE = 9;
+
       editor.config.autonumberStyleImgPath = this.path + "dialogs/img";
       editor.addContentsCss(this.path + "styles/numbering.css");
 
@@ -220,15 +223,14 @@
       CKEDITOR.dialog.add("selectStyle", this.path + "dialogs/selectstyle.js");
 
       // Indent and outdent with TAB/SHIFT+TAB key
-      var tabKey = 9;
       editor.on("key", function (evt) {
         if (editor.mode !== "wysiwyg") {
           return;
         }
 
-        if (evt.data.keyCode === tabKey) {
+        if (evt.data.keyCode === TAB_KEY_CODE) {
           editor.execCommand("increaseHeadingLevel");
-        } else if (evt.data.keyCode === CKEDITOR.SHIFT + tabKey) {
+        } else if (evt.data.keyCode === CKEDITOR.SHIFT + TAB_KEY_CODE) {
           editor.execCommand("decreaseHeadingLevel");
         }
 
