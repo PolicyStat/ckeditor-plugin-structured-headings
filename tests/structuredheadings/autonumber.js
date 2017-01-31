@@ -77,7 +77,7 @@
     },
 
     "AutoNumber Removes Class, Sets State Off": function () {
-      this.editorBot.setHtmlWithSelection("<h1 class='autonumber'>^Heading</h1>");
+      this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber\">^Heading</h1>");
       var testCommand = this.editor.getCommand("autoNumberHeading");
       this.editorBot.execCommand("autoNumberHeading");
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
@@ -89,6 +89,24 @@
       assert.areSame(
             CKEDITOR.TRISTATE_OFF, testCommand.state,
             "autoNumberHeading OFF"
+          );
+    },
+
+    "AutoNumber Forces Header Level Restriction": function () {
+      this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-0\">Heading</h1>" +
+                "<h3>^Heading</h3>");
+      var testCommand = this.editor.getCommand("autoNumberHeading");
+      this.editorBot.execCommand("autoNumberHeading");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
+        "<h1 class=\"autonumber autonumber-0\">Heading</h1>" +
+        "<h2 class=\"autonumber autonumber-1\">^Heading</h2>", updatedContent,
+        "Header Restricted when Numbered"
+          );
+      assert.areSame(
+        CKEDITOR.TRISTATE_ON, testCommand.state,
+        "autoNumberHeading ON"
           );
     }
 

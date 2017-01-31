@@ -143,7 +143,7 @@
         "autonumber-2",
         "autonumber-3",
         "autonumber-4",
-        "autonumbe4-5"
+        "autonumber-5"
       ],
       "Number Lowercase Roman": [
         "autonumber-N",
@@ -180,6 +180,25 @@
       };
 
     editor.config.autonumberCurrentStyle = "Numeric"; //hold current style or null if default
+  };
+
+  var elementStyles = {
+      //eslint-disable-next-line new-cap
+    div: new CKEDITOR.style({ element: "div" }),
+      //eslint-disable-next-line new-cap
+    p: new CKEDITOR.style({ element: "p" }),
+      //eslint-disable-next-line new-cap
+    h1: new CKEDITOR.style({ element: "h1" }),
+      //eslint-disable-next-line new-cap
+    h2: new CKEDITOR.style({ element: "h2" }),
+      //eslint-disable-next-line new-cap
+    h3: new CKEDITOR.style({ element: "h3" }),
+      //eslint-disable-next-line new-cap
+    h4: new CKEDITOR.style({ element: "h4" }),
+      //eslint-disable-next-line new-cap
+    h5: new CKEDITOR.style({ element: "h5" }),
+      //eslint-disable-next-line new-cap
+    h6: new CKEDITOR.style({ element: "h6" })
   };
 
 /*
@@ -257,6 +276,19 @@
         exec: function (editor) {
           var element = editor.elementPath().block;
 
+        //set to maximum level of the previous level + 1
+          var previousHeader = getPreviousHeader(editor, element);
+
+          if (previousHeader && isNumbered(editor, previousHeader)) {
+            var maxElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
+              previousHeader.getName()) + 1];
+            if (editor.config.numberedElements.indexOf(element.getName()) >
+              editor.config.numberedElements.indexOf(maxElement)) {
+              editor.applyStyle(elementStyles[maxElement]);
+              element = editor.elementPath().block;
+            }
+          }
+
           if (!isNumbered(editor, element)) {
             element.addClass(editor.config.autonumberBaseClass);
             setStyle(editor, element, editor.config.autonumberCurrentStyle);
@@ -288,24 +320,6 @@
         contextSensitive: 1,
         startDisabled: true,
         exec: function (editor) {
-          var elementStyles = {
-            //eslint-disable-next-line new-cap
-            div: new CKEDITOR.style({ element: "div" }),
-            //eslint-disable-next-line new-cap
-            p: new CKEDITOR.style({ element: "p" }),
-            //eslint-disable-next-line new-cap
-            h1: new CKEDITOR.style({ element: "h1" }),
-            //eslint-disable-next-line new-cap
-            h2: new CKEDITOR.style({ element: "h2" }),
-            //eslint-disable-next-line new-cap
-            h3: new CKEDITOR.style({ element: "h3" }),
-            //eslint-disable-next-line new-cap
-            h4: new CKEDITOR.style({ element: "h4" }),
-            //eslint-disable-next-line new-cap
-            h5: new CKEDITOR.style({ element: "h5" }),
-            //eslint-disable-next-line new-cap
-            h6: new CKEDITOR.style({ element: "h6" })
-          };
           var previousHeader = getPreviousHeader(editor, editor.elementPath().block);
 
         // if already in header, set back to default based on enter mode
@@ -357,18 +371,6 @@
           var nextElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
             element.getName()) + 1];
 
-        //set a maximum level of the previous level + 1
-          var previousHeader = getPreviousHeader(editor, element);
-
-          if (previousHeader) {
-            var maxElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
-              previousHeader.getName()) + 1];
-            if (editor.config.numberedElements.indexOf(nextElement) >
-              editor.config.numberedElements.indexOf(maxElement)) {
-              nextElement = maxElement;
-            }
-          }
-
         //eslint-disable-next-line new-cap
           var style = new CKEDITOR.style({ element: nextElement});
           editor.applyStyle(style);
@@ -384,9 +386,12 @@
               editor.config.numberedElements.indexOf(path.block.getName())) {
               this.setState(CKEDITOR.TRISTATE_DISABLED);
             } else if (
-            previousHeader && path.block.getName() ===
-            editor.config.numberedElements[editor.config.numberedElements.indexOf(
-              previousHeader.getName()) + 1]
+            previousHeader &&
+            isNumbered(editor, previousHeader) &&
+            isNumbered(editor, path.block) &&
+            editor.config.numberedElements.indexOf(path.block.getName()) >
+            editor.config.numberedElements.indexOf(previousHeader.getName())
+
           ) {
               this.setState(CKEDITOR.TRISTATE_DISABLED);
             } else {
