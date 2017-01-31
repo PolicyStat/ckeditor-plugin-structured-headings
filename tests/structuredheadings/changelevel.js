@@ -133,12 +133,13 @@
     },
 
     "Increase disabled if already at Previous + 1": function () {
-      this.editorBot.setHtmlWithSelection("<h1>Previous</h1><h2>^Heading</h2>");
+      this.editorBot.setHtmlWithSelection("<h1 class='autonumber'>Previous</h1>" +
+              "<h2 class='autonumber'>^Heading</h2>");
       var testCommand = this.editor.getCommand("increaseHeadingLevel");
 
       assert.areSame(
             CKEDITOR.TRISTATE_DISABLED, testCommand.state,
-            "increaseHeaderLevel DISABLED in previous +1"
+            "increaseHeaderLevel DISABLED in numbered previous +1"
           );
     }
 
