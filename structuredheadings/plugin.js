@@ -230,11 +230,11 @@
 
         if (evt.data.keyCode === TAB_KEY_CODE) {
           editor.execCommand("increaseHeadingLevel");
+          evt.cancel();
         } else if (evt.data.keyCode === CKEDITOR.SHIFT + TAB_KEY_CODE) {
           editor.execCommand("decreaseHeadingLevel");
+          evt.cancel();
         }
-
-        evt.cancel();
 
       }, this, null, 1);
 
