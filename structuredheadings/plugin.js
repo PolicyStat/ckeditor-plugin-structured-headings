@@ -479,33 +479,40 @@
       convertList: {
         exec: function (editor) {
 
+          var selectArea = function (startElement, endElement, encompass) {
+            encompass = encompass ? encompass : false;
+            var range = editor.createRange();
+            if (encompass) {
+              range.setStartBefore(startElement, 0);
+              range.setEndAfter(endElement, 0);
+            } else {
+              range.setStart(startElement, 0);
+              range.setEnd(endElement, 0);
+            }
+            editor.getSelection().selectRanges([ range ]);
+          };
+
           /* The Worker */
           var processList = function (listElement, level, deep) {
             level = level ? level : 0;
             deep = deep ? deep : false;
-            
+
             listElement.forEach(function (node) {
               if (node.type === CKEDITOR.NODE_ELEMENT && node.is({li: 1})) {
-                
-                /* this craziness is just to programmatically select each element
-                 * simply using node.focus() is not working for selecton, despite
-                 * the documentation saying it will.
-                 */
-                var range = editor.createRange();
-                range.setStart( node, 0 );
-                range.setEnd( node, 0 );
-                editor.getSelection().selectRanges( [ range ] );
+
+                selectArea(node, node);
 
                 // Apply the element style to the selection based on current level
+                //eslint-disable-next-line new-cap
                 editor.applyStyle(new CKEDITOR.style({
-                    element: editor.config.numberedElements[level]
+                  element: editor.config.numberedElements[level]
                 }));
-                
+
                 // Apply numbering also
-                editor.execCommand('autoNumberHeading');
-                
+                editor.execCommand("autoNumberHeading");
+
                 return true;
-                
+
               /* if another list is found, and deep is enabled, recursively call the worker
                * and incremement the level, deep will convert the entire list
                */
@@ -522,32 +529,33 @@
           var listRoot = editor.elementPath().contains(["ol", "ul"], false, true);
           var deep = false; //don't deep process
 
-          var previousHeader = getPreviousHeader(editor,listRoot);
-          if (!previousHeader) {
-            //fire off the worker at level 0
-            processList(listRoot, 0, deep);
-          } else {
-            //fire off worker at previous + 1
-            processList(listRoot,
-                editor.config.numberedElements.indexOf(previousHeader.getName()) + 1,
-                deep
-            )
+          if (listRoot) {
+
+            var previousHeader = getPreviousHeader(editor, listRoot);
+            if (!previousHeader) {
+                //fire off the worker at level 0
+              processList(listRoot, 0, deep);
+            } else {
+                //fire off worker at previous + 1
+              processList(listRoot,
+                    editor.config.numberedElements.indexOf(previousHeader.getName()) + 1,
+                    deep
+                );
+            }
+
+              /* After the process is run, select the entire list we worked on
+               * and outdent it, pushing the top level items out of the list. if
+               * deep is enabled, we instead flatten the entire list.
+               */
+            selectArea(listRoot, listRoot, true);
+
+            if (!deep) {
+              editor.execCommand("outdent");
+            } else {
+              editor.execCommand("bulletedlist");
+            }
+            editor.getSelection().removeAllRanges();
           }
-          
-          /* After the process is run, select the entire list we worked on
-           * and outdent it, pushing the top level items out of the list. if
-           * deep is enabled, we instead flatten the entire list.
-           */
-          var range = editor.createRange();
-          range.setStart( listRoot, 0 );
-          range.setEndAfter( listRoot, 0 );
-          editor.getSelection().selectRanges( [ range ] );
-          if (!deep) {
-            editor.execCommand('outdent');
-          } else {
-            editor.execCommand('bulletedlist');
-          }
-          
 
         }
       }
