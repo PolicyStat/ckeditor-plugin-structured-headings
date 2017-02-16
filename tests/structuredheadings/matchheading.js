@@ -1,11 +1,11 @@
 /* bender-tags: editor,unit */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,list */
 
 // Clean up all instances been created on the page.
 (function () {
 
   bender.editor = {
-    allowedForTests: "h1; p"
+    allowedForTests: "h1; p; ul; li"
   };
 
   bender.test({
@@ -111,6 +111,46 @@
           "<p>^Header</p>", updatedContent,
           "H6 changed back to P"
         );
+
+    },
+
+    "MatchHeading in list converts list level": function () {
+      this.editorBot.setHtmlWithSelection("<ul><li>^ListItem</li></ul>");
+      this.editorBot.execCommand("matchHeading");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
+            "<h1 class=\"autonumber autonumber-0\">^ListItem</h1>", updatedContent,
+            "LI changed to H1"
+          );
+
+    },
+
+    "MatchHeading in list following heading sets next level": function () {
+      this.editorBot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-0\">Header</h1>" +
+       "<ul><li>^ListItem</li></ul>");
+      this.editorBot.execCommand("matchHeading");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
+            "<h1 class=\"autonumber autonumber-0\">Header</h1>" +
+            "<h2 class=\"autonumber autonumber-1\">^ListItem</h2>", updatedContent,
+            "LI cahanged to h2"
+          );
+
+    },
+
+    "MatchHeading in list keeps sublists": function () {
+      this.editorBot.setHtmlWithSelection("<ul><li>^ListItem" +
+        "<ul><li>SubListItem</li></ul></li></ul>");
+      this.editorBot.execCommand("matchHeading");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
+              "<h1 class=\"autonumber autonumber-0\">^ListItem</h1>" +
+              "<ul><li>SubListItem</li></ul>", updatedContent,
+              "Sublist in tact"
+            );
 
     }
 

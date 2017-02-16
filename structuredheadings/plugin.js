@@ -123,11 +123,6 @@
         command: "increaseHeadingLevel",
         toolbar: "styles,3"
       });
-      editor.ui.addButton("convertList", {
-        label: "Convert List",
-        command: "convertList",
-        toolbar: "styles,7"
-      });
     }
   };
 
@@ -213,7 +208,6 @@
       //Dialogs
       //eslint-disable-next-line new-cap
       editor.addCommand("selectStyle", new CKEDITOR.dialogCommand("selectStyle", {
-        startDisabled: true,
         contextSensitive: true,
         refresh: function () {
           if (isEmpty(editor.config.autonumberStyles)) {
@@ -314,7 +308,8 @@
               editor.elementPath().block.addClass(editor.config.autonumberBaseClass);
               setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
             }
-
+          } else if (editor.elementPath().block.is({li: 1})) {
+            editor.execCommand("convertList");
         // else set it as new first element
           } else {
             editor.applyStyle(elementStyles[editor.config.numberedElements[0]]);
@@ -326,7 +321,7 @@
         refresh: function (editor, path) {
           if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
             this.setState(CKEDITOR.TRISTATE_ON);
-          } else if (path.block && path.block.is({h1: 1, p: 1})) {
+          } else if (path.block && path.block.is({h1: 1, p: 1, li: 1})) {
             this.setState(CKEDITOR.TRISTATE_OFF);
           } else {
             this.setState(CKEDITOR.TRISTATE_DISABLED);
@@ -554,7 +549,27 @@
             } else {
               editor.execCommand("bulletedlist");
             }
-            editor.getSelection().removeAllRanges();
+
+            /*
+             * At this point, everything has worked but the entire list is
+             * visibly selected, the original selection is invalid because the
+             * element has changed, bookmarks don't work for the same reason
+             * my only solution was to place the cursor at the start or end of
+             * the selection (first or last header created) assuming one would
+             * want to check the list, I chose start.
+             */
+
+            //end with selection at the first list element to cleanup
+            selectArea(
+                editor.getSelection().getStartElement(),
+                editor.getSelection().getStartElement()
+            );
+            //end with selection at the last list element
+//            selectArea(
+//                editor.getSelection().getRanges()[0].getTouchedEndNode(),
+//                editor.getSelection().getRanges()[0].getTouchedEndNode()
+//            );
+//            editor.getSelection().scrollIntoView();
           }
 
         }
