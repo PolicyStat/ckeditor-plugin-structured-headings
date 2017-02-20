@@ -475,7 +475,7 @@
         exec: function (editor) {
 
           var selectArea = function (startElement, endElement, encompass) {
-            encompass = encompass ? encompass : false;
+            encompass = encompass || false;
             var range = editor.createRange();
             if (encompass) {
               range.setStartBefore(startElement, 0);
@@ -489,8 +489,8 @@
 
           /* The Worker */
           var processList = function (listElement, level, deep) {
-            level = level ? level : 0;
-            deep = deep ? deep : false;
+            level = level || 0;
+            deep = deep || false;
 
             listElement.forEach(function (node) {
               if (node.type === CKEDITOR.NODE_ELEMENT && node.is({li: 1})) {
@@ -514,9 +514,8 @@
               } else if (node.type === CKEDITOR.NODE_ELEMENT && node.is({ul: 1, ol: 1}) && deep) {
                 processList(node, level + 1);
                 return false;
-              } else {
-                return false;
               }
+              return false;
             }, null, true);
           };
 
