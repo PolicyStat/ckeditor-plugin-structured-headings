@@ -96,31 +96,31 @@
         command: "autoNumberHeading",
         toolbar: "styles,4"
       });
-      editor.ui.addButton("restartNumbering", {
-        label: "Restart Numbering",
-        command: "restartNumbering",
-        toolbar: "styles,6"
-      });
-      editor.ui.addButton("matchHeading", {
-        label: "Match Heading",
-        command: "matchHeading",
-        toolbar: "styles,1"
-      });
-      editor.ui.addButton("selectStyle", {
-        label: "Select Style",
-        command: "selectStyle",
-        toolbar: "styles,5"
-      });
-      editor.ui.addButton("increaseHeadingLevel", {
-        label: "Increase Heading",
-        command: "decreaseHeadingLevel",
-        toolbar: "styles,2"
-      });
-      editor.ui.addButton("decreaseHeadingLevel", {
-        label: "Decrease Heading",
-        command: "increaseHeadingLevel",
-        toolbar: "styles,3"
-      });
+//       editor.ui.addButton("restartNumbering", {
+//         label: "Restart Numbering",
+//         command: "restartNumbering",
+//         toolbar: "styles,6"
+//       });
+//       editor.ui.addButton("matchHeading", {
+//         label: "Match Heading",
+//         command: "matchHeading",
+//         toolbar: "styles,1"
+//       });
+//       editor.ui.addButton("selectStyle", {
+//         label: "Select Style",
+//         command: "selectStyle",
+//         toolbar: "styles,5"
+//       });
+//       editor.ui.addButton("increaseHeadingLevel", {
+//         label: "Increase Heading",
+//         command: "decreaseHeadingLevel",
+//         toolbar: "styles,2"
+//       });
+//       editor.ui.addButton("decreaseHeadingLevel", {
+//         label: "Decrease Heading",
+//         command: "increaseHeadingLevel",
+//         toolbar: "styles,3"
+//       });
     }
   };
 
@@ -227,20 +227,98 @@
 
       //Dialogs
       //eslint-disable-next-line new-cap
-      editor.addCommand("selectStyle", new CKEDITOR.dialogCommand("selectStyle", {
-        startDisabled: true,
-        contextSensitive: true,
-        refresh: function () {
-          if (isEmpty(editor.config.autonumberStyles)) {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
-          } else {
-            this.setState(CKEDITOR.TRISTATE_OFF);
-          }
+//       editor.addCommand("selectStyle", new CKEDITOR.dialogCommand("selectStyle", {
+//         startDisabled: true,
+//         contextSensitive: true,
+//         refresh: function () {
+//           if (isEmpty(editor.config.autonumberStyles)) {
+//             this.setState(CKEDITOR.TRISTATE_DISABLED);
+//           } else {
+//             this.setState(CKEDITOR.TRISTATE_OFF);
+//           }
+//         }
+//       }));
+//       CKEDITOR.dialog.add("selectStyle", this.path + "dialogs/selectstyle.js");
+
+      //Style Dropdown
+      editor.ui.addRichCombo( 'NumStyles', {
+      label: 'Numbering',
+      title: 'Numbering Styles',
+      toolbar: 'styles,7',
+      
+      panel: {
+        css: [ CKEDITOR.skin.getPath( 'editor' ) ].concat( editor.config.contentsCss ),
+        multiSelect: false,
+        attributes: { 'aria-label': 'Numbering Styles' }
+      },
+
+      init: function() {
+        this.startGroup( 'Styles');
+
+        for ( var style in editor.config.autonumberStyles ) {
+          this.add( style, style, 'label' );
         }
-      }));
+        
+        this.startGroup( 'Restart');
+        this.add('restart', 'Restart Numbering', 'label');
+      },
 
-      CKEDITOR.dialog.add("selectStyle", this.path + "dialogs/selectstyle.js");
+      onClick: function( value ) {
+        editor.focus();
+        editor.fire( 'saveSnapshot' );
+        
+        if( value !== 'restart') {
+          editor.execCommand('setCurrentStyle', value);
+          editor.execCommand('reapplyStyle');
+          this.setValue( value, 'Numbering' );
+        } else {
+          editor.execCommand('restartNumbering');
+        }
+        
+        // Save the undo snapshot after all changes are affected. (#4899)
+        setTimeout( function() {
+          editor.fire( 'saveSnapshot' );
+        }, 0 );
+      },
 
+      onRender: function() {
+        editor.on( 'selectionChange', function( ev ) {
+          var currentTag = this.getValue(),
+            elementPath = ev.data.path;
+
+          this.refresh();
+
+          for ( var style in editor.config.autonumberStyles ) {
+            if ( editor.config.autonumberCurrentStyle === style ) {
+                this.setValue( style, 'Numbering' );
+                return;
+            }
+          }
+          // If no styles match, just empty it.
+          this.setValue( '' );
+
+        }, this );
+      },
+
+      onOpen: function() {
+        this.showAll();
+      },
+
+      refresh: function() {
+        var path = editor.elementPath();
+
+        if ( !path )
+            return;
+
+        if ( path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0 ) {
+          this.setState( CKEDITOR.TRISTATE_OFF );
+          return;
+        }
+        
+        this.setState( CKEDITOR.TRISTATE_DISABLED);        
+      }
+    } );
+    
       // Indent and outdent with TAB/SHIFT+TAB key
       editor.on("key", function (evt) {
         if (editor.mode !== "wysiwyg") {
