@@ -26,13 +26,13 @@ a value of null will omit an additional style and only use base+level classes.
 object, default:
 ```
 {
-    "Default": null,
-    "Number": "autonumber-N",
-    "Uppercase Roman": "autonumber-R",
-    "Lowercase Roman": "autonumber-r",
-    "Uppercase Letter": "autonumber-A",
-    "Lowercase Letter": "autonumber-a"
-  }
+  "Default": null,
+  "Number": "autonumber-N",
+  "Uppercase Roman": "autonumber-R",
+  "Lowercase Roman": "autonumber-r",
+  "Uppercase Letter": "autonumber-A",
+  "Lowercase Letter": "autonumber-a"
+}
 ```
 ### autonumberLevelClasses
 Array of CSS classes to be applied to elements at each level of numbering in addition to the base
