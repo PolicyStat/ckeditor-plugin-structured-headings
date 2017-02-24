@@ -114,6 +114,10 @@
   var setupCommands = function (editor) {
     editor.addCommand("matchHeading",
         CKEDITOR.plugins.structuredheadings.commands.matchHeading);
+    editor.addCommand("increaseHeadingLevel",
+            CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
+    editor.addCommand("decreaseHeadingLevel",
+            CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
     editor.addCommand("restartNumbering",
         CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
     editor.addCommand("reapplyStyle",
@@ -367,6 +371,44 @@
           }
         }
       },
+      
+      /*
+       * increaseHeadingLevel
+       */
+        increaseHeadingLevel: {
+          exec: function (editor) {
+            var element = editor.elementPath().block;
+            var nextElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
+              element.getName()) + 1];
+
+            if(nextElement) {
+                editor.applyStyle(elementStyles[nextElement]);
+            }
+            if (isNumbered(editor, element)) {
+              setLevel(editor, editor.elementPath().block);
+              setStyle(editor, editor.elementPath().block);
+            }
+          }
+        },
+
+      /*
+       * decreaseHeadingLevel
+       */
+        decreaseHeadingLevel: {
+          exec: function (editor) {
+            var element = editor.elementPath().block;
+            var prevElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
+              element.getName()) - 1];
+            
+            if(prevElement) {
+                editor.applyStyle(elementStyles[prevElement]);
+            }
+            if (isNumbered(editor, element)) {
+              setLevel(editor, editor.elementPath().block);
+              setStyle(editor, editor.elementPath().block);
+            }
+          }
+        },
 
     /*
      * restartNumbering
