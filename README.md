@@ -20,18 +20,37 @@ string, default: `"autonumber"`
 CSS class to add to any heading to restart numbering at that point.
 string, default: `"autonumber-restart"`
 ### autonumberStyles
-Listing of style definitions by name, each style definition is a CSS class to apply to all
-elements of the current index level specified in numberedElements. (will apply to all h2s, all h3s)
+Listing of style definitions by name, each style definition is an array of CSS classes to apply to
+all elements of the current index level specified in numberedElements.
 a value of null will omit an additional style and only use base+level classes.
 object, default:
 ```
 {
-  "Default": null,
-  "Number": "autonumber-N",
-  "Uppercase Roman": "autonumber-R",
-  "Lowercase Roman": "autonumber-r",
-  "Uppercase Letter": "autonumber-A",
-  "Lowercase Letter": "autonumber-a"
+  "Numeric": null,
+  "Number Lowercase Roman": [
+    "autonumber-N",
+    "autonumber-a",
+    "autonumber-r",
+    "autonumber-a",
+    "autonumber-r",
+    "autonumber-a"
+  ],
+  "Letter Lowercase Roman": [
+    "autonumber-A",
+    "autonumber-a",
+    "autonumber-r",
+    "autonumber-a",
+    "autonumber-r",
+    "autonumber-a"
+  ],
+  "Roman Uppercase Number": [
+    "autonumber-R",
+    "autonumber-A",
+    "autonumber-N",
+    "autonumber-a",
+    "autonumber-N",
+    "autonumber-a"
+  ]
 }
 ```
 ### autonumberLevelClasses
