@@ -147,7 +147,7 @@
 
     editor.config.autonumberStyles =
     editor.config.autonumberStyles || {
-      "Number.Number": null,
+      "Default": null,
       "Number": "autonumber-N",
       "Uppercase Roman": "autonumber-R",
       "Lowercase Roman": "autonumber-r",

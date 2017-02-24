@@ -22,17 +22,17 @@ string, default: `"autonumber-restart"`
 ### autonumberStyles
 Listing of style definitions by name, each style definition is a CSS class to apply to all
 elements of the current index level specified in numberedElements. (will apply to all h2s, all h3s)
+a value of null will omit an additional style and only use base+level classes.
 object, default:
 ```
 {
-    "Number.Number": null,
+    "Default": null,
     "Number": "autonumber-N",
     "Uppercase Roman": "autonumber-R",
     "Lowercase Roman": "autonumber-r",
     "Uppercase Letter": "autonumber-A",
     "Lowercase Letter": "autonumber-a"
   }
-```
 ```
 ### autonumberLevelClasses
 Array of CSS classes to be applied to elements at each level of numbering in addition to the base
