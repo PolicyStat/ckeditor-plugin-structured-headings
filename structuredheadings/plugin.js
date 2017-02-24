@@ -189,7 +189,7 @@
         },
 
         init: function () {
-          
+
           this.startGroup("Formats");
 
           this.add("p",
@@ -217,22 +217,24 @@
           editor.applyStyle(elementStyles[ value ]);
           setLevel(editor, editor.elementPath().block);
           editor.execCommand("reapplyStyle");
+          this.setValue(value, "Formats");
         },
 
         onRender: function () {
           editor.on("selectionChange", function (ev) {
             var currentTag = this.getValue();
             var elementPath = ev.data.path;
-            var elementList = editor.config.numberedElements.concat(["pre", "p", "div"])
-            for ( var tag in elementList ) {
-                if ( elementStyles[elementList[tag]].checkActive( elementPath, editor ) ) {
-                    if ( elementList[tag] != currentTag )
-                        this.setValue( elementList[tag], 'Formats' );
-                    return;
+            var elementList = editor.config.numberedElements.concat(["pre", "p", "div"]);
+            for (var tag in elementList) {
+              if (elementStyles[elementList[tag]].checkActive(elementPath, editor)) {
+                if (elementList[tag] !== currentTag) {
+                  this.setValue(elementList[tag], "Formats");
                 }
+                return;
+              }
             }
 
-            this.setValue( '' );
+            this.setValue("");
           }, this);
         }
 
@@ -275,22 +277,22 @@
             setLevel(editor, editor.elementPath().block);
             setCurrentStyle(editor, editor.elementPath().block, value);
             editor.execCommand("reapplyStyle");
+            this.setValue(value, "Numbering");
           }
         },
 
         onRender: function () {
           editor.on("selectionChange", function (ev) {
-              var currentTag = this.getValue();
-              var elementPath = ev.data.path;
-              
-              for ( var tag in editor.config.autonumberStyles ) {
-                  if ( elementPath.block.hasClass(editor.config.autonumberStyles[tag]) ) {
-                       this.setValue( tag, 'Numbering' );
-                      return;
-                  }
-              }
+            var elementPath = ev.data.path;
 
-              this.setValue( '' );
+            for (var tag in editor.config.autonumberStyles) {
+              if (elementPath.block.hasClass(editor.config.autonumberStyles[tag])) {
+                this.setValue(tag, "Numbering");
+                return;
+              }
+            }
+
+            this.setValue("");
           }, this);
         },
 
@@ -341,8 +343,6 @@
      * matchHeading
      */
       matchHeading: {
-        contextSensitive: 1,
-        startDisabled: true,
         exec: function (editor) {
           var previousHeader = getPreviousHeader(editor, editor.elementPath().block);
 
@@ -371,44 +371,44 @@
           }
         }
       },
-      
+
       /*
        * increaseHeadingLevel
        */
-        increaseHeadingLevel: {
-          exec: function (editor) {
-            var element = editor.elementPath().block;
-            var nextElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
+      increaseHeadingLevel: {
+        exec: function (editor) {
+          var element = editor.elementPath().block;
+          var nextElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
               element.getName()) + 1];
 
-            if(nextElement) {
-                editor.applyStyle(elementStyles[nextElement]);
-            }
-            if (isNumbered(editor, element)) {
-              setLevel(editor, editor.elementPath().block);
-              setStyle(editor, editor.elementPath().block);
-            }
+          if (nextElement) {
+            editor.applyStyle(elementStyles[nextElement]);
           }
-        },
+          if (isNumbered(editor, element)) {
+            setLevel(editor, editor.elementPath().block);
+            setStyle(editor, editor.elementPath().block);
+          }
+        }
+      },
 
       /*
        * decreaseHeadingLevel
        */
-        decreaseHeadingLevel: {
-          exec: function (editor) {
-            var element = editor.elementPath().block;
-            var prevElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
+      decreaseHeadingLevel: {
+        exec: function (editor) {
+          var element = editor.elementPath().block;
+          var prevElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
               element.getName()) - 1];
-            
-            if(prevElement) {
-                editor.applyStyle(elementStyles[prevElement]);
-            }
-            if (isNumbered(editor, element)) {
-              setLevel(editor, editor.elementPath().block);
-              setStyle(editor, editor.elementPath().block);
-            }
+
+          if (prevElement) {
+            editor.applyStyle(elementStyles[prevElement]);
           }
-        },
+          if (isNumbered(editor, element)) {
+            setLevel(editor, editor.elementPath().block);
+            setStyle(editor, editor.elementPath().block);
+          }
+        }
+      },
 
     /*
      * restartNumbering

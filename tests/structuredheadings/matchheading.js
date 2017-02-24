@@ -1,5 +1,5 @@
 /* bender-tags: editor,unit */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo */
 
 // Clean up all instances been created on the page.
 (function () {
@@ -11,39 +11,6 @@
   bender.test({
     setUp: function () {
       //Anything to be run before each test if needed
-    },
-
-    "MatchHeading Active and On Inside Header Tag": function () {
-      this.editorBot.setHtmlWithSelection("<h1>^Heading</h1>");
-      var testCommand = this.editor.getCommand("matchHeading");
-
-      assert.areSame(
-          CKEDITOR.TRISTATE_ON, testCommand.state,
-          "MatchHeading ON in H1"
-        );
-
-    },
-
-    "MatchHeading Active and Off Inside P Tag": function () {
-      this.editorBot.setHtmlWithSelection("<p>^Paragraph</p>");
-      var testCommand = this.editor.getCommand("matchHeading");
-
-      assert.areSame(
-         CKEDITOR.TRISTATE_OFF, testCommand.state,
-         "MatchHeading OFF in P"
-        );
-
-    },
-
-    "Plugin Selects Enclosing Block-ish Tag": function () {
-      this.editorBot.setHtmlWithSelection("<p><span><strong>^Span</strong></span></p>");
-      var testCommand = this.editor.getCommand("matchHeading");
-
-      assert.areSame(
-         CKEDITOR.TRISTATE_OFF, testCommand.state,
-         "MatchHeading OFF in STRONG in SPAN in P"
-        );
-
     },
 
     "MatchHeading Updates P Tag to H1 if No Previous": function () {
