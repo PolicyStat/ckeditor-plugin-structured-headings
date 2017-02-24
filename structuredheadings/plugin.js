@@ -453,7 +453,7 @@
           }
           if (isNumbered(editor, element)) {
             setLevel(editor, editor.elementPath().block);
-            setStyle(editor, editor.elementPath().block);
+            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
         }
       },
@@ -472,7 +472,7 @@
           }
           if (isNumbered(editor, element)) {
             setLevel(editor, editor.elementPath().block);
-            setStyle(editor, editor.elementPath().block);
+            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
         }
       },
