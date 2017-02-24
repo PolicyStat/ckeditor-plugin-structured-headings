@@ -217,7 +217,16 @@
           editor.applyStyle(elementStyles[ value ]);
           setLevel(editor, editor.elementPath().block);
           editor.execCommand("reapplyStyle");
-          this.setValue(value, "Formats");
+          if (value === "p") {
+            this.setValue(value, "Normal Text");
+          } else if (value === "pre") {
+            this.setValue(value, "Formatted Text");
+          } else {
+            this.setValue(value, "Header " + editor.config.numberedElements[
+                editor.config.numberedElements.indexOf(value)
+              ].slice(1));
+          }
+
         },
 
         onRender: function () {
@@ -228,7 +237,14 @@
             for (var tag in elementList) {
               if (elementStyles[elementList[tag]].checkActive(elementPath, editor)) {
                 if (elementList[tag] !== currentTag) {
-                  this.setValue(elementList[tag], "Formats");
+                  if (elementList[tag] === "p") {
+                    this.setValue(elementList[tag], "Normal Text");
+                  } else if (elementList[tag] === "pre") {
+                    this.setValue(elementList[tag], "Formatted Text");
+                  } else {
+                    this.setValue(elementList[tag], "Header " +
+                          editor.config.numberedElements[tag].slice(1));
+                  }
                 }
                 return;
               }
@@ -277,7 +293,7 @@
             setLevel(editor, editor.elementPath().block);
             setCurrentStyle(editor, editor.elementPath().block, value);
             editor.execCommand("reapplyStyle");
-            this.setValue(value, "Numbering");
+            this.setValue(value, value);
           }
         },
 
@@ -287,7 +303,7 @@
 
             for (var tag in editor.config.autonumberStyles) {
               if (elementPath.block.hasClass(editor.config.autonumberStyles[tag])) {
-                this.setValue(tag, "Numbering");
+                this.setValue(tag, tag);
                 return;
               }
             }
