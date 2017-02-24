@@ -87,23 +87,21 @@
 //      }
 //    }
 //  };
-  
+
   var setStyle = function (editor, element, style) {
-      var index = editor.config.numberedElements.indexOf(element.getName());
-      if (element.type === CKEDITOR.NODE_ELEMENT) {
-        clearStyles(editor, element);
-        if (editor.config.autonumberStyles[style] &&
+    var index = editor.config.numberedElements.indexOf(element.getName());
+    if (element.type === CKEDITOR.NODE_ELEMENT) {
+      clearStyles(editor, element);
+      if (editor.config.autonumberStyles[style] &&
           typeof editor.config.autonumberStyles[style] === "object") {
-            element.addClass(editor.config.autonumberStyles[style][index]);
-        } else {
-          element.addClass//(style);
-        }
+        element.addClass(editor.config.autonumberStyles[style][index]);
       }
-    };
-    
-    var setCurrentStyle = function (editor, element, style) {
-        editor.config.autonumberCurrentStyle = style;
-    };
+    }
+  };
+
+  var setCurrentStyle = function (editor, element, style) {
+    editor.config.autonumberCurrentStyle = style;
+  };
 
 //  var setCurrentStyle = function (editor, element, style) {
 //    var index = editor.config.numberedElements.indexOf(element.getName());
@@ -171,32 +169,32 @@
 //      "Lowercase Letter": "autonumber-a"
 //    };
 
-        "Numeric": null,
-        "Number Lowercase Roman": [
-          "autonumber-N",
-          "autonumber-a",
-          "autonumber-r",
-          "autonumber-a",
-          "autonumber-r",
-          "autonumber-a"
-        ],
-        "Letter Lowercase Roman": [
-          "autonumber-A",
-          "autonumber-a",
-          "autonumber-r",
-          "autonumber-a",
-          "autonumber-r",
-          "autonumber-a"
-        ],
-        "Roman Uppercase Number": [
-          "autonumber-R",
-          "autonumber-A",
-          "autonumber-N",
-          "autonumber-a",
-          "autonumber-N",
-          "autonumber-a"
-        ]
-      };
+      "Numeric": null,
+      "Number Lowercase Roman": [
+        "autonumber-N",
+        "autonumber-a",
+        "autonumber-r",
+        "autonumber-a",
+        "autonumber-r",
+        "autonumber-a"
+      ],
+      "Letter Lowercase Roman": [
+        "autonumber-A",
+        "autonumber-a",
+        "autonumber-r",
+        "autonumber-a",
+        "autonumber-r",
+        "autonumber-a"
+      ],
+      "Roman Uppercase Number": [
+        "autonumber-R",
+        "autonumber-A",
+        "autonumber-N",
+        "autonumber-a",
+        "autonumber-N",
+        "autonumber-a"
+      ]
+    };
 
     editor.config.autonumberCurrentStyle =
     editor.config.autonumberCurrentStyle || "Numeric";
@@ -351,15 +349,15 @@
 //                return;
 //              }
 //            }
-            
-            if(isNumbered(editor, elementPath.block)) {
-                this.setValue(editor.config.autonumberCurrentStyle,
+
+            if (isNumbered(editor, elementPath.block)) {
+              this.setValue(editor.config.autonumberCurrentStyle,
                         editor.config.autonumberCurrentStyle);
             } else {
-                this.setValue("");
+              this.setValue("");
             }
 
-            
+
           }, this);
         },
 
