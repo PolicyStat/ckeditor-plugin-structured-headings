@@ -58,7 +58,6 @@
 
   var setLevel = function (editor, element) {
     var index = editor.config.numberedElements.indexOf(element.getName());
-
     clearLevel(editor, element);
     element.addClass(editor.config.autonumberLevelClasses[index]);
   };
@@ -76,28 +75,45 @@
     }
   };
 
-  var setStyle = function (editor, element) {
-    var index = editor.config.numberedElements.indexOf(element.getName());
-    var style = editor.config.autonumberCurrentStyle[index];
-    if (element.type === CKEDITOR.NODE_ELEMENT) {
-      clearStyles(editor, element);
-      if (style && typeof style === "object") {
-        element.addClass(style[index]);
-      } else {
-        element.addClass(style);
-      }
-    }
-  };
-
-  var setCurrentStyle = function (editor, element, style) {
-    var index = editor.config.numberedElements.indexOf(element.getName());
-    if (editor.config.autonumberStyles[style] &&
+//  var setStyle = function (editor, element) {
+//    var index = editor.config.numberedElements.indexOf(element.getName());
+//    var style = editor.config.autonumberCurrentStyle[index];
+//    if (element.type === CKEDITOR.NODE_ELEMENT) {
+//      clearStyles(editor, element);
+//      if (style && typeof style === "object") {
+//        element.addClass(style[index]);
+//      } else {
+//        element.addClass(style);
+//      }
+//    }
+//  };
+  
+  var setStyle = function (editor, element, style) {
+      var index = editor.config.numberedElements.indexOf(element.getName());
+      if (element.type === CKEDITOR.NODE_ELEMENT) {
+        clearStyles(editor, element);
+        if (editor.config.autonumberStyles[style] &&
           typeof editor.config.autonumberStyles[style] === "object") {
-      editor.config.autonumberCurrentStyle[index] = editor.config.autonumberStyles[style][index];
-    } else {
-      editor.config.autonumberCurrentStyle[index] = editor.config.autonumberStyles[style];
-    }
-  };
+            element.addClass(editor.config.autonumberStyles[style][index]);
+        } else {
+          element.addClass//(style);
+        }
+      }
+    };
+    
+    var setCurrentStyle = function (editor, element, style) {
+        editor.config.autonumberCurrentStyle = style;
+    };
+
+//  var setCurrentStyle = function (editor, element, style) {
+//    var index = editor.config.numberedElements.indexOf(element.getName());
+//    if (editor.config.autonumberStyles[style] &&
+//          typeof editor.config.autonumberStyles[style] === "object") {
+//      editor.config.autonumberCurrentStyle[index] = editor.config.autonumberStyles[style][index];
+//    } else {
+//      editor.config.autonumberCurrentStyle[index] = editor.config.autonumberStyles[style];
+//    }
+//  };
 
   var getPreviousHeader = function (editor, element) {
     return element.getPrevious(function (node) {
@@ -147,16 +163,44 @@
 
     editor.config.autonumberStyles =
     editor.config.autonumberStyles || {
-      "Default": null,
-      "Number": "autonumber-N",
-      "Uppercase Roman": "autonumber-R",
-      "Lowercase Roman": "autonumber-r",
-      "Uppercase Letter": "autonumber-A",
-      "Lowercase Letter": "autonumber-a"
-    };
+//      "Default": null,
+//      "Number": "autonumber-N",
+//      "Uppercase Roman": "autonumber-R",
+//      "Lowercase Roman": "autonumber-r",
+//      "Uppercase Letter": "autonumber-A",
+//      "Lowercase Letter": "autonumber-a"
+//    };
+
+        "Numeric": null,
+        "Number Lowercase Roman": [
+          "autonumber-N",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a"
+        ],
+        "Letter Lowercase Roman": [
+          "autonumber-A",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a"
+        ],
+        "Roman Uppercase Number": [
+          "autonumber-R",
+          "autonumber-A",
+          "autonumber-N",
+          "autonumber-a",
+          "autonumber-N",
+          "autonumber-a"
+        ]
+      };
 
     editor.config.autonumberCurrentStyle =
-    editor.config.autonumberCurrentStyle || editor.config.autonumberLevelClasses.slice(0);
+    editor.config.autonumberCurrentStyle || "Numeric";
+    //editor.config.autonumberLevelClasses.slice(0)
   };
 
 /*
@@ -292,7 +336,7 @@
             setNumbering(editor, editor.elementPath().block);
             setLevel(editor, editor.elementPath().block);
             setCurrentStyle(editor, editor.elementPath().block, value);
-            editor.execCommand("reapplyStyle");
+            editor.execCommand("reapplyStyle", value);
             this.setValue(value, value);
           }
         },
@@ -301,14 +345,21 @@
           editor.on("selectionChange", function (ev) {
             var elementPath = ev.data.path;
 
-            for (var tag in editor.config.autonumberStyles) {
-              if (elementPath.block.hasClass(editor.config.autonumberStyles[tag])) {
-                this.setValue(tag, tag);
-                return;
-              }
+//            for (var tag in editor.config.autonumberStyles) {
+//              if (elementPath.block.hasClass(editor.config.autonumberStyles[tag])) {
+//                this.setValue(tag, tag);
+//                return;
+//              }
+//            }
+            
+            if(isNumbered(editor, elementPath.block)) {
+                this.setValue(editor.config.autonumberCurrentStyle,
+                        editor.config.autonumberCurrentStyle);
+            } else {
+                this.setValue("");
             }
 
-            this.setValue("");
+            
           }, this);
         },
 
@@ -448,12 +499,12 @@
        * reapplyStyle
        */
       reapplyStyle: {
-        exec: function (editor) {
+        exec: function (editor, style) {
           var nodeList = editor.document.find("." + editor.config.autonumberBaseClass);
 
           for (var i = 0; i < nodeList.count(); i++) {
             var node = nodeList.getItem(i);
-            setStyle(editor, node);
+            setStyle(editor, node, style);
           }
         }
       }
