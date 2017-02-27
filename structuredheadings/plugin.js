@@ -202,12 +202,8 @@
 
           this.startGroup("Formats");
 
-          this.add("p",
-            elementStyles.p.buildPreview(
-              "Normal Text"
-            ),
-            "Normal Text"
-          );
+          this.add("p", elementStyles.p.buildPreview("Normal Text"), "Normal Text");
+
           for (var key in editor.config.numberedElements) {
             this.add(editor.config.numberedElements[key],
               elementStyles[ editor.config.numberedElements[key] ].buildPreview(
@@ -215,12 +211,8 @@
               ),
               "Header " + editor.config.numberedElements[key].slice(1));
           }
-          this.add("pre",
-              elementStyles.pre.buildPreview(
-                  "Formatted Text"
-                ),
-            "Preformatted Text"
-          );
+
+          this.add("pre", elementStyles.pre.buildPreview("Formatted Text"), "Preformatted Text");
         },
 
         onClick: function (value) {
@@ -232,9 +224,11 @@
           } else if (value === "pre") {
             this.setValue(value, "Formatted Text");
           } else {
-            this.setValue(value, "Header " + editor.config.numberedElements[
-                editor.config.numberedElements.indexOf(value)
-              ].slice(1));
+            this.setValue(
+                value,
+                "Header " + editor.config.numberedElements[
+                    editor.config.numberedElements.indexOf(value)
+                ].slice(1));
           }
 
         },
@@ -252,8 +246,10 @@
                   } else if (elementList[tag] === "pre") {
                     this.setValue(elementList[tag], "Formatted Text");
                   } else {
-                    this.setValue(elementList[tag], "Header " +
-                          editor.config.numberedElements[tag].slice(1));
+                    this.setValue(
+                        elementList[tag],
+                        "Header " + editor.config.numberedElements[tag].slice(1)
+                    );
                   }
                 }
                 return;
@@ -280,13 +276,13 @@
         },
 
         init: function () {
-          this.startGroup("Styles");
+          this.startGroup("Global Styles");
 
           for (var style in editor.config.autonumberStyles) {
             this.add(style, style, style);
           }
 
-          this.startGroup("Setup");
+          this.startGroup("Heading-Specific Styles");
           this.add("clear", "Clear Numbering", "Clear Numbering");
           this.add("restart", "Restart Numbering", "Restart Numbering");
         },
