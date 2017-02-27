@@ -427,6 +427,7 @@
           // if previous was numbered, set the new  one to numbered also
             if (isNumbered(editor, previousHeader)) {
               setNumbering(editor, editor.elementPath().block);
+              setLevel(editor, editor.elementPath().block);
               setStyle(editor, editor.elementPath().block);
             }
 
@@ -485,6 +486,7 @@
 
           if (!element.hasClass(editor.config.autonumberRestartClass)) {
             setNumbering(editor, element);
+            setLevel(editor, element);
             element.addClass(editor.config.autonumberRestartClass);
             setStyle(editor, element);
           } else {
