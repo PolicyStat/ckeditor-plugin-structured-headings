@@ -75,19 +75,6 @@
     }
   };
 
-//  var setStyle = function (editor, element) {
-//    var index = editor.config.numberedElements.indexOf(element.getName());
-//    var style = editor.config.autonumberCurrentStyle[index];
-//    if (element.type === CKEDITOR.NODE_ELEMENT) {
-//      clearStyles(editor, element);
-//      if (style && typeof style === "object") {
-//        element.addClass(style[index]);
-//      } else {
-//        element.addClass(style);
-//      }
-//    }
-//  };
-
   var setStyle = function (editor, element, style) {
     var index = editor.config.numberedElements.indexOf(element.getName());
     if (element.type === CKEDITOR.NODE_ELEMENT) {
@@ -102,16 +89,6 @@
   var setCurrentStyle = function (editor, element, style) {
     editor.config.autonumberCurrentStyle = style;
   };
-
-//  var setCurrentStyle = function (editor, element, style) {
-//    var index = editor.config.numberedElements.indexOf(element.getName());
-//    if (editor.config.autonumberStyles[style] &&
-//          typeof editor.config.autonumberStyles[style] === "object") {
-//      editor.config.autonumberCurrentStyle[index] = editor.config.autonumberStyles[style][index];
-//    } else {
-//      editor.config.autonumberCurrentStyle[index] = editor.config.autonumberStyles[style];
-//    }
-//  };
 
   var getPreviousHeader = function (editor, element) {
     return element.getPrevious(function (node) {
@@ -161,14 +138,6 @@
 
     editor.config.autonumberStyles =
     editor.config.autonumberStyles || {
-//      "Default": null,
-//      "Number": "autonumber-N",
-//      "Uppercase Roman": "autonumber-R",
-//      "Lowercase Roman": "autonumber-r",
-//      "Uppercase Letter": "autonumber-A",
-//      "Lowercase Letter": "autonumber-a"
-//    };
-
       "Numeric": null,
       "Number Lowercase Roman": [
         "autonumber-N",
@@ -198,7 +167,6 @@
 
     editor.config.autonumberCurrentStyle =
     editor.config.autonumberCurrentStyle || "Numeric";
-    //editor.config.autonumberLevelClasses.slice(0)
   };
 
 /*
@@ -342,13 +310,6 @@
         onRender: function () {
           editor.on("selectionChange", function (ev) {
             var elementPath = ev.data.path;
-
-//            for (var tag in editor.config.autonumberStyles) {
-//              if (elementPath.block.hasClass(editor.config.autonumberStyles[tag])) {
-//                this.setValue(tag, tag);
-//                return;
-//              }
-//            }
 
             if (isNumbered(editor, elementPath.block)) {
               this.setValue(editor.config.autonumberCurrentStyle,
