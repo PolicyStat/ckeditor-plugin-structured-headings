@@ -3,8 +3,16 @@
  * Helper Functions
  */
 
-  var setupElements = function (editor) {
+  var elementStyles = {
+      //eslint-disable-next-line new-cap
+    div: new CKEDITOR.style({ element: "div" }),
+      //eslint-disable-next-line new-cap
+    p: new CKEDITOR.style({ element: "p" }),
+      //eslint-disable-next-line new-cap
+    pre: new CKEDITOR.style({ element: "pre" })
+  };
 
+  var setupElements = function (editor) {
     // list of elements allowed to be numbered
     editor.config.numberedElements =
     editor.config.numberedElements || [
@@ -15,10 +23,12 @@
       "h5",
       "h6"
     ];
-
+    for (var e in editor.config.numberedElements) {
+      elementStyles[editor.config.numberedElements[e]] =
+        //eslint-disable-next-line new-cap
+        new CKEDITOR.style({ element: editor.config.numberedElements[e] });
+    }
   };
-
-//style helpers
 
   var isNumbered = function (editor, element) {
     if (element.hasClass(editor.config.autonumberBaseClass)) {
@@ -28,26 +38,56 @@
     }
   };
 
+  var clearNumbering = function (editor, element) {
+    if (element.hasClass(editor.config.autonumberBaseClass)) {
+      element.removeClass(editor.config.autonumberBaseClass);
+    }
+  };
+
+  var setNumbering = function (editor, element) {
+    if (!element.hasClass(editor.config.autonumberBaseClass)) {
+      element.addClass(editor.config.autonumberBaseClass);
+    }
+  };
+
+  var clearLevel = function (editor, element) {
+    for (var key in editor.config.autonumberLevelClasses) {
+      element.removeClass(editor.config.autonumberLevelClasses[key]);
+    }
+  };
+
+  var setLevel = function (editor, element) {
+    var index = editor.config.numberedElements.indexOf(element.getName());
+    clearLevel(editor, element);
+    element.addClass(editor.config.autonumberLevelClasses[index]);
+  };
+
   var clearStyles = function (editor, element) {
     for (var styleName in editor.config.autonumberStyles) {
       var style = editor.config.autonumberStyles[styleName];
-      for (var className in style) {
-        element.removeClass(style[className]);
+      if (typeof style === "object") {
+        for (var className in style) {
+          element.removeClass(style[className]);
+        }
+      } else {
+        element.removeClass(style);
       }
     }
   };
 
-  var setStyle = function (editor, element, styleName) {
-    var style = editor.config.autonumberStyles[styleName];
+  var setStyle = function (editor, element, style) {
+    var index = editor.config.numberedElements.indexOf(element.getName());
     if (element.type === CKEDITOR.NODE_ELEMENT) {
       clearStyles(editor, element);
-      if (style && style[editor.config.numberedElements.indexOf(element.getName())]) {
-        element.addClass(editor.config.autonumberBaseClass + "-" +
-          editor.config.numberedElements.indexOf(element.getName()));
-        element.addClass(style[editor.config.numberedElements.indexOf(element.getName())]);
+      if (editor.config.autonumberStyles[style] &&
+          typeof editor.config.autonumberStyles[style] === "object") {
+        element.addClass(editor.config.autonumberStyles[style][index]);
       }
     }
+  };
 
+  var setCurrentStyle = function (editor, element, style) {
+    editor.config.autonumberCurrentStyle = style;
   };
 
   var getPreviousHeader = function (editor, element) {
@@ -62,66 +102,17 @@
     });
   };
 
-  var isEmpty = function (obj) {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        return false;
-      }
-    }
-    return true;
-  };
-
   var setupCommands = function (editor) {
-    editor.addCommand("autoNumberHeading",
-        CKEDITOR.plugins.structuredheadings.commands.autoNumberHeading);
     editor.addCommand("matchHeading",
         CKEDITOR.plugins.structuredheadings.commands.matchHeading);
     editor.addCommand("increaseHeadingLevel",
-        CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
+            CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
     editor.addCommand("decreaseHeadingLevel",
-        CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
+            CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
     editor.addCommand("restartNumbering",
         CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
-    editor.addCommand("setCurrentStyle",
-              CKEDITOR.plugins.structuredheadings.commands.setCurrentStyle);
     editor.addCommand("reapplyStyle",
         CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
-  };
-
-  var addButtons = function (editor) {
-     // Add the button to the toolbar only if toolbar plugin or button plugin is loaded
-    if (CKEDITOR.plugins.get("toolbar")) {
-      editor.ui.addButton("autoNumberHeading", {
-        label: "Autonumber Heading",
-        command: "autoNumberHeading",
-        toolbar: "styles,4"
-      });
-      editor.ui.addButton("restartNumbering", {
-        label: "Restart Numbering",
-        command: "restartNumbering",
-        toolbar: "styles,6"
-      });
-      editor.ui.addButton("matchHeading", {
-        label: "Match Heading",
-        command: "matchHeading",
-        toolbar: "styles,1"
-      });
-      editor.ui.addButton("selectStyle", {
-        label: "Select Style",
-        command: "selectStyle",
-        toolbar: "styles,5"
-      });
-      editor.ui.addButton("increaseHeadingLevel", {
-        label: "Increase Heading",
-        command: "decreaseHeadingLevel",
-        toolbar: "styles,2"
-      });
-      editor.ui.addButton("decreaseHeadingLevel", {
-        label: "Decrease Heading",
-        command: "increaseHeadingLevel",
-        toolbar: "styles,3"
-      });
-    }
   };
 
   /*
@@ -135,16 +126,19 @@
     editor.config.autonumberRestartClass =
     editor.config.autonumberRestartClass || "autonumber-restart";
 
+    editor.config.autonumberLevelClasses =
+    editor.config.autonumberLevelClasses || [
+      "autonumber-0",
+      "autonumber-1",
+      "autonumber-2",
+      "autonumber-3",
+      "autonumber-4",
+      "autonumber-5"
+    ];
+
     editor.config.autonumberStyles =
     editor.config.autonumberStyles || {
-      "Numeric": [
-        "autonumber-0",
-        "autonumber-1",
-        "autonumber-2",
-        "autonumber-3",
-        "autonumber-4",
-        "autonumber-5"
-      ],
+      "Numeric": null,
       "Number Lowercase Roman": [
         "autonumber-N",
         "autonumber-a",
@@ -171,34 +165,8 @@
       ]
     };
 
-    editor.config.autonumberStyleImages =
-      editor.config.autonumberStyleImages || {
-        "Numeric": "Default.png",
-        "Number Lowercase Roman": "Narara.png",
-        "Letter Lowercase Roman": "Aarara.png",
-        "Roman Uppercase Number": "RANaNa.png"
-      };
-
-    editor.config.autonumberCurrentStyle = "Numeric"; //hold current style or null if default
-  };
-
-  var elementStyles = {
-      //eslint-disable-next-line new-cap
-    div: new CKEDITOR.style({ element: "div" }),
-      //eslint-disable-next-line new-cap
-    p: new CKEDITOR.style({ element: "p" }),
-      //eslint-disable-next-line new-cap
-    h1: new CKEDITOR.style({ element: "h1" }),
-      //eslint-disable-next-line new-cap
-    h2: new CKEDITOR.style({ element: "h2" }),
-      //eslint-disable-next-line new-cap
-    h3: new CKEDITOR.style({ element: "h3" }),
-      //eslint-disable-next-line new-cap
-    h4: new CKEDITOR.style({ element: "h4" }),
-      //eslint-disable-next-line new-cap
-    h5: new CKEDITOR.style({ element: "h5" }),
-      //eslint-disable-next-line new-cap
-    h6: new CKEDITOR.style({ element: "h6" })
+    editor.config.autonumberCurrentStyle =
+    editor.config.autonumberCurrentStyle || "Numeric";
   };
 
 /*
@@ -206,13 +174,6 @@
  */
 
   CKEDITOR.plugins.add("structuredheadings", {
-    icons: "autonumberheading," +
-         "matchheading," +
-         "increaseheadinglevel," +
-         "decreaseheadinglevel," +
-         "restartNumbering," +
-         "selectStyle",
-    hidpi: true,
     init: function (editor) {
 
       var TAB_KEY_CODE = 9;
@@ -222,24 +183,158 @@
 
       setupElements(editor);
       setupCommands(editor);
-      addButtons(editor);
       setupStyles(editor);
 
-      //Dialogs
-      //eslint-disable-next-line new-cap
-      editor.addCommand("selectStyle", new CKEDITOR.dialogCommand("selectStyle", {
-        startDisabled: true,
-        contextSensitive: true,
-        refresh: function () {
-          if (isEmpty(editor.config.autonumberStyles)) {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
-          } else {
-            this.setState(CKEDITOR.TRISTATE_OFF);
-          }
-        }
-      }));
+      //Format Dropdown
+      editor.ui.addRichCombo("NumFormats", {
+        label: "Formats",
+        title: "Numbering Formats",
+        toolbar: "styles,7",
+        allowedContent: editor.config.numberedElements.concat(["pre", "p", "div"]),
 
-      CKEDITOR.dialog.add("selectStyle", this.path + "dialogs/selectstyle.js");
+        panel: {
+          css: [ CKEDITOR.skin.getPath("editor") ].concat(editor.config.contentsCss),
+          multiSelect: false,
+          attributes: { "aria-label": "Numbering Formats" }
+        },
+
+        init: function () {
+
+          this.startGroup("Formats");
+
+          this.add("p", elementStyles.p.buildPreview("Normal Text"), "Normal Text");
+
+          for (var key in editor.config.numberedElements) {
+            this.add(editor.config.numberedElements[key],
+              elementStyles[ editor.config.numberedElements[key] ].buildPreview(
+                "Header " + editor.config.numberedElements[key].slice(1)
+              ),
+              "Header " + editor.config.numberedElements[key].slice(1));
+          }
+
+          this.add("pre", elementStyles.pre.buildPreview("Formatted Text"), "Preformatted Text");
+        },
+
+        onClick: function (value) {
+          editor.applyStyle(elementStyles[ value ]);
+          setLevel(editor, editor.elementPath().block);
+          editor.execCommand("reapplyStyle");
+          if (value === "p") {
+            this.setValue(value, "Normal Text");
+          } else if (value === "pre") {
+            this.setValue(value, "Formatted Text");
+          } else {
+            this.setValue(
+                value,
+                "Header " + editor.config.numberedElements[
+                    editor.config.numberedElements.indexOf(value)
+                ].slice(1));
+          }
+
+        },
+
+        onRender: function () {
+          editor.on("selectionChange", function (ev) {
+            var currentTag = this.getValue();
+            var elementPath = ev.data.path;
+            var elementList = editor.config.numberedElements.concat(["pre", "p", "div"]);
+            for (var tag in elementList) {
+              if (elementStyles[elementList[tag]].checkActive(elementPath, editor)) {
+                if (elementList[tag] !== currentTag) {
+                  if (elementList[tag] === "p") {
+                    this.setValue(elementList[tag], "Normal Text");
+                  } else if (elementList[tag] === "pre") {
+                    this.setValue(elementList[tag], "Formatted Text");
+                  } else {
+                    this.setValue(
+                        elementList[tag],
+                        "Header " + editor.config.numberedElements[tag].slice(1)
+                    );
+                  }
+                }
+                return;
+              }
+            }
+
+            this.setValue("");
+          }, this);
+        }
+
+      });
+
+      //Style Dropdown
+      editor.ui.addRichCombo("NumStyles", {
+        label: "Numbering",
+        title: "Numbering Styles",
+        toolbar: "styles,8",
+        allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*)",
+
+        panel: {
+          css: [ CKEDITOR.skin.getPath("editor") ].concat(editor.config.contentsCss),
+          multiSelect: false,
+          attributes: { "aria-label": "Numbering Styles" }
+        },
+
+        init: function () {
+          this.startGroup("Global Styles");
+
+          for (var style in editor.config.autonumberStyles) {
+            this.add(style, style, style);
+          }
+
+          this.startGroup("Heading-Specific Styles");
+          this.add("clear", "Clear Numbering", "Clear Numbering");
+          this.add("restart", "Restart Numbering", "Restart Numbering");
+        },
+
+        onClick: function (value) {
+          if (value === "restart") {
+            editor.execCommand("restartNumbering");
+          } else if (value === "clear") {
+            clearStyles(editor, editor.elementPath().block);
+            clearLevel(editor, editor.elementPath().block);
+            clearNumbering(editor, editor.elementPath().block);
+          } else {
+            setNumbering(editor, editor.elementPath().block);
+            setLevel(editor, editor.elementPath().block);
+            setCurrentStyle(editor, editor.elementPath().block, value);
+            editor.execCommand("reapplyStyle", value);
+            this.setValue(value, value);
+          }
+        },
+
+        onRender: function () {
+          editor.on("selectionChange", function (ev) {
+            var elementPath = ev.data.path;
+
+            if (isNumbered(editor, elementPath.block)) {
+              this.setValue(editor.config.autonumberCurrentStyle,
+                        editor.config.autonumberCurrentStyle);
+            } else {
+              this.setValue("");
+            }
+
+
+          }, this);
+        },
+
+        onOpen: function () {
+          this.showAll();
+        },
+
+        refresh: function () {
+          var path = editor.elementPath();
+
+          if (!path) {return;}
+
+          if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
+            this.setState(CKEDITOR.TRISTATE_OFF);
+            return;
+          }
+
+          this.setState(CKEDITOR.TRISTATE_DISABLED);
+        }
+      });
 
       // Indent and outdent with TAB/SHIFT+TAB key
       editor.on("key", function (evt) {
@@ -267,58 +362,9 @@
   CKEDITOR.plugins.structuredheadings = {
     commands: {
     /*
-     * autoNumberHeading
-     */
-      autoNumberHeading: {
-        contextSensitive: 1,
-        allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*)",
-        startDisabled: true,
-        exec: function (editor) {
-          var element = editor.elementPath().block;
-
-        //set to maximum level of the previous level + 1
-          var previousHeader = getPreviousHeader(editor, element);
-
-          if (previousHeader && isNumbered(editor, previousHeader)) {
-            var maxElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
-              previousHeader.getName()) + 1];
-            if (editor.config.numberedElements.indexOf(element.getName()) >
-              editor.config.numberedElements.indexOf(maxElement)) {
-              editor.applyStyle(elementStyles[maxElement]);
-              element = editor.elementPath().block;
-            }
-          }
-
-          if (!isNumbered(editor, element)) {
-            element.addClass(editor.config.autonumberBaseClass);
-            setStyle(editor, element, editor.config.autonumberCurrentStyle);
-            this.setState(CKEDITOR.TRISTATE_ON);
-          } else {
-            element.removeClass(editor.config.autonumberBaseClass);
-            clearStyles(editor, element);
-            this.setState(CKEDITOR.TRISTATE_OFF);
-          }
-
-        },
-        refresh: function (editor, path) {
-          if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
-            if (isNumbered(editor, path.block)) {
-              this.setState(CKEDITOR.TRISTATE_ON);
-            } else {
-              this.setState(CKEDITOR.TRISTATE_OFF);
-            }
-          } else {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
-          }
-        }
-      },
-
-    /*
      * matchHeading
      */
       matchHeading: {
-        contextSensitive: 1,
-        startDisabled: true,
         exec: function (editor) {
           var previousHeader = getPreviousHeader(editor, editor.elementPath().block);
 
@@ -329,7 +375,7 @@
             } else {
               editor.applyStyle(elementStyles.p);
             }
-            editor.elementPath().block.removeClass(editor.config.autonumberBaseClass);
+            clearNumbering(editor, editor.elementPath().block);
             clearStyles(editor, editor.elementPath().block);
 
         // else get previous element style (type) and apply to selection
@@ -337,100 +383,52 @@
             editor.applyStyle(elementStyles[previousHeader.getName()]);
           // if previous was numbered, set the new  one to numbered also
             if (isNumbered(editor, previousHeader)) {
-              editor.elementPath().block.addClass(editor.config.autonumberBaseClass);
-              setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+              setNumbering(editor, editor.elementPath().block);
+              setLevel(editor, editor.elementPath().block);
+              setStyle(editor, editor.elementPath().block);
             }
 
         // else set it as new first element
           } else {
             editor.applyStyle(elementStyles[editor.config.numberedElements[0]]);
-
-            //editor.elementPath().block.addClass(editor.config.autonumberBaseClass);
-            //setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
-          }
-        },
-        refresh: function (editor, path) {
-          if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
-            this.setState(CKEDITOR.TRISTATE_ON);
-          } else if (path.block && path.block.is({h1: 1, p: 1})) {
-            this.setState(CKEDITOR.TRISTATE_OFF);
-          } else {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
           }
         }
       },
 
-    /*
-     * increaseHeadingLevel
-     */
+      /*
+       * increaseHeadingLevel
+       */
       increaseHeadingLevel: {
-        contextSensitive: 1,
-        startDisabled: true,
         exec: function (editor) {
           var element = editor.elementPath().block;
           var nextElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
-            element.getName()) + 1];
+              element.getName()) + 1];
 
-        //eslint-disable-next-line new-cap
-          var style = new CKEDITOR.style({ element: nextElement});
-          editor.applyStyle(style);
+          if (nextElement) {
+            editor.applyStyle(elementStyles[nextElement]);
+          }
           if (isNumbered(editor, element)) {
+            setLevel(editor, editor.elementPath().block);
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
-        },
-        refresh: function (editor, path) {
-          if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
-            var previousHeader = getPreviousHeader(editor, path.block);
-
-            if (editor.config.numberedElements.length - 1 ===
-              editor.config.numberedElements.indexOf(path.block.getName())) {
-              this.setState(CKEDITOR.TRISTATE_DISABLED);
-            } else if (
-            previousHeader &&
-            isNumbered(editor, previousHeader) &&
-            isNumbered(editor, path.block) &&
-            editor.config.numberedElements.indexOf(path.block.getName()) >
-            editor.config.numberedElements.indexOf(previousHeader.getName())
-
-          ) {
-              this.setState(CKEDITOR.TRISTATE_DISABLED);
-            } else {
-              this.setState(CKEDITOR.TRISTATE_OFF);
-            }
-
-          } else {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
-          }
-
         }
       },
 
-    /*
-     * decreaseHeadingLevel
-     */
+      /*
+       * decreaseHeadingLevel
+       */
       decreaseHeadingLevel: {
-        contextSensitive: 1,
-        startDisabled: true,
         exec: function (editor) {
           var element = editor.elementPath().block;
           var prevElement = editor.config.numberedElements[editor.config.numberedElements.indexOf(
-            element.getName()) - 1];
-        //eslint-disable-next-line new-cap
-          var style = new CKEDITOR.style({ element: prevElement});
-          editor.applyStyle(style);
-          if (isNumbered(editor, element)) {
-            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+              element.getName()) - 1];
+
+          if (prevElement) {
+            editor.applyStyle(elementStyles[prevElement]);
           }
-        },
-        refresh: function (editor, path) {
-          if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
-            if (editor.config.numberedElements.indexOf(path.block.getName()) === 0) {
-              this.setState(CKEDITOR.TRISTATE_DISABLED);
-            } else {
-              this.setState(CKEDITOR.TRISTATE_OFF);
-            }
-          } else {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
+          if (isNumbered(editor, element)) {
+            setLevel(editor, editor.elementPath().block);
+            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
         }
       },
@@ -440,39 +438,17 @@
      */
       restartNumbering: {
         contextSensitive: 1,
-        startDisabled: true,
         exec: function (editor) {
           var element = editor.elementPath().block;
 
           if (!element.hasClass(editor.config.autonumberRestartClass)) {
-            element.addClass(editor.config.autonumberBaseClass);
+            setNumbering(editor, element);
+            setLevel(editor, element);
             element.addClass(editor.config.autonumberRestartClass);
-            setStyle(editor, element, editor.config.autonumberCurrentStyle);
-            this.setState(CKEDITOR.TRISTATE_ON);
+            setStyle(editor, element);
           } else {
             element.removeClass(editor.config.autonumberRestartClass);
-            this.setState(CKEDITOR.TRISTATE_OFF);
           }
-        },
-        refresh: function (editor, path) {
-          if (path.block && path.block.getName() === editor.config.numberedElements[0]) {
-            if (path.block.hasClass(editor.config.autonumberRestartClass)) {
-              this.setState(CKEDITOR.TRISTATE_ON);
-            } else {
-              this.setState(CKEDITOR.TRISTATE_OFF);
-            }
-          } else {
-            this.setState(CKEDITOR.TRISTATE_DISABLED);
-          }
-        }
-      },
-
-      /*
-       * setCurrentStyle
-       */
-      setCurrentStyle: {
-        exec: function (editor, style) {
-          editor.config.autonumberCurrentStyle = style;
         }
       },
 
@@ -480,12 +456,12 @@
        * reapplyStyle
        */
       reapplyStyle: {
-        exec: function (editor) {
+        exec: function (editor, style) {
           var nodeList = editor.document.find("." + editor.config.autonumberBaseClass);
 
           for (var i = 0; i < nodeList.count(); i++) {
             var node = nodeList.getItem(i);
-            setStyle(editor, node, editor.config.autonumberCurrentStyle);
+            setStyle(editor, node, style);
           }
         }
       }
