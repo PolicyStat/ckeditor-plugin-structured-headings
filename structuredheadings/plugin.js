@@ -138,8 +138,8 @@
 
     editor.config.autonumberStyles =
     editor.config.autonumberStyles || {
-      "1.1.1.1.": null,
-      "1. a. i.": [
+      "1.1.1.1.1.": null,
+      "1. a. i. a. i.": [
         "autonumber-N",
         "autonumber-a",
         "autonumber-r",
@@ -147,7 +147,7 @@
         "autonumber-r",
         "autonumber-a"
       ],
-      "A. a. i.": [
+      "A. a. i. a. i. a.": [
         "autonumber-A",
         "autonumber-a",
         "autonumber-r",
@@ -155,7 +155,7 @@
         "autonumber-r",
         "autonumber-a"
       ],
-      "I. A. 1.": [
+      "I. A. 1. a. 1.": [
         "autonumber-R",
         "autonumber-A",
         "autonumber-N",
