@@ -166,7 +166,7 @@
     };
 
     editor.config.autonumberCurrentStyle =
-    editor.config.autonumberCurrentStyle || "1.1.1.1.";
+    editor.config.autonumberCurrentStyle || "1.1.1.1.1.";
   };
 
 /*
