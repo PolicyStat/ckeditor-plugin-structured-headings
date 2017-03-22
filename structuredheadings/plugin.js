@@ -138,8 +138,8 @@
 
     editor.config.autonumberStyles =
     editor.config.autonumberStyles || {
-      "Numeric": null,
-      "Number Lowercase Roman": [
+      "1.1.1.1.1.": null,
+      "1. a. i. a. i.": [
         "autonumber-N",
         "autonumber-a",
         "autonumber-r",
@@ -147,7 +147,7 @@
         "autonumber-r",
         "autonumber-a"
       ],
-      "Letter Lowercase Roman": [
+      "A. a. i. a. i. a.": [
         "autonumber-A",
         "autonumber-a",
         "autonumber-r",
@@ -155,7 +155,7 @@
         "autonumber-r",
         "autonumber-a"
       ],
-      "Roman Uppercase Number": [
+      "I. A. 1. a. 1.": [
         "autonumber-R",
         "autonumber-A",
         "autonumber-N",
@@ -166,7 +166,7 @@
     };
 
     editor.config.autonumberCurrentStyle =
-    editor.config.autonumberCurrentStyle || "Numeric";
+    editor.config.autonumberCurrentStyle || "1.1.1.1.1.";
   };
 
 /*
@@ -283,8 +283,8 @@
           }
 
           this.startGroup("Heading-Specific Styles");
-          this.add("clear", "Clear Numbering", "Clear Numbering");
-          this.add("restart", "Restart Numbering", "Restart Numbering");
+          this.add("clear", "Clear Styling", "Clear Styling");
+          this.add("restart", "Restart Styling", "Restart Styling");
         },
 
         onClick: function (value) {
