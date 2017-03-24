@@ -352,8 +352,6 @@
 
       }, this, null, 1);
 
-      overrideFormattingOnClick(editor);
-
     }
   });
 

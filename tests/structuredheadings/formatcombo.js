@@ -24,7 +24,11 @@
       bot.combo(name, function (combo) {
         assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
         combo.onClick("h2");
-        assert.areSame("<h2>^foo</h2>", bot.htmlWithSelection(), "applied h1 block style");
+        assert.areSame(
+            "<h2 class=\"autonumber-1\">^foo</h2>",
+            bot.htmlWithSelection(),
+            "applied h1 block style"
+        );
       });
     }
 
