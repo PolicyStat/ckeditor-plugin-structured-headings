@@ -169,6 +169,14 @@
     editor.config.autonumberCurrentStyle || "1.1.1.1.1.";
   };
 
+    var overrideFormattingOnClick = function (editor) {
+      var oldOnClick = editor.ui.get("Format").onClick;
+      editor.ui.get("Format").onClick = function (value) {
+        oldOnClick(value);
+        console.log("this is the overidden one");
+      };
+    };
+
 /*
  * Structured Headings Plugin Setup
  */
@@ -351,6 +359,8 @@
         }
 
       }, this, null, 1);
+
+      overrideFormattingOnClick(editor);
 
     }
   });
