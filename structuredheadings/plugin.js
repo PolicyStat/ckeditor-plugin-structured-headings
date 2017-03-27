@@ -217,6 +217,7 @@
 
         onClick: function (value) {
           editor.applyStyle(elementStyles[ value ]);
+          setNumbering(editor, editor.elementPath().block);
           setLevel(editor, editor.elementPath().block);
           editor.execCommand("reapplyStyle");
           if (value === "p") {
