@@ -35,7 +35,7 @@
     "if previous heading is autonumber, the new heading is autonumbered": function () {
       var bot = this.editorBot;
       var ed = this.editor;
-      bot.setHtmlWithSelection("<h2 class=\"autonumber autonumber-1\">bar</h2><p>^foo</p>");
+      bot.setHtmlWithSelection("<h2 class=\"autonumber autonumber-0\">bar</h2><p>^foo</p>");
       var name = "NumFormats";
       var formatCombo = ed.ui.get(name);
       assert.areSame(CKEDITOR.TRISTATE_OFF, formatCombo._.state, "check state OFF");
@@ -44,7 +44,7 @@
         assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
         combo.onClick("h2");
         assert.areSame(
-            "<h2 class=\"autonumber autonumber-1\">bar</h2><h2 class=\"autonumber autonumber-1\">^foo</h2>",
+            "<h2 class=\"autonumber autonumber-0\">bar</h2><h2 class=\"autonumber autonumber-1\">^foo</h2>",
             bot.htmlWithSelection(),
             "applied h2 block autonumber style"
         );
