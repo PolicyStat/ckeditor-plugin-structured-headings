@@ -44,7 +44,8 @@
         assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
         combo.onClick("h2");
         assert.areSame(
-            "<h2 class=\"autonumber autonumber-0\">bar</h2><h2 class=\"autonumber autonumber-1\">^foo</h2>",
+            "<h2 class=\"autonumber autonumber-0\">bar</h2>" +
+            "<h2 class=\"autonumber autonumber-1\">^foo</h2>",
             bot.htmlWithSelection(),
             "applied h2 block autonumber style"
         );
@@ -69,7 +70,7 @@
             "applied h2 block non-autonumbered style"
         );
       });
-    },
+    }
 
   });
 })();
