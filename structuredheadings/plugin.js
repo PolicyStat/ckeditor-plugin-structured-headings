@@ -216,10 +216,13 @@
         },
 
         onClick: function (value) {
+          var previousHeader = getPreviousHeader(editor, editor.elementPath().block);
           editor.applyStyle(elementStyles[ value ]);
-          setNumbering(editor, editor.elementPath().block);
-          setLevel(editor, editor.elementPath().block);
-          editor.execCommand("reapplyStyle");
+          if (isNumbered(editor, previousHeader)) {
+            setNumbering(editor, editor.elementPath().block);
+            setLevel(editor, editor.elementPath().block);
+            editor.execCommand("reapplyStyle");
+          }
           if (value === "p") {
             this.setValue(value, "Normal Text");
           } else if (value === "pre") {
