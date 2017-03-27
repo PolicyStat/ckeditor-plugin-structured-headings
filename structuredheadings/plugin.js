@@ -218,7 +218,7 @@
         onClick: function (value) {
           var previousHeader = getPreviousHeader(editor, editor.elementPath().block);
           editor.applyStyle(elementStyles[ value ]);
-          if (isNumbered(editor, previousHeader)) {
+          if (previousHeader && isNumbered(editor, previousHeader)) {
             setNumbering(editor, editor.elementPath().block);
             setLevel(editor, editor.elementPath().block);
             editor.execCommand("reapplyStyle");
