@@ -29,6 +29,25 @@
             "applied 1aiai to h1"
         );
       });
+    },
+    "apply numbering style to multiple non-autonumbered h1": function () {
+      var bot = this.editorBot;
+      var ed = this.editor;
+      bot.setHtmlWithSelection("[<h1>foo</h1><h1>bar</h1>]");
+      var name = "NumStyles";
+      var styleCombo = ed.ui.get(name);
+      assert.areSame(CKEDITOR.TRISTATE_OFF, styleCombo._.state, "check state OFF");
+
+      bot.combo(name, function (combo) {
+        assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
+        combo.onClick("1. a. i. a. i.");
+        assert.areSame(
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to both h1"
+        );
+      });
     }
   });
 })();
