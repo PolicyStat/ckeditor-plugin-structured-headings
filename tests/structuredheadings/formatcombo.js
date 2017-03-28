@@ -76,6 +76,44 @@
             "applied h2 block non-autonumbered style"
         );
       });
+    },
+
+    "p option no-ops": function () {
+      var bot = this.editorBot;
+      var ed = this.editor;
+      bot.setHtmlWithSelection("<p>^foo</p>");
+      var formatCombo = ed.ui.get(comboName);
+      assert.areSame(CKEDITOR.TRISTATE_OFF, formatCombo._.state, "check state OFF");
+
+      bot.combo(comboName, function (combo) {
+        assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
+        // click p
+        combo.onClick("p");
+        assert.areSame(
+            "<p>^foo</p>",
+            bot.htmlWithSelection(),
+            "applied p to p"
+        );
+      });
+    },
+
+    "p on autonumbered heading removes classes": function () {
+      var bot = this.editorBot;
+      var ed = this.editor;
+      bot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-0\">^foo</h1>");
+      var formatCombo = ed.ui.get(comboName);
+      assert.areSame(CKEDITOR.TRISTATE_OFF, formatCombo._.state, "check state OFF");
+
+      bot.combo(comboName, function (combo) {
+        assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
+        // click p
+        combo.onClick("p");
+        assert.areSame(
+            "<p>^foo</p>",
+            bot.htmlWithSelection(),
+            "applied p to h1"
+        );
+      });
     }
 
   });
