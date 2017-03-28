@@ -114,6 +114,43 @@
             "applied p to h1"
         );
       });
+    },
+    "pre option on a p": function () {
+      var bot = this.editorBot;
+      var ed = this.editor;
+      bot.setHtmlWithSelection("<p>^foo</p>");
+      var formatCombo = ed.ui.get(comboName);
+      assert.areSame(CKEDITOR.TRISTATE_OFF, formatCombo._.state, "check state OFF");
+
+      bot.combo(comboName, function (combo) {
+        assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
+        // click pre
+        combo.onClick("pre");
+        assert.areSame(
+            "<pre>^foo</pre>",
+            bot.htmlWithSelection(),
+            "applied pre to p"
+        );
+      });
+    },
+
+    "pre on autonumbered heading removes autonumbering classes": function () {
+      var bot = this.editorBot;
+      var ed = this.editor;
+      bot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-0\">^foo</h1>");
+      var formatCombo = ed.ui.get(comboName);
+      assert.areSame(CKEDITOR.TRISTATE_OFF, formatCombo._.state, "check state OFF");
+
+      bot.combo(comboName, function (combo) {
+        assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
+        // click pre
+        combo.onClick("pre");
+        assert.areSame(
+            "<pre>^foo</pre>",
+            bot.htmlWithSelection(),
+            "applied pre to h1"
+        );
+      });
     }
 
   });
