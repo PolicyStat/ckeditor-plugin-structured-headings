@@ -216,18 +216,21 @@
         },
 
         onClick: function (value) {
-          var previousHeader = getPreviousHeader(editor, editor.elementPath().block);
           editor.applyStyle(elementStyles[ value ]);
-          if (!previousHeader || isNumbered(editor, previousHeader)) {
-            setNumbering(editor, editor.elementPath().block);
-            setLevel(editor, editor.elementPath().block);
-            editor.execCommand("reapplyStyle");
-          }
+          var block = editor.elementPath().block;
+          var previousHeader = getPreviousHeader(editor, block);
           if (value === "p") {
+            CKEDITOR.plugins.structuredheadings.clearAll(editor, block);
             this.setValue(value, "Normal Text");
           } else if (value === "pre") {
+            CKEDITOR.plugins.structuredheadings.clearAll(editor, block);
             this.setValue(value, "Formatted Text");
           } else {
+            if (!previousHeader || isNumbered(editor, previousHeader)) {
+              setNumbering(editor, block);
+              setLevel(editor, block);
+              editor.execCommand("reapplyStyle");
+            }
             this.setValue(
                 value,
                 "Header " + editor.config.numberedElements[
@@ -372,7 +375,14 @@
       var headings = range._find.apply(range, editor.config.numberedElements);
 
       return headings;
-
+    },
+    clearAll: function (editor, element) {
+      clearLevel(editor, element);
+      clearNumbering(editor, element);
+      clearStyles(editor, element);
+    },
+    getCurrentBlockFromPath: function (editor) {
+      return editor.elementPath().block;
     },
     commands: {
     /*
