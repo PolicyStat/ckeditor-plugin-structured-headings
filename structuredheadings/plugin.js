@@ -478,6 +478,8 @@
 
       /*
        * reapplyStyle
+       * Finds all autonumbered headings,
+       * and applies the selected numbering style.
        */
       reapplyStyle: {
         exec: function (editor, style) {
