@@ -303,6 +303,7 @@
             clearNumbering(editor, editor.elementPath().block);
           } else {
             var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(editor, editor.getSelection());
+            console.log(headings);
             setNumbering(editor, editor.elementPath().block);
             setLevel(editor, editor.elementPath().block);
             setCurrentStyle(editor, editor.elementPath().block, value);
@@ -371,8 +372,25 @@
     getHeadingsInSelection: function (editor, selection) {
       // forget Firefox multirange for now
       var range = selection.getRanges()[0];
-      range.enlarge(CKEDITOR.ENLARGE_ELEMENT);
-      var headings = range._find.apply(range, editor.config.numberedElements);
+      var walker = new CKEDITOR.dom.walker(range);
+      walker.evaluation = function (node) {
+        if (node.type !== CKEDITOR.NODE_ELEMENT) {
+          return false;
+        }
+
+        if (editor.config.numberedElements.indexOf(node.getName())) {
+          return true;
+        }
+        return false;
+      };
+
+      var headings = [];
+      var current = walker.next();
+
+      while (current) {
+        headings.push(current);
+        current = walker.next();
+      }
 
       return headings;
     },
