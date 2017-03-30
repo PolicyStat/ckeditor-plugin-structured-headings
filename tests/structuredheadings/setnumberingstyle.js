@@ -4,6 +4,8 @@
 // Clean up all instances been created on the page.
 (function () {
 
+  var comboName = "NumStyles";
+
   bender.editor = {
     allowedForTests: "h1; h2; p"
   };
@@ -16,11 +18,10 @@
       var bot = this.editorBot;
       var ed = this.editor;
       bot.setHtmlWithSelection("<h1>^foo</h1>");
-      var name = "NumStyles";
-      var styleCombo = ed.ui.get(name);
+      var styleCombo = ed.ui.get(comboName);
       assert.areSame(CKEDITOR.TRISTATE_OFF, styleCombo._.state, "check state OFF");
 
-      bot.combo(name, function (combo) {
+      bot.combo(comboName, function (combo) {
         assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
         combo.onClick("1. a. i. a. i.");
         assert.areSame(
@@ -34,11 +35,10 @@
       var bot = this.editorBot;
       var ed = this.editor;
       bot.setHtmlWithSelection("[<h1>foo</h1><h1>bar</h1>]");
-      var name = "NumStyles";
-      var styleCombo = ed.ui.get(name);
+      var styleCombo = ed.ui.get(comboName);
       assert.areSame(CKEDITOR.TRISTATE_OFF, styleCombo._.state, "check state OFF");
 
-      bot.combo(name, function (combo) {
+      bot.combo(comboName, function (combo) {
         assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
         combo.onClick("1. a. i. a. i.");
         assert.areSame(
@@ -53,11 +53,10 @@
       var bot = this.editorBot;
       var ed = this.editor;
       bot.setHtmlWithSelection("[<h1>foo</h1><h1>b]ar</h1>");
-      var name = "NumStyles";
-      var styleCombo = ed.ui.get(name);
+      var styleCombo = ed.ui.get(comboName);
       assert.areSame(CKEDITOR.TRISTATE_OFF, styleCombo._.state, "check state OFF");
 
-      bot.combo(name, function (combo) {
+      bot.combo(comboName, function (combo) {
         assert.areSame(CKEDITOR.TRISTATE_ON, combo._.state, "check state ON when opened");
         combo.onClick("1. a. i. a. i.");
         assert.areSame(
