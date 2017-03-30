@@ -44,7 +44,7 @@
         assert.areSame(
             "<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
             "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1>",
-            bot.htmlWithSelection(),
+            bot.getData(),
             "applied 1aiai to both h1"
         );
       });
@@ -63,7 +63,7 @@
         assert.areSame(
             "<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
             "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1>",
-            bot.htmlWithSelection(),
+            bot.getData(),
             "applied 1aiai to both h1"
         );
       });
