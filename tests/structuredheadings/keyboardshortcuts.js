@@ -1,5 +1,7 @@
+/* eslint-disable */
 /* bender-tags: editor,unit */
 /* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,indentlist,list */
+/* eslint-enable */
 
 // Clean up all instances been created on the page.
 (function () {
@@ -17,7 +19,10 @@
 
     "H2 to H3 from Tab": function () {
       this.editorBot.setHtmlWithSelection("<h2>^Heading</h2>");
-      this.editor.editable().fire("keydown", new CKEDITOR.dom.event({ keyCode: tabKey }));  // eslint-ignore-line new-cap
+      this.editor.editable().fire(
+        "keydown",
+        new CKEDITOR.dom.event({ keyCode: tabKey }) // eslint-disable-line new-cap
+      );
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
@@ -28,7 +33,10 @@
 
     "H2 to H1 from Shift-Tab": function () {
       this.editorBot.setHtmlWithSelection("<h2>^Heading</h2>");
-      this.editor.editable().fire("keydown", new CKEDITOR.dom.event({ keyCode: tabKey, shiftKey: true }));  // eslint-ignore-line new-cap
+      this.editor.editable().fire(
+        "keydown",
+        new CKEDITOR.dom.event({ keyCode: tabKey, shiftKey: true }) // eslint-disable-line new-cap
+      );
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
@@ -39,7 +47,10 @@
 
     "list tab still works": function () {
       this.editorBot.setHtmlWithSelection("<ul><li>foo</li><li>^bar</li></ul>");
-      this.editor.editable().fire("keydown", new CKEDITOR.dom.event({ keyCode: tabKey }));  // eslint-ignore-line new-cap
+      this.editor.editable().fire(
+        "keydown",
+        new CKEDITOR.dom.event({ keyCode: tabKey })  // eslint-disable-line new-cap
+      );
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
@@ -50,7 +61,10 @@
 
     "list shift tab still works": function () {
       this.editorBot.setHtmlWithSelection("<ul><li>foo<ul><li>^bar</li></ul></li></ul>");
-      this.editor.editable().fire("keydown", new CKEDITOR.dom.event({ keyCode: tabKey, shiftKey: true }));  // eslint-ignore-line new-cap
+      this.editor.editable().fire(
+        "keydown",
+        new CKEDITOR.dom.event({ keyCode: tabKey, shiftKey: true }) // eslint-disable-line new-cap
+      );
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
