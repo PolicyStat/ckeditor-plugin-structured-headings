@@ -6,7 +6,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "bender run",
+    "test": "bender run -l && bender run -b firefox",
     "lint": "eslint --format compact .",
     "fix-lint": "eslint --fix --format compact .",
     "symlink-plugin-to-ckeditor": "ln -s ../../structuredheadings ckeditor/plugins/structuredheadings"

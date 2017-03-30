@@ -295,19 +295,40 @@
         },
 
         onClick: function (value) {
+          var block = CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor);
           if (value === "restart") {
             editor.execCommand("restartNumbering");
           } else if (value === "clear") {
-            clearStyles(editor, editor.elementPath().block);
-            clearLevel(editor, editor.elementPath().block);
-            clearNumbering(editor, editor.elementPath().block);
+            clearStyles(editor, block);
+            clearLevel(editor, block);
+            clearNumbering(editor, block);
           } else {
-            setNumbering(editor, editor.elementPath().block);
-            setLevel(editor, editor.elementPath().block);
-            setCurrentStyle(editor, editor.elementPath().block, value);
+            // convert any non-numbered headings to numbered
+            var selection = editor.getSelection();
+            if (selection.getRanges()[0].collapsed) {
+              this.setAutonumberClassesForHeading(block, value);
+            } else {
+              var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
+                editor,
+                selection
+              );
+              if (headings.length > 0) {
+                for (var i = 0; i < headings.length; i++) {
+                  this.setAutonumberClassesForHeading(headings[i], value);
+                }
+              }
+            }
+            // apply the correct bulletstyle for all numbered headings
             editor.execCommand("reapplyStyle", value);
+            // set the combo box value
             this.setValue(value, value);
           }
+        },
+
+        setAutonumberClassesForHeading: function (heading, value) {
+          setNumbering(editor, heading);
+          setLevel(editor, heading);
+          setCurrentStyle(editor, heading, value);
         },
 
         onRender: function () {
@@ -367,6 +388,31 @@
  */
 
   CKEDITOR.plugins.structuredheadings = {
+    getHeadingsInSelection: function (editor, selection) {
+      // forget Firefox multirange for now
+      var range = selection.getRanges()[0];
+      var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap
+      walker.evaluator = function (node) {
+        if (node.type !== CKEDITOR.NODE_ELEMENT) {
+          return false;
+        }
+
+        if (editor.config.numberedElements.indexOf(node.getName()) !== -1) {
+          return true;
+        }
+        return false;
+      };
+
+      var headings = [];
+      var current = walker.next();
+
+      while (current) {
+        headings.push(current);
+        current = walker.next();
+      }
+
+      return headings;
+    },
     clearAll: function (editor, element) {
       clearLevel(editor, element);
       clearNumbering(editor, element);
@@ -469,6 +515,8 @@
 
       /*
        * reapplyStyle
+       * Finds all autonumbered headings,
+       * and applies the selected numbering style.
        */
       reapplyStyle: {
         exec: function (editor, style) {
