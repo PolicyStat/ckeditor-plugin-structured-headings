@@ -302,17 +302,31 @@
             clearLevel(editor, editor.elementPath().block);
             clearNumbering(editor, editor.elementPath().block);
           } else {
-            var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(editor, editor.getSelection());
-            if (headings.length > 0) {
-              for (var i = 0; i < headings.length; i++) {
-                setNumbering(editor, headings[i]);
-                setLevel(editor, headings[i]);
-                setCurrentStyle(editor, headings[i], value);
+            var selection = editor.getSelection();
+            if (selection.getRanges()[0].collapsed) {
+              this.setStyleForHeading(
+                CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)
+              );
+            } else {
+              var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
+                editor,
+                selection
+              );
+              if (headings.length > 0) {
+                for (var i = 0; i < headings.length; i++) {
+                  this.setStyleForHeading(headings[i]);
+                }
               }
-              editor.execCommand("reapplyStyle", value);
-              this.setValue(value, value);
             }
+            editor.execCommand("reapplyStyle", value);
+            this.setValue(value, value);
           }
+        },
+
+        setStyleForHeading: function (heading, value) {
+          setNumbering(editor, heading);
+          setLevel(editor, heading);
+          setCurrentStyle(editor, heading, value);
         },
 
         onRender: function () {
