@@ -303,9 +303,10 @@
             clearLevel(editor, block);
             clearNumbering(editor, block);
           } else {
+            // convert any non-numbered headings to numbered
             var selection = editor.getSelection();
             if (selection.getRanges()[0].collapsed) {
-              this.setStyleForHeading(block);
+              this.setAutonumberClassesForHeading(block);
             } else {
               var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
                 editor,
@@ -313,16 +314,18 @@
               );
               if (headings.length > 0) {
                 for (var i = 0; i < headings.length; i++) {
-                  this.setStyleForHeading(headings[i]);
+                  this.setAutonumberClassesForHeading(headings[i]);
                 }
               }
             }
+            // apply the correct bulletstyle for all numbered headings
             editor.execCommand("reapplyStyle", value);
+            // set the combo box value
             this.setValue(value, value);
           }
         },
 
-        setStyleForHeading: function (heading, value) {
+        setAutonumberClassesForHeading: function (heading, value) {
           setNumbering(editor, heading);
           setLevel(editor, heading);
           setCurrentStyle(editor, heading, value);
