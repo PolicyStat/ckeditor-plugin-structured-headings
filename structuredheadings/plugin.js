@@ -375,7 +375,7 @@
     getHeadingsInSelection: function (editor, selection) {
       // forget Firefox multirange for now
       var range = selection.getRanges()[0];
-      var walker = new CKEDITOR.dom.walker(range);
+      var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap
       walker.evaluator = function (node) {
         if (node.type !== CKEDITOR.NODE_ELEMENT) {
           return false;
