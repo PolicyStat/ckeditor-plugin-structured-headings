@@ -67,7 +67,7 @@
         );
       });
     },
-    "attempt to apply numbering style to a range containing non-haedings": function () {
+    "attempt to apply numbering style to a range containing non-headings": function () {
       var bot = this.editorBot;
       bot.setHtmlWithSelection("[<h1>foo</h1><p>bar</p><h1>baz]</h1>");
 
@@ -79,6 +79,22 @@
             "<h1 class=\"autonumber autonumber-0 autonumber-N\">baz</h1>",
             bot.getData(),
             "applied 1aiai to both h1 and p is intact"
+        );
+      });
+    },
+    "preserves existing autonumbered headings in a mix": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection(
+        "[<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1><h1>bar]</h1>"
+      );
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+        assert.areSame(
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1>",
+            bot.getData(),
+            "applied 1aiai to second h1 and first h1 is intact"
         );
       });
     }
