@@ -295,18 +295,17 @@
         },
 
         onClick: function (value) {
+          var block = CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor);
           if (value === "restart") {
             editor.execCommand("restartNumbering");
           } else if (value === "clear") {
-            clearStyles(editor, editor.elementPath().block);
-            clearLevel(editor, editor.elementPath().block);
-            clearNumbering(editor, editor.elementPath().block);
+            clearStyles(editor, block);
+            clearLevel(editor, block);
+            clearNumbering(editor, block);
           } else {
             var selection = editor.getSelection();
             if (selection.getRanges()[0].collapsed) {
-              this.setStyleForHeading(
-                CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)
-              );
+              this.setStyleForHeading(block);
             } else {
               var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
                 editor,
