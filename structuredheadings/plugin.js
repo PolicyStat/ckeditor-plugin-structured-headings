@@ -373,12 +373,12 @@
       // forget Firefox multirange for now
       var range = selection.getRanges()[0];
       var walker = new CKEDITOR.dom.walker(range);
-      walker.evaluation = function (node) {
+      walker.evaluator = function (node) {
         if (node.type !== CKEDITOR.NODE_ELEMENT) {
           return false;
         }
 
-        if (editor.config.numberedElements.indexOf(node.getName())) {
+        if (editor.config.numberedElements.indexOf(node.getName()) !== -1) {
           return true;
         }
         return false;
