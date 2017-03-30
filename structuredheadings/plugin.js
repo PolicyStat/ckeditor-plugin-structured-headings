@@ -306,7 +306,7 @@
             // convert any non-numbered headings to numbered
             var selection = editor.getSelection();
             if (selection.getRanges()[0].collapsed) {
-              this.setAutonumberClassesForHeading(block);
+              this.setAutonumberClassesForHeading(block, value);
             } else {
               var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
                 editor,
@@ -314,7 +314,7 @@
               );
               if (headings.length > 0) {
                 for (var i = 0; i < headings.length; i++) {
-                  this.setAutonumberClassesForHeading(headings[i]);
+                  this.setAutonumberClassesForHeading(headings[i], value);
                 }
               }
             }
