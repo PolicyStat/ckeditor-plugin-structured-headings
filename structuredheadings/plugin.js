@@ -303,13 +303,15 @@
             clearNumbering(editor, editor.elementPath().block);
           } else {
             var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(editor, editor.getSelection());
-            for (var i = 0; i < headings.length; i++) {
-              setNumbering(editor, headings[i]);
-              setLevel(editor, headings[i]);
-              setCurrentStyle(editor, headings[i], value);
+            if (headings.length > 0) {
+              for (var i = 0; i < headings.length; i++) {
+                setNumbering(editor, headings[i]);
+                setLevel(editor, headings[i]);
+                setCurrentStyle(editor, headings[i], value);
+              }
+              editor.execCommand("reapplyStyle", value);
+              this.setValue(value, value);
             }
-            editor.execCommand("reapplyStyle", value);
-            this.setValue(value, value);
           }
         },
 
