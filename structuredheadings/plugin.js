@@ -90,7 +90,7 @@
     editor.config.autonumberCurrentStyle = style;
   };
 
-  var getPreviousHeader = function (editor, element) {
+  var getPreviousHeading = function (editor, element) {
     return element.getPrevious(function (node) {
       if (node.type === CKEDITOR.NODE_ELEMENT &&
         editor.config.numberedElements.indexOf(node.getName()) >= 0
@@ -207,9 +207,9 @@
           for (var key in editor.config.numberedElements) {
             this.add(editor.config.numberedElements[key],
               elementStyles[ editor.config.numberedElements[key] ].buildPreview(
-                "Header " + editor.config.numberedElements[key].slice(1)
+                "Heading " + editor.config.numberedElements[key].slice(1)
               ),
-              "Header " + editor.config.numberedElements[key].slice(1));
+              "Heading " + editor.config.numberedElements[key].slice(1));
           }
 
           this.add("pre", elementStyles.pre.buildPreview("Formatted Text"), "Preformatted Text");
@@ -218,7 +218,7 @@
         onClick: function (value) {
           editor.applyStyle(elementStyles[ value ]);
           var block = editor.elementPath().block;
-          var previousHeader = getPreviousHeader(editor, block);
+          var previousHeading = getPreviousHeading(editor, block);
           if (value === "p") {
             CKEDITOR.plugins.structuredheadings.clearAll(editor, block);
             this.setValue(value, "Normal Text");
@@ -226,14 +226,14 @@
             CKEDITOR.plugins.structuredheadings.clearAll(editor, block);
             this.setValue(value, "Formatted Text");
           } else {
-            if (!previousHeader || isNumbered(editor, previousHeader)) {
+            if (!previousHeading || isNumbered(editor, previousHeading)) {
               setNumbering(editor, block);
               setLevel(editor, block);
               editor.execCommand("reapplyStyle");
             }
             this.setValue(
                 value,
-                "Header " + editor.config.numberedElements[
+                "Heading " + editor.config.numberedElements[
                     editor.config.numberedElements.indexOf(value)
                 ].slice(1));
           }
@@ -255,7 +255,7 @@
                   } else {
                     this.setValue(
                         elementList[tag],
-                        "Header " + editor.config.numberedElements[tag].slice(1)
+                        "Heading " + editor.config.numberedElements[tag].slice(1)
                     );
                   }
                 }
@@ -448,9 +448,9 @@
      */
       matchHeading: {
         exec: function (editor) {
-          var previousHeader = getPreviousHeader(editor, editor.elementPath().block);
+          var previousHeading = getPreviousHeading(editor, editor.elementPath().block);
 
-        // if already in header, set back to default based on enter mode
+        // if already in heading, set back to default based on enter mode
           if (editor.config.numberedElements.indexOf(editor.elementPath().block.getName()) >= 0) {
             if (editor.config.enterMode === CKEDITOR.ENTER_DIV) {
               editor.applyStyle(elementStyles.div);
@@ -461,10 +461,10 @@
             clearStyles(editor, editor.elementPath().block);
 
         // else get previous element style (type) and apply to selection
-          } else if (previousHeader) {
-            editor.applyStyle(elementStyles[previousHeader.getName()]);
+          } else if (previousHeading) {
+            editor.applyStyle(elementStyles[previousHeading.getName()]);
           // if previous was numbered, set the new  one to numbered also
-            if (isNumbered(editor, previousHeader)) {
+            if (isNumbered(editor, previousHeading)) {
               setNumbering(editor, editor.elementPath().block);
               setLevel(editor, editor.elementPath().block);
               setStyle(editor, editor.elementPath().block);
