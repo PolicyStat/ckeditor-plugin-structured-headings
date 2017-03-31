@@ -41,7 +41,22 @@
         assert.areSame(
             "<h1>foo</h1><p>bar</p><h1>baz</h1>",
             bot.getData(),
-            "cleared styling fro headings"
+            "cleared styling from headings"
+        );
+      });
+    },
+    "clear numbering style no-op on plain heading": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection(
+        "<h1>^foo</h1>"
+      );
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick(itemName);
+        assert.areSame(
+            "<h1>^foo</h1>",
+            bot.htmlWithSelection(),
+            "didn't do anything"
         );
       });
     }
