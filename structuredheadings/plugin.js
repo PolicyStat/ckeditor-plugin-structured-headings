@@ -373,7 +373,7 @@
 
         // if the current block is not configured as a structured-heading-able block
 
-        if (editor.config.numberedElements.indexOf(block.getName()) === -1) {
+        if (block && editor.config.numberedElements.indexOf(block.getName()) === -1) {
           return;
         }
 
