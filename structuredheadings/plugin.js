@@ -369,6 +369,13 @@
         if (editor.mode !== "wysiwyg") {
           return;
         }
+        var block = CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor);
+
+        // if the current block is not configured as a structured-heading-able block
+
+        if (block && editor.config.numberedElements.indexOf(block.getName()) === -1) {
+          return;
+        }
 
         if (evt.data.keyCode === TAB_KEY_CODE) {
           editor.execCommand("increaseHeadingLevel");
