@@ -85,6 +85,16 @@
             "applied 1aiai to second h1 and first h1 is intact"
         );
       });
-    }
+    },
+    "don't blow up on null selection": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection("<h1>foo</h1>");
+
+      bot.combo(comboName, function (combo) {
+        // do something here
+        // this is sufficient to crash it
+
+      });
+    },
   });
 })();

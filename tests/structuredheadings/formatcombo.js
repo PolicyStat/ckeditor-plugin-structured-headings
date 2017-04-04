@@ -133,7 +133,7 @@
         // this is sufficient to crash it
 
       });
-    },
+    }
 
   });
 })();
