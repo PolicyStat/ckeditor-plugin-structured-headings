@@ -131,6 +131,7 @@
       bot.combo(comboName, function () {
         // we don't need to do anything here
         // this is sufficient to crash it
+        assert.isTrue(true);
       });
     }
 
