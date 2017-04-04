@@ -122,7 +122,18 @@
             "applied pre to h1"
         );
       });
-    }
+    },
+
+    "don't blow up on null selection": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection("<p>foo</p>");
+
+      bot.combo(comboName, function (combo) {
+        // do something here
+        // this is sufficient to crash it
+
+      });
+    },
 
   });
 })();
