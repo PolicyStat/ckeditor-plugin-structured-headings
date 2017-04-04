@@ -97,7 +97,11 @@
 
     "p on autonumbered heading in range removes classes": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("[<p>foo</p><h1 class=\"autonumber autonumber-0\">bar</h1><p>baz</p>]");
+      bot.setHtmlWithSelection(
+        "[<p>foo</p>" +
+        "<h1 class=\"autonumber autonumber-0\">bar</h1>" +
+        "<p>baz</p>]"
+        );
 
       bot.combo(comboName, function (combo) {
         // click p
