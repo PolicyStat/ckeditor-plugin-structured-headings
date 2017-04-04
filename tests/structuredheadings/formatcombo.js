@@ -128,10 +128,9 @@
       var bot = this.editorBot;
       bot.setHtmlWithSelection("<p>foo</p>");
 
-      bot.combo(comboName, function (combo) {
-        // do something here
+      bot.combo(comboName, function () {
+        // we don't need to do anything here
         // this is sufficient to crash it
-
       });
     }
 

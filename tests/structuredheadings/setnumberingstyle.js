@@ -90,11 +90,10 @@
       var bot = this.editorBot;
       bot.setHtmlWithSelection("<h1>foo</h1>");
 
-      bot.combo(comboName, function (combo) {
-        // do something here
+      bot.combo(comboName, function () {
+        // we don't need to do something here
         // this is sufficient to crash it
-
       });
-    },
+    }
   });
 })();
