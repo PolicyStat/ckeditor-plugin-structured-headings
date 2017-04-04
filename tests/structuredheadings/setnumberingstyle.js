@@ -89,6 +89,7 @@
     "don't blow up on null selection": function () {
       var bot = this.editorBot;
       bot.setHtmlWithSelection("<h1>foo</h1>");
+      bot.editor.getSelection().removeAllRanges();
 
       bot.combo(comboName, function () {
         // we don't need to do something here
