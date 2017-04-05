@@ -340,8 +340,9 @@
         onRender: function () {
           editor.on("selectionChange", function (ev) {
             var elementPath = ev.data.path;
+            var block = elementPath.block;
 
-            if (isNumbered(editor, elementPath.block)) {
+            if (block && isNumbered(editor, block)) {
               this.setValue(editor.config.autonumberCurrentStyle,
                         editor.config.autonumberCurrentStyle);
             } else {
