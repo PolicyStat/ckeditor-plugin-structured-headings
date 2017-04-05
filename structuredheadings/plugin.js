@@ -307,8 +307,9 @@
           setLevel(editor, heading);
           setCurrentStyle(editor, heading, value);
         },
-        onClick: function (value) {
+        onClick: function (value) {  // eslint-disable-line max-statements
           editor.fire("saveSnapshot");
+
           if (value === "restart") {
             editor.execCommand("restartNumbering");
             editor.fire("saveSnapshot");
