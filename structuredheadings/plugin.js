@@ -451,7 +451,7 @@
     },
     clearAllFromRange: function (editor, range) {
       var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap
-      walker.evaluator = function (node) {
+      walker.evaluator = function isParaPreOrHeading(node) {
         if (node.type !== CKEDITOR.NODE_ELEMENT) {
           return false;
         }
