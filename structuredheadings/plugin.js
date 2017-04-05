@@ -388,6 +388,8 @@
           return;
         }
 
+        editor.fire("saveSnapshot");
+
         if (evt.data.keyCode === TAB_KEY_CODE) {
           editor.execCommand("increaseHeadingLevel");
           evt.cancel();
@@ -395,6 +397,8 @@
           editor.execCommand("decreaseHeadingLevel");
           evt.cancel();
         }
+
+        editor.fire("saveSnapshot");
 
       }, this, null, 1);
 
