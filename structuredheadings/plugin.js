@@ -307,11 +307,11 @@
           setLevel(editor, heading);
           setCurrentStyle(editor, heading, value);
         },
-
         onClick: function (value) {
           editor.fire("saveSnapshot");
           if (value === "restart") {
             editor.execCommand("restartNumbering");
+            editor.fire("saveSnapshot");
             return;
           }
           var selection = editor.getSelection();
@@ -334,10 +334,11 @@
           }
 
           // apply the correct bulletstyle for all numbered headings
+          editor.fire("lockSnapshot");
           editor.execCommand("reapplyStyle", value);
           // set the combo box value
           this.setValue(value, value);
-          editor.fire("saveSnapshot");
+          editor.fire("unlockSnapshot");
         },
 
         onRender: function () {
