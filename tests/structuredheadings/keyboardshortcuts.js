@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* bender-tags: editor,unit */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,indentlist,list */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,indentlist,list,undo */
 /* eslint-enable */
 
 // Clean up all instances been created on the page.
