@@ -221,10 +221,10 @@
           var block = editor.elementPath().block;
           var previousHeading = getPreviousHeading(editor, block);
           if (value === "p") {
-            CKEDITOR.plugins.structuredheadings.clearAll(editor, block);
+            CKEDITOR.plugins.structuredheadings.clearAllInSelection(editor);
             this.setValue(value, "Normal Text");
           } else if (value === "pre") {
-            CKEDITOR.plugins.structuredheadings.clearAll(editor, block);
+            CKEDITOR.plugins.structuredheadings.clearAllInSelection(editor);
             this.setValue(value, "Formatted Text");
           } else {
             if (!previousHeading || isNumbered(editor, previousHeading)) {
@@ -418,7 +418,7 @@
       }
 
       var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap
-      walker.evaluator = function (node) {
+      walker.evaluator = function isHeading(node) {
         if (node.type !== CKEDITOR.NODE_ELEMENT) {
           return false;
         }
@@ -439,7 +439,44 @@
 
       return headings;
     },
-    clearAll: function (editor, element) {
+    clearAllInSelection: function (editor) {
+      var selection = editor.getSelection();
+      if (selection) {
+        var range = selection.getRanges()[0];
+        if (range.collapsed) {
+          this.clearAllFromElement(
+            editor,
+            CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)
+          );
+        } else {
+          this.clearAllFromRange(editor, range);
+        }
+
+      }
+    },
+    clearAllFromRange: function (editor, range) {
+      var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap
+      walker.evaluator = function isParaPreOrHeading(node) {
+        if (node.type !== CKEDITOR.NODE_ELEMENT) {
+          return false;
+        }
+        var nodeName = node.getName();
+
+        return (
+          editor.config.numberedElements.indexOf(nodeName) !== -1 ||
+          nodeName === "p" ||
+          nodeName === "pre"
+        );
+      };
+
+      var current = walker.next();
+
+      while (current) {
+        this.clearAllFromElement(editor, current);
+        current = walker.next();
+      }
+    },
+    clearAllFromElement: function (editor, element) {
       clearLevel(editor, element);
       clearNumbering(editor, element);
       clearStyles(editor, element);

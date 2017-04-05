@@ -97,6 +97,25 @@
       });
     },
 
+    "p on autonumbered heading in range removes classes": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection(
+        "[<p>foo</p>" +
+        "<h1 class=\"autonumber autonumber-0\">bar</h1>" +
+        "<p>baz</p>]"
+        );
+
+      bot.combo(comboName, function (combo) {
+        // click p
+        combo.onClick("p");
+        assert.areSame(
+            "<p>foo</p><p>bar</p><p>baz</p>",
+            bot.getData(),
+            "applied p to h1 and it is classless"
+        );
+      });
+    },
+
     "pre option on a p": function () {
       var bot = this.editorBot;
       bot.setHtmlWithSelection("<p>^foo</p>");
