@@ -443,7 +443,6 @@
             editor,
             CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)
           );
-          return;
         } else {
           this.clearAllFromRange(editor, range);
         }
