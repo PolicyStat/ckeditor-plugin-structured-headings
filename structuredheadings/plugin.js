@@ -216,6 +216,7 @@
         },
 
         onClick: function (value) {
+          editor.fire("saveSnapshot");
           editor.applyStyle(elementStyles[ value ]);
           var block = editor.elementPath().block;
           var previousHeading = getPreviousHeading(editor, block);
@@ -238,6 +239,7 @@
                 ].slice(1));
           }
 
+          editor.fire("saveSnapshot");
         },
 
         onRender: function () {
@@ -307,6 +309,7 @@
         },
 
         onClick: function (value) {
+          editor.fire("saveSnapshot");
           if (value === "restart") {
             editor.execCommand("restartNumbering");
             return;
@@ -334,7 +337,7 @@
           editor.execCommand("reapplyStyle", value);
           // set the combo box value
           this.setValue(value, value);
-
+          editor.fire("saveSnapshot");
         },
 
         onRender: function () {
