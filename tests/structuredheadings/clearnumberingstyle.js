@@ -41,7 +41,8 @@
     },
     "clear numbering style to multiple autonumbered h1": function () {
       var bot = this.editorBot;
-      var initialHtmlWithSelection = "[<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
+      var initialHtmlWithSelection =
+        "[<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
         "<p>bar</p>" +
         "<h1 class=\"autonumber autonumber-0 autonumber-N\">baz</h1>]";
       bot.setHtmlWithSelection(initialHtmlWithSelection);
