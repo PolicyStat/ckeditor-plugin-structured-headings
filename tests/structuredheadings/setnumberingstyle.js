@@ -85,6 +85,28 @@
             "applied 1aiai to second h1 and first h1 is intact"
         );
       });
+    },
+    "undo applying numbering style to a non-autonumbered heading": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<h1>^foo</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+        assert.areSame(
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to h1"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the numbering style"
+        );
+      });
     }
   });
 })();
