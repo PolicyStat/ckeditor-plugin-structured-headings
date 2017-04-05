@@ -124,6 +124,29 @@
             "applied pre to h1"
         );
       });
+    },
+
+    "autonumbered heading is undoable": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection("<p>^foo</p>");
+
+      bot.combo(comboName, function (combo) {
+        // click h2
+        combo.onClick("h2");
+        // the new h2 has autonumbering set, since no prior heading exists
+        assert.areSame(
+            "<h2 class=\"autonumber autonumber-1\">^foo</h2>",
+            bot.htmlWithSelection(),
+            "applied h2 block autonumberstyle"
+        );
+
+        bot.execCommand("undo");
+        assert.areSame(
+            "<p>^foo</p>",
+            bot.htmlWithSelection(),
+            "undid the heading"
+        );
+      });
     }
 
   });
