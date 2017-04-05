@@ -96,6 +96,7 @@
         );
       });
     },
+
     "pre option on a p": function () {
       var bot = this.editorBot;
       bot.setHtmlWithSelection("<p>^foo</p>");
@@ -128,7 +129,8 @@
 
     "autonumbered heading is undoable": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("<p>^foo</p>");
+      var initialHtmlWithSelection = "<p>^foo</p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         // click h2
@@ -142,9 +144,56 @@
 
         bot.execCommand("undo");
         assert.areSame(
-            "<p>^foo</p>",
+            initialHtmlWithSelection,
             bot.htmlWithSelection(),
             "undid the heading"
+        );
+      });
+    },
+
+    "pre is undoable": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<h1 class=\"autonumber autonumber-0\">^foo</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        // click pre
+        combo.onClick("pre");
+        assert.areSame(
+            "<pre>^foo</pre>",
+            bot.htmlWithSelection(),
+            "applied pre to h1"
+        );
+
+        bot.execCommand("undo");
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the pre"
+        );
+      });
+    },
+
+    "p on autonumbered heading is undoable": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<h1 class=\"autonumber autonumber-0\">^foo</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        // click p
+        combo.onClick("p");
+        assert.areSame(
+            "<p>^foo</p>",
+            bot.htmlWithSelection(),
+            "applied p to h1"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the p"
         );
       });
     }
