@@ -17,7 +17,8 @@
     },
     "clear numbering style to a single autonumbered heading": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>");
+      var initialHtmlWithSelection = "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         combo.onClick(itemName);
@@ -26,15 +27,22 @@
             bot.htmlWithSelection(),
             "cleared styling from h1"
         );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undo the dropdown"
+        );
       });
     },
     "clear numbering style to multiple autonumbered h1": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection(
-        "[<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
+      var initialHtmlWithSelection = "[<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
         "<p>bar</p>" +
-        "<h1 class=\"autonumber autonumber-0 autonumber-N\">baz</h1>]"
-      );
+        "<h1 class=\"autonumber autonumber-0 autonumber-N\">baz</h1>]";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         combo.onClick(itemName);
@@ -42,6 +50,14 @@
             "<h1>foo</h1><p>bar</p><h1>baz</h1>",
             bot.getData(),
             "cleared styling from headings"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undo the dropdown"
         );
       });
     },
