@@ -336,6 +336,9 @@
 
           // apply the correct bulletstyle for all numbered headings
           editor.fire("lockSnapshot");
+          // the snapshot needs to be locked here, because
+          // execCommand will also create a snapshot, leading to
+          // an intermediate snapshot with some of the styles applied, but not all
           editor.execCommand("reapplyStyle", value);
           // set the combo box value
           this.setValue(value, value);
