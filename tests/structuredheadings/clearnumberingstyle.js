@@ -1,5 +1,7 @@
+/* eslint-disable */
 /* bender-tags: editor,unit */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,undo */
+/* eslint-enable */
 
 // Clean up all instances been created on the page.
 (function () {
@@ -17,7 +19,8 @@
     },
     "clear numbering style to a single autonumbered heading": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>");
+      var initialHtmlWithSelection = "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         combo.onClick(itemName);
@@ -26,15 +29,27 @@
             bot.htmlWithSelection(),
             "cleared styling from h1"
         );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undo the dropdown"
+        );
       });
     },
     "clear numbering style to multiple autonumbered h1": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection(
+      var initialHtmlWithSelection =
         "[<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
         "<p>bar</p>" +
-        "<h1 class=\"autonumber autonumber-0 autonumber-N\">baz</h1>]"
+        "<h1 class=\"autonumber autonumber-0 autonumber-N\">baz</h1>]";
+      var initialHtmlWithoutSelection = initialHtmlWithSelection.substring(
+        1,
+        initialHtmlWithSelection.length - 1
       );
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         combo.onClick(itemName);
@@ -42,6 +57,15 @@
             "<h1>foo</h1><p>bar</p><h1>baz</h1>",
             bot.getData(),
             "cleared styling from headings"
+        );
+
+        bot.execCommand("undo");
+        // this is weird, but the selection API returns the extra (internal) paragraphs
+        // that are created to normalize the selection here
+        assert.areSame(
+          initialHtmlWithoutSelection,
+          bot.getData(),
+          "undo the dropdown"
         );
       });
     },

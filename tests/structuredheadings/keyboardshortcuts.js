@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* bender-tags: editor,unit */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,indentlist,list */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,indentlist,list,undo */
 /* eslint-enable */
 
 // Clean up all instances been created on the page.
@@ -18,7 +18,9 @@
     },
 
     "H2 to H3 from Tab": function () {
-      this.editorBot.setHtmlWithSelection("<h2>^Heading</h2>");
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<h2>^Heading</h2>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
       this.editor.editable().fire(
         "keydown",
         new CKEDITOR.dom.event({ keyCode: tabKey }) // eslint-disable-line new-cap
@@ -29,10 +31,20 @@
         "<h3>^Heading</h3>", updatedContent,
         "Header increased from TAB"
       );
+
+      bot.execCommand("undo");
+
+      assert.areSame(
+        initialHtmlWithSelection,
+        bender.tools.getHtmlWithSelection(this.editorBot.editor),
+        "tab is undoable"
+      );
     },
 
     "H2 to H1 from Shift-Tab": function () {
-      this.editorBot.setHtmlWithSelection("<h2>^Heading</h2>");
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<h2>^Heading</h2>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
       this.editor.editable().fire(
         "keydown",
         new CKEDITOR.dom.event({ keyCode: tabKey, shiftKey: true }) // eslint-disable-line new-cap
@@ -42,7 +54,15 @@
       assert.areSame(
           "<h1>^Heading</h1>", updatedContent,
           "Header decreased from Shift-TAB"
-        );
+      );
+
+      bot.execCommand("undo");
+
+      assert.areSame(
+        initialHtmlWithSelection,
+        bender.tools.getHtmlWithSelection(this.editorBot.editor),
+        "tab is undoable"
+      );
     },
 
     "list tab still works": function () {

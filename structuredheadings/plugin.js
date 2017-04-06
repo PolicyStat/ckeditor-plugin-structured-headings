@@ -216,6 +216,7 @@
         },
 
         onClick: function (value) {
+          editor.fire("saveSnapshot");
           editor.applyStyle(elementStyles[ value ]);
           var block = editor.elementPath().block;
           var previousHeading = getPreviousHeading(editor, block);
@@ -238,6 +239,7 @@
                 ].slice(1));
           }
 
+          editor.fire("saveSnapshot");
         },
 
         onRender: function () {
@@ -305,10 +307,12 @@
           setLevel(editor, heading);
           setCurrentStyle(editor, heading, value);
         },
+        onClick: function (value) {  // eslint-disable-line max-statements
+          editor.fire("saveSnapshot");
 
-        onClick: function (value) {
           if (value === "restart") {
             editor.execCommand("restartNumbering");
+            editor.fire("saveSnapshot");
             return;
           }
           var selection = editor.getSelection();
@@ -331,10 +335,14 @@
           }
 
           // apply the correct bulletstyle for all numbered headings
+          editor.fire("lockSnapshot");
+          // the snapshot needs to be locked here, because
+          // execCommand will also create a snapshot, leading to
+          // an intermediate snapshot with some of the styles applied, but not all
           editor.execCommand("reapplyStyle", value);
           // set the combo box value
           this.setValue(value, value);
-
+          editor.fire("unlockSnapshot");
         },
 
         onRender: function () {
