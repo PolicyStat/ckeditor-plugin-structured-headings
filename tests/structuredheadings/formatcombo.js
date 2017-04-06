@@ -1,5 +1,7 @@
+/* eslint-disable */
 /* bender-tags: editor,unit */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,undo */
+/* eslint-enable */
 
 // Clean up all instances been created on the page.
 (function () {
@@ -140,6 +142,77 @@
             "<pre>^foo</pre>",
             bot.htmlWithSelection(),
             "applied pre to h1"
+        );
+      });
+    },
+
+    "autonumbered heading is undoable": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<p>^foo</p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        // click h2
+        combo.onClick("h2");
+        // the new h2 has autonumbering set, since no prior heading exists
+        assert.areSame(
+            "<h2 class=\"autonumber autonumber-1\">^foo</h2>",
+            bot.htmlWithSelection(),
+            "applied h2 block autonumberstyle"
+        );
+
+        bot.execCommand("undo");
+        assert.areSame(
+            initialHtmlWithSelection,
+            bot.htmlWithSelection(),
+            "undid the heading"
+        );
+      });
+    },
+
+    "pre is undoable": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<h1 class=\"autonumber autonumber-0\">^foo</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        // click pre
+        combo.onClick("pre");
+        assert.areSame(
+            "<pre>^foo</pre>",
+            bot.htmlWithSelection(),
+            "applied pre to h1"
+        );
+
+        bot.execCommand("undo");
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the pre"
+        );
+      });
+    },
+
+    "p on autonumbered heading is undoable": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<h1 class=\"autonumber autonumber-0\">^foo</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        // click p
+        combo.onClick("p");
+        assert.areSame(
+            "<p>^foo</p>",
+            bot.htmlWithSelection(),
+            "applied p to h1"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the p"
         );
       });
     }
