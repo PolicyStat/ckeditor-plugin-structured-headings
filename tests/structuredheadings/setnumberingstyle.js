@@ -134,5 +134,22 @@
         );
       });
     },
+    "match the heading level when going paragraph -> numbered": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection("<h2>foo</h2><p>bar</p><p>^baz</p>");
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+        // this is an interesting case.  should the prior unnumbered heading be numbered?
+        // probably not.
+        assert.areSame(
+            "<h2>foo</h2>" +
+            "<p>bar</p>" +
+            "<h2 class=\"autonumber autonumber-0 autonumber-N\">^baz</h2>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to p, and it became an h1"
+        );
+      });
+    },
   });
 })();
