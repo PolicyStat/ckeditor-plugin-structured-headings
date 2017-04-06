@@ -120,6 +120,19 @@
           "undid the numbering style"
         );
       });
-    }
+    },
+    "apply numbering style to a paragraph, so it becomes a heading": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection("<p>^foo</p>");
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+        assert.areSame(
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to p, and it became an h1"
+        );
+      });
+    },
   });
 })();
