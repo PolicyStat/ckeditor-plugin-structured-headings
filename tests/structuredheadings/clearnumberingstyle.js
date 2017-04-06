@@ -45,6 +45,10 @@
         "[<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
         "<p>bar</p>" +
         "<h1 class=\"autonumber autonumber-0 autonumber-N\">baz</h1>]";
+      var initialHtmlWithoutSelection = initialHtmlWithSelection.substring(
+        1,
+        initialHtmlWithSelection.length - 1
+      );
       bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
@@ -59,7 +63,7 @@
         // this is weird, but the selection API returns the extra (internal) paragraphs
         // that are created to normalize the selection here
         assert.areSame(
-          initialHtmlWithSelection.substring(1, initialHtmlWithSelection.length - 1),
+          initialHtmlWithoutSelection,
           bot.getData(),
           "undo the dropdown"
         );
