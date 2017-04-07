@@ -337,7 +337,7 @@
             func = this.setAutonumberClassesForHeading.bind(this, value);
           }
 
-          if (headings && headings.length > 0) {
+          if (headings.length > 0) {
             for (var i = 0; i < headings.length; i++) {
               func(headings[i]);
             }
