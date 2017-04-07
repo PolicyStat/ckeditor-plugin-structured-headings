@@ -167,6 +167,31 @@
           "undid the numbering style"
         );
       });
-    }
+    },
+    "apply numbering style to a strong tag, so it becomes a heading": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<p><strong>^foo</strong></p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+
+        // yes, the strong tag doesn't get cleared even in the original behaviour
+        // the heading style trumps it though
+        assert.areSame(
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\"><strong>^foo</strong></h1>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to p, and it became an h1"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the numbering style"
+        );
+      });
+    },
   });
 })();
