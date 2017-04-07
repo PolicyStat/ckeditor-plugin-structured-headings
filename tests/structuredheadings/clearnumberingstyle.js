@@ -83,6 +83,20 @@
             "didn't do anything"
         );
       });
+    },
+    "clear numbering style no-op on p": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<p>^foo</p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick(itemName);
+        assert.areSame(
+            initialHtmlWithSelection,
+            bot.htmlWithSelection(),
+            "didn't do anything"
+        );
+      });
     }
   });
 })();
