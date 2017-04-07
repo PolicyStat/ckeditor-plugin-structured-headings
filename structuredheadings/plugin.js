@@ -293,7 +293,7 @@
 
           this.startGroup("Heading-Specific Styles");
           this.add("clear", "Clear Styling", "Clear Styling");
-          this.add("restart", "Restart Styling", "Restart Styling");
+          this.add("restart", "Restart Numbering", "Restart Numbering");
         },
 
         clearAutonumberClassesForHeading: function (heading) {
