@@ -322,19 +322,19 @@
               );
           var func;
 
-          // handle the collapsed, not in a heading case
-          if (headings === null) {
-            editor.fire("lockSnapshot", { dontUpdate: true });
-            editor.execCommand("matchHeading");
-            editor.fire("unlockSnapshot");
-            // put the new heading into the headings array
-            headings = [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
-          }
-
           if (value === "clear") {
             func = this.clearAutonumberClassesForHeading;
           } else {
             func = this.setAutonumberClassesForHeading.bind(this, value);
+
+             // prep the html for the collapsed, not in a heading case
+            if (headings === null) {
+              editor.fire("lockSnapshot", { dontUpdate: true });
+              editor.execCommand("matchHeading");
+              editor.fire("unlockSnapshot");
+              // put the new heading into the headings array
+              headings = [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
+            }
           }
 
           if (headings.length > 0) {
