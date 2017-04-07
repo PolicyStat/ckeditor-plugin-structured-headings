@@ -322,10 +322,25 @@
               );
           var func;
 
+          // handle the collapsed, not in a heading case
+          if (headings === null) {
+            editor.fire("lockSnapshot");
+            editor.execCommand("matchHeading");
+            editor.fire("unlockSnapshot");
+            // put the new heading into the headings array
+            headings = [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
+          }
+
           if (value === "clear") {
             func = this.clearAutonumberClassesForHeading;
           } else {
             func = this.setAutonumberClassesForHeading.bind(this, value);
+          }
+
+          if (headings && headings.length > 0) {
+            for (var i = 0; i < headings.length; i++) {
+              func(headings[i]);
+            }
           }
 
           editor.fire("lockSnapshot");
@@ -333,21 +348,7 @@
           // execCommand will also create a snapshot, leading to
           // an intermediate snapshot with some of the styles applied, but not all
 
-          // handle the collapsed, not in a heading case
-          if (headings === null) {
-            editor.execCommand("matchHeading");
-            // put the new heading into the headings array
-            headings = [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
-          }
-
-          if (headings.length > 0) {
-            for (var i = 0; i < headings.length; i++) {
-              func(headings[i]);
-            }
-          }
-
           // apply the correct bulletstyle for all numbered headings
-
           editor.execCommand("reapplyStyle", value);
           // set the combo box value
           this.setValue(value, value);
