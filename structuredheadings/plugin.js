@@ -328,6 +328,18 @@
             func = this.setAutonumberClassesForHeading.bind(this, value);
           }
 
+          editor.fire("lockSnapshot");
+          // the snapshot needs to be locked here, because
+          // execCommand will also create a snapshot, leading to
+          // an intermediate snapshot with some of the styles applied, but not all
+
+          // handle the collapsed, not in a heading case
+          if (headings === null) {
+            editor.execCommand("matchHeading");
+            // put the new heading into the headings array
+            headings = [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
+          }
+
           if (headings.length > 0) {
             for (var i = 0; i < headings.length; i++) {
               func(headings[i]);
@@ -335,10 +347,7 @@
           }
 
           // apply the correct bulletstyle for all numbered headings
-          editor.fire("lockSnapshot");
-          // the snapshot needs to be locked here, because
-          // execCommand will also create a snapshot, leading to
-          // an intermediate snapshot with some of the styles applied, but not all
+
           editor.execCommand("reapplyStyle", value);
           // set the combo box value
           this.setValue(value, value);
@@ -405,7 +414,9 @@
         if (editor.config.numberedElements.indexOf(block.getName()) !== -1) {
           return [block];
         }
-        return [];
+        // we were in a collapsed selection, but it isn't a heading
+
+        return null;
       }
 
       var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap
