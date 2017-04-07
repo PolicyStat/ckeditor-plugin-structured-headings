@@ -337,7 +337,7 @@
             }
           }
 
-          if (headings.length > 0) {
+          if (headings !== null && headings.length > 0) {
             for (var i = 0; i < headings.length; i++) {
               func(headings[i]);
             }
