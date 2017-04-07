@@ -45,7 +45,9 @@
     },
     "apply numbering style to multiple non-autonumbered h1 using a partial selection": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("[<h1>foo</h1><h1>b]ar</h1>");
+      var initialHtmlWithSelection = "[<h1>foo</h1><h1>b]ar</h1>";
+      var initialHtmlWithoutSelection = "<h1>foo</h1><h1>bar</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         combo.onClick("1. a. i. a. i.");
@@ -54,6 +56,15 @@
             "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1>",
             bot.getData(),
             "applied 1aiai to both h1"
+        );
+
+        bot.execCommand("undo");
+
+        // weird phantom p bug
+        assert.areSame(
+          initialHtmlWithoutSelection,
+          bot.getData(),
+          "undid the numbering style"
         );
       });
     },
@@ -192,6 +203,6 @@
           "undid the numbering style"
         );
       });
-    },
+    }
   });
 })();
