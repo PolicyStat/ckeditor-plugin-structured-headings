@@ -123,7 +123,8 @@
     },
     "apply numbering style to a paragraph, so it becomes a heading": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("<p>^foo</p>");
+      var initialHtmlWithSelection = "<p>^foo</p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         combo.onClick("1. a. i. a. i.");
@@ -132,11 +133,20 @@
             bot.htmlWithSelection(),
             "applied 1aiai to p, and it became an h1"
         );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the numbering style"
+        );
       });
     },
     "match the heading level when going paragraph -> numbered": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("<h2>foo</h2><p>bar</p><p>^baz</p>");
+      var initialHtmlWithSelection = "<h2>foo</h2><p>bar</p><p>^baz</p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         combo.onClick("1. a. i. a. i.");
@@ -147,6 +157,14 @@
             "<h2 class=\"autonumber autonumber-1 autonumber-a\">^baz</h2>",
             bot.htmlWithSelection(),
             "applied 1aiai to p, and it became an h2 at the right level"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the numbering style"
         );
       });
     }
