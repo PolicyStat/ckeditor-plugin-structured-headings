@@ -329,6 +329,7 @@
 
              // prep the html for the collapsed, not in a heading case
             if (headings === null) {
+              // avoid an extra snapshot created by the matchHeading command
               editor.fire("lockSnapshot", { dontUpdate: true });
               editor.execCommand("matchHeading");
               editor.fire("unlockSnapshot");
