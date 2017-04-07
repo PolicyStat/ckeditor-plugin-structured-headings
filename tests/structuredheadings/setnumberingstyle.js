@@ -144,7 +144,7 @@
         assert.areSame(
             "<h2>foo</h2>" +
             "<p>bar</p>" +
-            "<h2 class=\"autonumber autonumber-1 autonumber-N\">^baz</h2>",
+            "<h2 class=\"autonumber autonumber-1 autonumber-a\">^baz</h2>",
             bot.htmlWithSelection(),
             "applied 1aiai to p, and it became an h2 at the right level"
         );
