@@ -324,7 +324,7 @@
 
           // handle the collapsed, not in a heading case
           if (headings === null) {
-            editor.fire("lockSnapshot");
+            editor.fire("lockSnapshot", { dontUpdate: true });
             editor.execCommand("matchHeading");
             editor.fire("unlockSnapshot");
             // put the new heading into the headings array
