@@ -202,7 +202,7 @@
 
           this.startGroup("Formats");
 
-          this.add("p", elementStyles.p.buildPreview("Normal Text"), "Normal Text");
+          this.add("p", elementStyles.p.buildPreview("Paragraph"), "Paragraph");
 
           for (var key in editor.config.numberedElements) {
             this.add(editor.config.numberedElements[key],
@@ -222,7 +222,7 @@
           var previousHeading = getPreviousHeading(editor, block);
           if (value === "p") {
             CKEDITOR.plugins.structuredheadings.clearAllInSelection(editor);
-            this.setValue(value, "Normal Text");
+            this.setValue(value, "Paragraph");
           } else if (value === "pre") {
             CKEDITOR.plugins.structuredheadings.clearAllInSelection(editor);
             this.setValue(value, "Formatted Text");
@@ -251,7 +251,7 @@
               if (elementStyles[elementList[tag]].checkActive(elementPath, editor)) {
                 if (elementList[tag] !== currentTag) {
                   if (elementList[tag] === "p") {
-                    this.setValue(elementList[tag], "Normal Text");
+                    this.setValue(elementList[tag], "Paragraph");
                   } else if (elementList[tag] === "pre") {
                     this.setValue(elementList[tag], "Formatted Text");
                   } else {
@@ -293,7 +293,7 @@
 
           this.startGroup("Heading-Specific Styles");
           this.add("clear", "Clear Styling", "Clear Styling");
-          this.add("restart", "Restart Styling", "Restart Styling");
+          this.add("restart", "Restart Numbering", "Restart Numbering");
         },
 
         clearAutonumberClassesForHeading: function (heading) {
