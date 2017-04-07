@@ -326,19 +326,30 @@
             func = this.clearAutonumberClassesForHeading;
           } else {
             func = this.setAutonumberClassesForHeading.bind(this, value);
+
+             // prep the html for the collapsed, not in a heading case
+            if (headings === null) {
+              // avoid an extra snapshot created by the matchHeading command
+              editor.fire("lockSnapshot", { dontUpdate: true });
+              editor.execCommand("matchHeading");
+              editor.fire("unlockSnapshot");
+              // put the new heading into the headings array
+              headings = [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
+            }
           }
 
-          if (headings.length > 0) {
+          if (headings) {
             for (var i = 0; i < headings.length; i++) {
               func(headings[i]);
             }
           }
 
-          // apply the correct bulletstyle for all numbered headings
           editor.fire("lockSnapshot");
           // the snapshot needs to be locked here, because
           // execCommand will also create a snapshot, leading to
           // an intermediate snapshot with some of the styles applied, but not all
+
+          // apply the correct bulletstyle for all numbered headings
           editor.execCommand("reapplyStyle", value);
           // set the combo box value
           this.setValue(value, value);
@@ -363,19 +374,6 @@
 
         onOpen: function () {
           this.showAll();
-        },
-
-        refresh: function () {
-          var path = editor.elementPath();
-
-          if (!path) {return;}
-
-          if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
-            this.setState(CKEDITOR.TRISTATE_OFF);
-            return;
-          }
-
-          this.setState(CKEDITOR.TRISTATE_DISABLED);
         }
       });
 
@@ -418,7 +416,9 @@
         if (editor.config.numberedElements.indexOf(block.getName()) !== -1) {
           return [block];
         }
-        return [];
+        // we were in a collapsed selection, but it isn't a heading
+
+        return null;
       }
 
       var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap

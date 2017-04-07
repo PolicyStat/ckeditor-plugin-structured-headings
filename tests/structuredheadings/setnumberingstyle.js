@@ -45,7 +45,9 @@
     },
     "apply numbering style to multiple non-autonumbered h1 using a partial selection": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("[<h1>foo</h1><h1>b]ar</h1>");
+      var initialHtmlWithSelection = "[<h1>foo</h1><h1>b]ar</h1>";
+      var initialHtmlWithoutSelection = "<h1>foo</h1><h1>bar</h1>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
         combo.onClick("1. a. i. a. i.");
@@ -54,6 +56,15 @@
             "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1>",
             bot.getData(),
             "applied 1aiai to both h1"
+        );
+
+        bot.execCommand("undo");
+
+        // weird phantom p bug
+        assert.areSame(
+          initialHtmlWithoutSelection,
+          bot.getData(),
+          "undid the numbering style"
         );
       });
     },
@@ -110,6 +121,78 @@
             "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>",
             bot.htmlWithSelection(),
             "applied 1aiai to h1"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the numbering style"
+        );
+      });
+    },
+    "apply numbering style to a paragraph, so it becomes a heading": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<p>^foo</p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+        assert.areSame(
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to p, and it became an h1"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the numbering style"
+        );
+      });
+    },
+    "match the heading level when going paragraph -> numbered": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<h2>foo</h2><p>bar</p><p>^baz</p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+        // this is an interesting case.  should the prior unnumbered heading be numbered?
+        assert.areSame(
+            "<h2>foo</h2>" +
+            "<p>bar</p>" +
+            "<h2 class=\"autonumber autonumber-1 autonumber-a\">^baz</h2>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to p, and it became an h2 at the right level"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the numbering style"
+        );
+      });
+    },
+    "apply numbering style to a strong tag, so it becomes a heading": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<p><strong>^foo</strong></p>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+
+        // yes, the strong tag doesn't get cleared even in the original behaviour
+        // the heading style trumps it though
+        assert.areSame(
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\"><strong>^foo</strong></h1>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to p, and it became an h1"
         );
 
         bot.execCommand("undo");
