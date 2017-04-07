@@ -363,19 +363,6 @@
 
         onOpen: function () {
           this.showAll();
-        },
-
-        refresh: function () {
-          var path = editor.elementPath();
-
-          if (!path) {return;}
-
-          if (path.block && editor.config.numberedElements.indexOf(path.block.getName()) >= 0) {
-            this.setState(CKEDITOR.TRISTATE_OFF);
-            return;
-          }
-
-          this.setState(CKEDITOR.TRISTATE_DISABLED);
         }
       });
 
