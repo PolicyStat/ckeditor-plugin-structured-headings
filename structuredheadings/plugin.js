@@ -362,6 +362,11 @@
         onClick: function (value) {  // eslint-disable-line max-statements
           editor.fire("saveSnapshot");
 
+          if (isInList(editor, isInList)) {
+            editor.execCommand("applyPresetToList", "asdf");
+            return;
+          }
+
           if (value === "restart") {
             editor.execCommand("restartNumbering");
             editor.fire("saveSnapshot");
@@ -650,7 +655,15 @@
 
       applyPresetToList: {
         exec: function (editor, presetName) {
+          var listClassMappings = editor.config.listClassMappings;
           // get the root ordered list
+          var path = editor.elementPath();
+          // TODO verify if this might be backwards
+          var rootList = path.contains("ol");
+
+          // TODO this needs to determine the correct style to apply
+
+          listClassMappings.A.applyToObject(rootList, editor);
 
           // go through the tree and apply the correct style at each level
 
