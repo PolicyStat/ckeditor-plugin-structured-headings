@@ -364,7 +364,7 @@
         onClick: function (value) {  // eslint-disable-line max-statements
           editor.fire("saveSnapshot");
 
-          if (isInList(editor, isInList)) {
+          if (isInList(editor, editor.elementPath())) {
             editor.execCommand("applyPresetToList", "asdf");
             return;
           }
