@@ -637,6 +637,15 @@
             setStyle(editor, node, style);
           }
         }
+      },
+
+      applyPresetToList: {
+        exec: function (editor, presetName) {
+          // get the root ordered list
+
+          // go through the tree and apply the correct style at each level
+
+        }
       }
     }
   };
