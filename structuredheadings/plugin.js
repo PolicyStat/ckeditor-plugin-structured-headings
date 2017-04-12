@@ -365,7 +365,8 @@
           editor.fire("saveSnapshot");
 
           if (isInList(editor, editor.elementPath())) {
-            editor.execCommand("applyPresetToList", "asdf");
+            // TODO we need to also handle restart/clear
+            editor.execCommand("applyPresetToList", value);
             return;
           }
 
@@ -656,16 +657,24 @@
       },
 
       applyPresetToList: {
+        getPresetStyleArray: function (editor, presetName) {
+          var styleArray = presetName.split(".").map(function (str) {
+            var key = str.trim()[0];
+            return editor.config.listClassMappings[key];
+          });
+
+          return styleArray;
+        },
         exec: function (editor, presetName) {
-          var listClassMappings = editor.config.listClassMappings;
+          var styleArray = this.getPresetStyleArray(editor, presetName);
           // get the root ordered list
           var path = editor.elementPath();
           // TODO verify if this might be backwards
           var rootList = path.contains("ol");
 
-          // TODO this needs to determine the correct style to apply
+          styleArray[0].applyToObject(rootList, editor);
 
-          listClassMappings.A.applyToObject(rootList, editor);
+          // TODO this needs to determine the correct style to apply
 
           // go through the tree and apply the correct style at each level
 
