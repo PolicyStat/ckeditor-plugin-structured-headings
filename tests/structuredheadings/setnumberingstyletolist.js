@@ -16,12 +16,15 @@
     setUp: function () {
       //Anything to be run before each test if needed
     },
-    assertComboBeforeAfter: function (comboItem, beforeHtml, afterHtml, ignoreSelection) {
+    assertComboBeforeAfter: function (opts) {
       var bot = this.editorBot;
-      var initialHtmlWithSelection = beforeHtml;
+      // i wish we had ES6
+
+      var initialHtmlWithSelection = opts.beforeHtml || "";
+      var comboItem = opts.comboitem || "1. a. i. a. i.";
       var htmlGetter;
 
-      if (ignoreSelection) {
+      if (opts.ignoreSelection) {
         htmlGetter = bot.getData.bind(bot);
       } else {
         htmlGetter = bot.htmlWithSelection.bind(bot);
@@ -33,7 +36,7 @@
         combo.onClick(comboItem);
 
         assert.areSame(
-          afterHtml,
+          opts.afterHtml,
           htmlGetter(),
           "applied " + comboItem + " to html"
         );
@@ -51,7 +54,12 @@
       var comboItem = "1. a. i. a. i.";
       var beforeHtmlWithSelection = "<ol><li>^foo</li></ol>";
       var afterHtmlWithSelection = "<ol class=\"list-decimal\"><li>^foo</li></ol>";
-      this.assertComboBeforeAfter(comboItem, beforeHtmlWithSelection, afterHtmlWithSelection);
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+      this.assertComboBeforeAfter(opts);
     },
     "apply 1aiai style to a nested list tag": function () {
       var comboItem = "1. a. i. a. i.";
@@ -61,7 +69,13 @@
         "<li><ol class=\"list-lower-alpha\"><li>^bar</li></ol>" +
         "</li></ol>";
 
-      this.assertComboBeforeAfter(comboItem, beforeHtmlWithSelection, afterHtmlWithSelection);
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+
+      this.assertComboBeforeAfter(opts);
     }
   });
 })();
