@@ -12,6 +12,8 @@
     pre: new CKEDITOR.style({ element: "pre" })
   };
 
+  var listNodeNames = { ol: 1, ul: 1 };
+
   var setupElements = function (editor) {
     // list of elements allowed to be numbered
     editor.config.numberedElements =
@@ -36,6 +38,13 @@
     } else {
       return false;
     }
+  };
+
+  var isInList = function (editor, path) {
+    var list = path.contains(listNodeNames, 1);
+    var limit = path.blockLimit || path.root;
+
+    return list && limit.contains(list);
   };
 
   var clearNumbering = function (editor, element) {
