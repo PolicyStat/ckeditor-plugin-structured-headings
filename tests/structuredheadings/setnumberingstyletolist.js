@@ -38,6 +38,32 @@
           "undid the numbering style"
         );
       });
-    }
+    },
+    "apply 1aiai style to a nested list tag": function () {
+      var bot = this.editorBot;
+      var initialHtmlWithSelection = "<ol><li>foo></li><li><ol><li>^bar</li></ol></li></ol>";
+      bot.setHtmlWithSelection(initialHtmlWithSelection);
+
+      bot.combo(comboName, function (combo) {
+        combo.onClick("1. a. i. a. i.");
+
+        assert.areSame(
+            "<ol class=\"list-decimal\">" +
+            "<li>foo</li>" +
+            "<li><ol class=\"list-lower-alpha\"><li>^bar</li></ol>" +
+            "</li></ol>",
+            bot.htmlWithSelection(),
+            "applied 1aiai to ordered list, and both level changed to be 1aiai"
+        );
+
+        bot.execCommand("undo");
+
+        assert.areSame(
+          initialHtmlWithSelection,
+          bot.htmlWithSelection(),
+          "undid the numbering style"
+        );
+      });
+    },
   });
 })();
