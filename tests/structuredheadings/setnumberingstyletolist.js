@@ -16,28 +16,42 @@
     setUp: function () {
       //Anything to be run before each test if needed
     },
-    "apply 1aiai style to a ordered list tag": function () {
+    assertComboBeforeAfter: function (comboItem, beforeHtml, afterHtml, ignoreSelection) {
       var bot = this.editorBot;
-      var initialHtmlWithSelection = "<ol><li>^foo</li></ol>";
+      var initialHtmlWithSelection = beforeHtml;
+      var htmlGetter;
+
+      if (ignoreSelection) {
+        htmlGetter = bot.getData;
+      } else {
+        htmlGetter = bot.htmlWithSelection();
+      }
+
       bot.setHtmlWithSelection(initialHtmlWithSelection);
 
       bot.combo(comboName, function (combo) {
-        combo.onClick("1. a. i. a. i.");
+        combo.onClick(comboItem);
 
         assert.areSame(
-            "<ol class=\"list-decimal\"><li>^foo</li></ol>",
-            bot.htmlWithSelection(),
-            "applied 1aiai to ordered list, and first level got the decimal class"
+          afterHtml,
+          htmlGetter(),
+          "applied " + comboItem + " to html"
         );
 
         bot.execCommand("undo");
 
         assert.areSame(
-          initialHtmlWithSelection,
-          bot.htmlWithSelection(),
-          "undid the numbering style"
+            initialHtmlWithSelection,
+            htmlGetter(),
+            "undid " + comboItem
         );
       });
+    },
+    "apply 1aiai style to a ordered list tag": function () {
+      var comboItem = "1. a. i. a. i.";
+      var beforeHtmlWithSelection = "<ol><li>^foo</li></ol>";
+      var afterHtmlWithSelection = "<ol class=\"list-decimal\"><li>^foo</li></ol>";
+      this.assertComboBeforeAfter(comboItem, beforeHtmlWithSelection, afterHtmlWithSelection);
     },
     "apply 1aiai style to a nested list tag": function () {
       var bot = this.editorBot;
