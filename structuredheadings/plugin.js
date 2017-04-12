@@ -122,6 +122,8 @@
         CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
     editor.addCommand("reapplyStyle",
         CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
+    editor.addCommand("applyPresetToList",
+        CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
   };
 
   /*
