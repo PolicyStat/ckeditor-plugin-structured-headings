@@ -24,7 +24,7 @@
       if (ignoreSelection) {
         htmlGetter = bot.getData;
       } else {
-        htmlGetter = bot.htmlWithSelection();
+        htmlGetter = bot.htmlWithSelection;
       }
 
       bot.setHtmlWithSelection(initialHtmlWithSelection);
