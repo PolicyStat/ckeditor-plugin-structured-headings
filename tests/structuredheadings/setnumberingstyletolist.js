@@ -22,9 +22,9 @@
       var htmlGetter;
 
       if (ignoreSelection) {
-        htmlGetter = bot.getData;
+        htmlGetter = bot.getData.bind(bot);
       } else {
-        htmlGetter = bot.htmlWithSelection;
+        htmlGetter = bot.htmlWithSelection.bind(bot);
       }
 
       bot.setHtmlWithSelection(initialHtmlWithSelection);
