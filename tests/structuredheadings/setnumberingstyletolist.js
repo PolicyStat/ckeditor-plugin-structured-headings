@@ -54,6 +54,7 @@
       var comboItem = "1. a. i. a. i.";
       var beforeHtmlWithSelection = "<ol><li>^foo</li></ol>";
       var afterHtmlWithSelection = "<ol class=\"list-decimal\"><li>^foo</li></ol>";
+      // wtb destructuring
       var opts = {
         comboItem: comboItem,
         beforeHtml: beforeHtmlWithSelection,
@@ -67,6 +68,27 @@
       var afterHtmlWithSelection = "<ol class=\"list-decimal\">" +
         "<li>foo</li>" +
         "<li><ol class=\"list-lower-alpha\"><li>^bar</li></ol>" +
+        "</li></ol>";
+
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+
+      this.assertComboBeforeAfter(opts);
+    },
+    "apply 1aiai style to a mixed list, ignore uls in count": function () {
+      var comboItem = "1. a. i. a. i.";
+      var beforeHtmlWithSelection = "<ol><li>foo" +
+        "<ul><li>bar" +
+		"<ol><li>^baz</li></ol>" +
+		"</li></ul>" +
+        "</li></ol>";
+      var afterHtmlWithSelection = "<ol class=\"list-decimal\"><li>foo" +
+        "<ul><li>bar" +
+		"<ol class=\"list-lower-alpha\"><li>^baz</li></ol>" +
+		"</li></ul>" +
         "</li></ol>";
 
       var opts = {
