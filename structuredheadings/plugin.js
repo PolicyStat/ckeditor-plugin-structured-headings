@@ -273,8 +273,8 @@
 
       //Style Dropdown
       editor.ui.addRichCombo("NumStyles", {
-        label: "Numbering",
-        title: "Numbering Styles",
+        label: "Heading Styles",
+        title: "Heading Styles",
         toolbar: "styles,8",
         allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*)",
 
