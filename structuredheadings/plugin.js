@@ -338,13 +338,11 @@
         },
 
         init: function () {
-          this.startGroup("Global Styles");
-
           for (var style in editor.config.autonumberStyles) {
             this.add(style, style, style);
           }
 
-          this.startGroup("Heading-Specific Styles");
+          this.startGroup("Only for Headings");
           this.add("clear", "Clear Styling", "Clear Styling");
           this.add("restart", "Restart Numbering", "Restart Numbering");
         },
