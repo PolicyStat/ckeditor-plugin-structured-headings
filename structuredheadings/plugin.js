@@ -12,7 +12,7 @@
     pre: new CKEDITOR.style({ element: "pre" })
   };
 
-  var listNodeNames = { ol: 1, ul: 1 };
+  var listNodeNames = ["ol", "ul"];
 
   var setupElements = function (editor) {
     // list of elements allowed to be numbered
