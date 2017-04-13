@@ -133,7 +133,42 @@
       };
 
       this.assertComboBeforeAfter(opts);
-    }
+    },
+    "clear from nested list": function () {
+      var comboItem = "Clear Styling";
+        // reverse the previous
+      var afterHtmlWithSelection = "<ol><li>A" +
+        "<ol><li>^B" +
+        "<ol><li>C" +
+        "<ol><li>D" +
+        "<ol><li>E" +
+        "<ol><li>F</li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol>";
+      var beforeHtmlWithSelection = "<ol class=\"list-decimal\"><li>A" +
+        "<ol class=\"list-lower-alpha\"><li>^B" +
+        "<ol class=\"list-lower-roman\"><li>C" +
+        "<ol class=\"list-lower-alpha\"><li>D" +
+        "<ol class=\"list-lower-roman\"><li>E" +
+        "<ol class=\"list-decimal\"><li>F</li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol>";
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
 
+      this.assertComboBeforeAfter(opts);
+
+    }
   });
 })();
