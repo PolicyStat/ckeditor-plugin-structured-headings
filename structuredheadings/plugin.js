@@ -672,13 +672,13 @@
 
           return styleArray;
         },
-        numListsInPath: function(elementPath) {
+        numListsInPath: function (elementPath) {
           var elements = elementPath.elements;
           var ols = elements.filter(function isOl(el) {
-            return el.getName() === "ol"
+            return el.getName() === "ol";
           });
-
-          return ols.length;
+          // root would have been included, ignore it
+          return ols.length - 1;
         },
         exec: function (editor, presetName) {
           var styleArray = this.getPresetStyleArray(editor, presetName);
