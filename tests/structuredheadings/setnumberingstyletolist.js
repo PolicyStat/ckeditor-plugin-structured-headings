@@ -64,10 +64,10 @@
     },
     "apply 1aiai style to a nested list tag": function () {
       var comboItem = "1. a. i. a. i.";
-      var beforeHtmlWithSelection = "<ol><li>foo</li><li><ol><li>^bar</li></ol></li></ol>";
+      var beforeHtmlWithSelection = "<ol><li>foo<ol><li>^bar</li></ol></li></ol>";
       var afterHtmlWithSelection = "<ol class=\"list-decimal\">" +
-        "<li>foo</li>" +
-        "<li><ol class=\"list-lower-alpha\"><li>^bar</li></ol>" +
+        "<li>foo" +
+        "<ol class=\"list-lower-alpha\"><li>^bar</li></ol>" +
         "</li></ol>";
 
       var opts = {
