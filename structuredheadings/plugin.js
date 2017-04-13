@@ -178,6 +178,9 @@
     editor.config.autonumberCurrentStyle =
     editor.config.autonumberCurrentStyle || "1.1.1.1.1.";
 
+    // maps each potential part of a heading preset to
+    // the PolicyStat CSS class for lists
+
     editor.config.listClassMappings = editor.config.listClassMappings || {
       //eslint-disable-next-line new-cap
       "A": new CKEDITOR.style(
