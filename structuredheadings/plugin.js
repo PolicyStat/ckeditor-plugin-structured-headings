@@ -673,7 +673,12 @@
           return styleArray;
         },
         numListsInPath: function(elementPath) {
+          var elements = elementPath.elements;
+          var ols = elements.filter(function isOl(el) {
+            return el.getName() === "ol"
+          });
 
+          return ols.length;
         },
         exec: function (editor, presetName) {
           var styleArray = this.getPresetStyleArray(editor, presetName);
@@ -688,6 +693,10 @@
 
           for (var i = 0; i < childrenLists.count(); i++) {
             var childList = childrenLists.getItem(i);
+            var elementPath = new CKEDITOR.dom.elementPath(childList, rootList);
+            var numLists = this.numListsInPath(elementPath);
+            var styleIndex = numLists % styleArray.length;
+            styleArray[styleIndex].applyToObject(childList, editor);
 
           }
 
