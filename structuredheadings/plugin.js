@@ -47,29 +47,28 @@
     return list && limit.contains(list);
   };
 
-  var clearNumbering = function (editor, element) {
-    if (element.hasClass(editor.config.autonumberBaseClass)) {
-      element.removeClass(editor.config.autonumberBaseClass);
+  var cssUtils = {
+    clearNumbering: function (editor, element) {
+      if (element.hasClass(editor.config.autonumberBaseClass)) {
+        element.removeClass(editor.config.autonumberBaseClass);
+      }
+    },
+    setNumbering: function (editor, element) {
+      if (!element.hasClass(editor.config.autonumberBaseClass)) {
+        element.addClass(editor.config.autonumberBaseClass);
+      }
+    },
+    clearLevel: function (editor, element) {
+      for (var key in editor.config.autonumberLevelClasses) {
+        element.removeClass(editor.config.autonumberLevelClasses[key]);
+      }
+    },
+    setLevel: function (editor, element) {
+      var index = editor.config.numberedElements.indexOf(element.getName());
+      cssUtils.clearLevel(editor, element);
+      element.addClass(editor.config.autonumberLevelClasses[index]);
     }
-  };
-
-  var setNumbering = function (editor, element) {
-    if (!element.hasClass(editor.config.autonumberBaseClass)) {
-      element.addClass(editor.config.autonumberBaseClass);
-    }
-  };
-
-  var clearLevel = function (editor, element) {
-    for (var key in editor.config.autonumberLevelClasses) {
-      element.removeClass(editor.config.autonumberLevelClasses[key]);
-    }
-  };
-
-  var setLevel = function (editor, element) {
-    var index = editor.config.numberedElements.indexOf(element.getName());
-    clearLevel(editor, element);
-    element.addClass(editor.config.autonumberLevelClasses[index]);
-  };
+  }
 
   var clearStyles = function (editor, element) {
     for (var styleName in editor.config.autonumberStyles) {
@@ -282,8 +281,8 @@
             this.setValue(value, "Formatted Text");
           } else {
             if (!previousHeading || isNumbered(editor, previousHeading)) {
-              setNumbering(editor, block);
-              setLevel(editor, block);
+              cssUtils.setNumbering(editor, block);
+              cssUtils.setLevel(editor, block);
               editor.execCommand("reapplyStyle");
             }
             this.setValue(
@@ -352,13 +351,13 @@
 
         clearAutonumberClassesForHeading: function (heading) {
           clearStyles(editor, heading);
-          clearLevel(editor, heading);
-          clearNumbering(editor, heading);
+          cssUtils.clearLevel(editor, heading);
+          cssUtils.clearNumbering(editor, heading);
         },
 
         setAutonumberClassesForHeading: function (value, heading) {
-          setNumbering(editor, heading);
-          setLevel(editor, heading);
+          cssUtils.setNumbering(editor, heading);
+          cssUtils.setLevel(editor, heading);
           setCurrentStyle(editor, heading, value);
         },
         onClick: function (value) {  // eslint-disable-line max-statements
@@ -541,8 +540,8 @@
       }
     },
     clearAllFromElement: function (editor, element) {
-      clearLevel(editor, element);
-      clearNumbering(editor, element);
+      cssUtils.clearLevel(editor, element);
+      cssUtils.clearNumbering(editor, element);
       clearStyles(editor, element);
     },
     getCurrentBlockFromPath: function (editor) {
@@ -563,7 +562,7 @@
             } else {
               editor.applyStyle(elementStyles.p);
             }
-            clearNumbering(editor, editor.elementPath().block);
+            cssUtils.clearNumbering(editor, editor.elementPath().block);
             clearStyles(editor, editor.elementPath().block);
 
         // else get previous element style (type) and apply to selection
@@ -571,8 +570,8 @@
             editor.applyStyle(elementStyles[previousHeading.getName()]);
           // if previous was numbered, set the new  one to numbered also
             if (isNumbered(editor, previousHeading)) {
-              setNumbering(editor, editor.elementPath().block);
-              setLevel(editor, editor.elementPath().block);
+              cssUtils.setNumbering(editor, editor.elementPath().block);
+              cssUtils.setLevel(editor, editor.elementPath().block);
               setStyle(editor, editor.elementPath().block);
             }
 
@@ -596,7 +595,7 @@
             editor.applyStyle(elementStyles[nextElement]);
           }
           if (isNumbered(editor, element)) {
-            setLevel(editor, editor.elementPath().block);
+            cssUtils.setLevel(editor, editor.elementPath().block);
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
         }
@@ -615,7 +614,7 @@
             editor.applyStyle(elementStyles[prevElement]);
           }
           if (isNumbered(editor, element)) {
-            setLevel(editor, editor.elementPath().block);
+            cssUtils.setLevel(editor, editor.elementPath().block);
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
         }
@@ -630,8 +629,8 @@
           var element = editor.elementPath().block;
 
           if (!element.hasClass(editor.config.autonumberRestartClass)) {
-            setNumbering(editor, element);
-            setLevel(editor, element);
+            cssUtils.setNumbering(editor, element);
+            cssUtils.setLevel(editor, element);
             element.addClass(editor.config.autonumberRestartClass);
             setStyle(editor, element);
           } else {

@@ -133,7 +133,7 @@
       };
 
       this.assertComboBeforeAfter(opts);
-    },
+    }
 
   });
 })();
