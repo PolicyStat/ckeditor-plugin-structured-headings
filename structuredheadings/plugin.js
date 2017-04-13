@@ -68,7 +68,7 @@
       cssUtils.clearLevel(editor, element);
       element.addClass(editor.config.autonumberLevelClasses[index]);
     }
-  }
+  };
 
   var clearStyles = function (editor, element) {
     for (var styleName in editor.config.autonumberStyles) {
@@ -219,9 +219,10 @@
           attributes: {"class": "list-lower-roman"}
         }
       ),
+      //eslint-disable-next-line new-cap
       "clear": new CKEDITOR.style({
         element: "ol",
-        attributes: {"class": ""};
+        attributes: {"class": ""}
       })
     };
   };
@@ -658,7 +659,7 @@
 
       applyPresetToList: {
         getPresetStyleArray: function (editor, presetName) {
-          if ("presetName" === "clear") {
+          if (presetName === "clear") {
             return [editor.config.listClassMappings.clear];
           }
 
