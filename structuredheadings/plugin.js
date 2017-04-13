@@ -183,45 +183,35 @@
 
     editor.config.listClassMappings = editor.config.listClassMappings || {
       //eslint-disable-next-line new-cap
-      "A": new CKEDITOR.style(
-        {
-          name: "List: A. B. C.",
-          element: "ol",
-          attributes: {"class": "list-upper-alpha"}
-        }
-      ),
+      "A": new CKEDITOR.style({
+        name: "List: A. B. C.",
+        element: "ol",
+        attributes: {"class": "list-upper-alpha"}
+      }),
       //eslint-disable-next-line new-cap
-      "a": new CKEDITOR.style(
-        {
-          name: "List: a. b. c.",
-          element: "ol",
-          attributes: {"class": "list-lower-alpha"}
-        }
-      ),
+      "a": new CKEDITOR.style({
+        name: "List: a. b. c.",
+        element: "ol",
+        attributes: {"class": "list-lower-alpha"}
+      }),
       //eslint-disable-next-line new-cap
-      "1": new CKEDITOR.style(
-        {
-          name: "List: 1. 2. 3.",
-          element: "ol",
-          attributes: {"class": "list-decimal"}
-        }
-      ),
+      "1": new CKEDITOR.style({
+        name: "List: 1. 2. 3.",
+        element: "ol",
+        attributes: {"class": "list-decimal"}
+      }),
       //eslint-disable-next-line new-cap
-      "I": new CKEDITOR.style(
-        {
-          name: "List: I. II. III.",
-          element: "ol",
-          attributes: {"class": "list-upper-roman"}
-        }
-      ),
+      "I": new CKEDITOR.style({
+        name: "List: I. II. III.",
+        element: "ol",
+        attributes: {"class": "list-upper-roman"}
+      }),
       //eslint-disable-next-line new-cap
-      "i": new CKEDITOR.style(
-        {
-          name: "List: i. ii. iii.",
-          element: "ol",
-          attributes: {"class": "list-lower-roman"}
-        }
-      ),
+      "i": new CKEDITOR.style({
+        name: "List: i. ii. iii.",
+        element: "ol",
+        attributes: {"class": "list-lower-roman"}
+      }),
       //eslint-disable-next-line new-cap
       "clear": new CKEDITOR.style({
         element: "ol",
