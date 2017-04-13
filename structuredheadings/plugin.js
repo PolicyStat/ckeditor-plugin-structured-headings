@@ -684,8 +684,8 @@
           var styleArray = this.getPresetStyleArray(editor, presetName);
           // get the root ordered list
           var path = editor.elementPath();
-          // TODO verify if this might be backwards
-          var rootList = path.contains("ol");
+          // we need to start fromTop or else this returns the leaf rather than root
+          var rootList = path.contains("ol", false, true);
 
           styleArray[0].applyToObject(rootList, editor);
 
