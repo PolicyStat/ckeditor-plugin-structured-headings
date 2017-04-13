@@ -693,17 +693,12 @@
 
           for (var i = 0; i < childrenLists.count(); i++) {
             var childList = childrenLists.getItem(i);
+            // eslint-disable-next-line new-cap
             var elementPath = new CKEDITOR.dom.elementPath(childList, rootList);
             var numLists = this.numListsInPath(elementPath);
             var styleIndex = numLists % styleArray.length;
             styleArray[styleIndex].applyToObject(childList, editor);
-
           }
-
-          // TODO this needs to determine the correct style to apply
-
-          // go through the tree and apply the correct style at each level
-
         }
       }
     }

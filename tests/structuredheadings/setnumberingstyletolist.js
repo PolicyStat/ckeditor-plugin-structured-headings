@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* bender-tags: editor,unit */
-/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,undo */
+/* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,undo,list,indentlist */
 /* eslint-enable */
 
 // Clean up all instances been created on the page.
@@ -98,6 +98,42 @@
       };
 
       this.assertComboBeforeAfter(opts);
-    }
+    },
+    "apply 1aiai style to a 6 level nested list tag": function () {
+      var comboItem = "1. a. i. a. i.";
+      var beforeHtmlWithSelection = "<ol><li>A" +
+        "<ol><li>^B" +
+        "<ol><li>C" +
+        "<ol><li>D" +
+        "<ol><li>E" +
+        "<ol><li>F</li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol>";
+      var afterHtmlWithSelection = "<ol class=\"list-decimal\"><li>A" +
+        "<ol class=\"list-lower-alpha\"><li>^B" +
+        "<ol class=\"list-lower-roman\"><li>C" +
+        "<ol class=\"list-lower-alpha\"><li>D" +
+        "<ol class=\"list-lower-roman\"><li>E" +
+        "<ol class=\"list-decimal\"><li>F</li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol></li>" +
+        "</ol>";
+
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+
+      this.assertComboBeforeAfter(opts);
+    },
+
   });
 })();
