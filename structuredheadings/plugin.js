@@ -661,6 +661,13 @@
           var styleArray = presetName.split(".").map(function (str) {
             var key = str.trim()[0];
             return editor.config.listClassMappings[key];
+          }).filter(function (str) {
+            if (str) {
+              // also purge empty strings, undef, etc. because I am lazy
+              return true;
+            } else {
+              return false;
+            }
           });
 
           return styleArray;
