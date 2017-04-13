@@ -21,7 +21,7 @@
       // i wish we had ES6
 
       var initialHtmlWithSelection = opts.beforeHtml || "";
-      var comboItem = opts.comboitem || "1. a. i. a. i.";
+      var comboItem = opts.comboItem || "1. a. i. a. i.";
       var htmlGetter;
 
       if (opts.ignoreSelection) {
