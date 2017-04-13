@@ -135,7 +135,7 @@
       this.assertComboBeforeAfter(opts);
     },
     "clear from nested list": function () {
-      var comboItem = "Clear Styling";
+      var comboItem = "clear";
         // reverse the previous
       var afterHtmlWithSelection = "<ol><li>A" +
         "<ol><li>^B" +
