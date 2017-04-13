@@ -672,6 +672,9 @@
 
           return styleArray;
         },
+        numListsInPath: function(elementPath) {
+
+        },
         exec: function (editor, presetName) {
           var styleArray = this.getPresetStyleArray(editor, presetName);
           // get the root ordered list
@@ -680,6 +683,13 @@
           var rootList = path.contains("ol");
 
           styleArray[0].applyToObject(rootList, editor);
+
+          var childrenLists = rootList.find("ol");
+
+          for (var i = 0; i < childrenLists.count(); i++) {
+            var childList = childrenLists.getItem(i);
+
+          }
 
           // TODO this needs to determine the correct style to apply
 
