@@ -218,7 +218,11 @@
           element: "ol",
           attributes: {"class": "list-lower-roman"}
         }
-      )
+      ),
+      "clear": new CKEDITOR.style({
+        element: "ol",
+        attributes: {"class": ""};
+      })
     };
   };
 
@@ -362,7 +366,6 @@
           editor.fire("saveSnapshot");
 
           if (isInList(editor, editor.elementPath())) {
-            // TODO we need to also handle restart/clear
             editor.execCommand("applyPresetToList", value);
             return;
           }
@@ -655,6 +658,10 @@
 
       applyPresetToList: {
         getPresetStyleArray: function (editor, presetName) {
+          if ("presetName" === "clear") {
+            return [editor.config.listClassMappings.clear];
+          }
+
           var styleArray = presetName.split(".").map(function (str) {
             var key = str.trim()[0];
             return editor.config.listClassMappings[key];
