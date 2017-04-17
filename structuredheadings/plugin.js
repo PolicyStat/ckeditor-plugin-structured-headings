@@ -12,6 +12,8 @@
     pre: new CKEDITOR.style({ element: "pre" })
   };
 
+  var listNodeNames = ["ol", "ul"];
+
   var setupElements = function (editor) {
     // list of elements allowed to be numbered
     editor.config.numberedElements =
@@ -38,28 +40,34 @@
     }
   };
 
-  var clearNumbering = function (editor, element) {
-    if (element.hasClass(editor.config.autonumberBaseClass)) {
-      element.removeClass(editor.config.autonumberBaseClass);
-    }
+  var isInList = function (editor, path) {
+    var list = path.contains(listNodeNames, 1);
+    var limit = path.blockLimit || path.root;
+
+    return list && limit.contains(list);
   };
 
-  var setNumbering = function (editor, element) {
-    if (!element.hasClass(editor.config.autonumberBaseClass)) {
-      element.addClass(editor.config.autonumberBaseClass);
+  var cssUtils = {
+    clearNumbering: function (editor, element) {
+      if (element.hasClass(editor.config.autonumberBaseClass)) {
+        element.removeClass(editor.config.autonumberBaseClass);
+      }
+    },
+    setNumbering: function (editor, element) {
+      if (!element.hasClass(editor.config.autonumberBaseClass)) {
+        element.addClass(editor.config.autonumberBaseClass);
+      }
+    },
+    clearLevel: function (editor, element) {
+      for (var key in editor.config.autonumberLevelClasses) {
+        element.removeClass(editor.config.autonumberLevelClasses[key]);
+      }
+    },
+    setLevel: function (editor, element) {
+      var index = editor.config.numberedElements.indexOf(element.getName());
+      cssUtils.clearLevel(editor, element);
+      element.addClass(editor.config.autonumberLevelClasses[index]);
     }
-  };
-
-  var clearLevel = function (editor, element) {
-    for (var key in editor.config.autonumberLevelClasses) {
-      element.removeClass(editor.config.autonumberLevelClasses[key]);
-    }
-  };
-
-  var setLevel = function (editor, element) {
-    var index = editor.config.numberedElements.indexOf(element.getName());
-    clearLevel(editor, element);
-    element.addClass(editor.config.autonumberLevelClasses[index]);
   };
 
   var clearStyles = function (editor, element) {
@@ -113,6 +121,8 @@
         CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
     editor.addCommand("reapplyStyle",
         CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
+    editor.addCommand("applyPresetToList",
+        CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
   };
 
   /*
@@ -167,6 +177,47 @@
 
     editor.config.autonumberCurrentStyle =
     editor.config.autonumberCurrentStyle || "1.1.1.1.1.";
+
+    // maps each potential part of a heading preset to
+    // the PolicyStat CSS class for lists
+
+    editor.config.listClassMappings = editor.config.listClassMappings || {
+      //eslint-disable-next-line new-cap
+      "A": new CKEDITOR.style({
+        name: "List: A. B. C.",
+        element: "ol",
+        attributes: {"class": "list-upper-alpha"}
+      }),
+      //eslint-disable-next-line new-cap
+      "a": new CKEDITOR.style({
+        name: "List: a. b. c.",
+        element: "ol",
+        attributes: {"class": "list-lower-alpha"}
+      }),
+      //eslint-disable-next-line new-cap
+      "1": new CKEDITOR.style({
+        name: "List: 1. 2. 3.",
+        element: "ol",
+        attributes: {"class": "list-decimal"}
+      }),
+      //eslint-disable-next-line new-cap
+      "I": new CKEDITOR.style({
+        name: "List: I. II. III.",
+        element: "ol",
+        attributes: {"class": "list-upper-roman"}
+      }),
+      //eslint-disable-next-line new-cap
+      "i": new CKEDITOR.style({
+        name: "List: i. ii. iii.",
+        element: "ol",
+        attributes: {"class": "list-lower-roman"}
+      }),
+      //eslint-disable-next-line new-cap
+      "clear": new CKEDITOR.style({
+        element: "ol",
+        attributes: {"class": ""}
+      })
+    };
   };
 
 /*
@@ -228,8 +279,8 @@
             this.setValue(value, "Formatted Text");
           } else {
             if (!previousHeading || isNumbered(editor, previousHeading)) {
-              setNumbering(editor, block);
-              setLevel(editor, block);
+              cssUtils.setNumbering(editor, block);
+              cssUtils.setLevel(editor, block);
               editor.execCommand("reapplyStyle");
             }
             this.setValue(
@@ -273,7 +324,7 @@
 
       //Style Dropdown
       editor.ui.addRichCombo("NumStyles", {
-        label: "Numbering",
+        label: "Numbering Styles",
         title: "Numbering Styles",
         toolbar: "styles,8",
         allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*)",
@@ -285,30 +336,33 @@
         },
 
         init: function () {
-          this.startGroup("Global Styles");
-
           for (var style in editor.config.autonumberStyles) {
             this.add(style, style, style);
           }
 
-          this.startGroup("Heading-Specific Styles");
+          this.startGroup("Only for Headings");
           this.add("clear", "Clear Styling", "Clear Styling");
           this.add("restart", "Restart Numbering", "Restart Numbering");
         },
 
         clearAutonumberClassesForHeading: function (heading) {
           clearStyles(editor, heading);
-          clearLevel(editor, heading);
-          clearNumbering(editor, heading);
+          cssUtils.clearLevel(editor, heading);
+          cssUtils.clearNumbering(editor, heading);
         },
 
         setAutonumberClassesForHeading: function (value, heading) {
-          setNumbering(editor, heading);
-          setLevel(editor, heading);
+          cssUtils.setNumbering(editor, heading);
+          cssUtils.setLevel(editor, heading);
           setCurrentStyle(editor, heading, value);
         },
         onClick: function (value) {  // eslint-disable-line max-statements
           editor.fire("saveSnapshot");
+
+          if (isInList(editor, editor.elementPath())) {
+            editor.execCommand("applyPresetToList", value);
+            return;
+          }
 
           if (value === "restart") {
             editor.execCommand("restartNumbering");
@@ -481,8 +535,8 @@
       }
     },
     clearAllFromElement: function (editor, element) {
-      clearLevel(editor, element);
-      clearNumbering(editor, element);
+      cssUtils.clearLevel(editor, element);
+      cssUtils.clearNumbering(editor, element);
       clearStyles(editor, element);
     },
     getCurrentBlockFromPath: function (editor) {
@@ -503,7 +557,7 @@
             } else {
               editor.applyStyle(elementStyles.p);
             }
-            clearNumbering(editor, editor.elementPath().block);
+            cssUtils.clearNumbering(editor, editor.elementPath().block);
             clearStyles(editor, editor.elementPath().block);
 
         // else get previous element style (type) and apply to selection
@@ -511,8 +565,8 @@
             editor.applyStyle(elementStyles[previousHeading.getName()]);
           // if previous was numbered, set the new  one to numbered also
             if (isNumbered(editor, previousHeading)) {
-              setNumbering(editor, editor.elementPath().block);
-              setLevel(editor, editor.elementPath().block);
+              cssUtils.setNumbering(editor, editor.elementPath().block);
+              cssUtils.setLevel(editor, editor.elementPath().block);
               setStyle(editor, editor.elementPath().block);
             }
 
@@ -536,7 +590,7 @@
             editor.applyStyle(elementStyles[nextElement]);
           }
           if (isNumbered(editor, element)) {
-            setLevel(editor, editor.elementPath().block);
+            cssUtils.setLevel(editor, editor.elementPath().block);
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
         }
@@ -555,7 +609,7 @@
             editor.applyStyle(elementStyles[prevElement]);
           }
           if (isNumbered(editor, element)) {
-            setLevel(editor, editor.elementPath().block);
+            cssUtils.setLevel(editor, editor.elementPath().block);
             setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
           }
         }
@@ -570,8 +624,8 @@
           var element = editor.elementPath().block;
 
           if (!element.hasClass(editor.config.autonumberRestartClass)) {
-            setNumbering(editor, element);
-            setLevel(editor, element);
+            cssUtils.setNumbering(editor, element);
+            cssUtils.setLevel(editor, element);
             element.addClass(editor.config.autonumberRestartClass);
             setStyle(editor, element);
           } else {
@@ -592,6 +646,56 @@
           for (var i = 0; i < nodeList.count(); i++) {
             var node = nodeList.getItem(i);
             setStyle(editor, node, style);
+          }
+        }
+      },
+
+      applyPresetToList: {
+        getPresetStyleArray: function (editor, presetName) {
+          if (presetName === "clear") {
+            return [editor.config.listClassMappings.clear];
+          }
+
+          var styleArray = presetName.split(".").map(function (str) {
+            var key = str.trim()[0];
+            return editor.config.listClassMappings[key];
+          }).filter(function (str) {
+            if (str) {
+              // also purge empty strings, undef, etc. because I am lazy
+              return true;
+            } else {
+              return false;
+            }
+          });
+
+          return styleArray;
+        },
+        numListsInPath: function (elementPath) {
+          var elements = elementPath.elements;
+          var ols = elements.filter(function isOl(el) {
+            return el.getName() === "ol";
+          });
+          // root would have been included, ignore it
+          return ols.length - 1;
+        },
+        exec: function (editor, presetName) {
+          var styleArray = this.getPresetStyleArray(editor, presetName);
+          // get the root ordered list
+          var path = editor.elementPath();
+          // we need to start fromTop or else this returns the leaf rather than root
+          var rootList = path.contains("ol", false, true);
+
+          styleArray[0].applyToObject(rootList, editor);
+
+          var childrenLists = rootList.find("ol");
+
+          for (var i = 0; i < childrenLists.count(); i++) {
+            var childList = childrenLists.getItem(i);
+            // eslint-disable-next-line new-cap
+            var elementPath = new CKEDITOR.dom.elementPath(childList, rootList);
+            var numLists = this.numListsInPath(elementPath);
+            var styleIndex = numLists % styleArray.length;
+            styleArray[styleIndex].applyToObject(childList, editor);
           }
         }
       }
