@@ -616,6 +616,18 @@
           cssUtils.setLevel(editor, heading);
           setCurrentStyle(editor, heading, value);
         },
+
+        handleCollapsedSelection: function (editor) {
+          // avoid an extra snapshot created by the matchHeading command
+          editor.fire("lockSnapshot", { dontUpdate: true });
+          editor.execCommand("matchHeading");
+          editor.fire("unlockSnapshot");
+
+          // return the one matched current heading
+
+          return [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
+        },
+
         exec: function (editor, value) {
           var selection = editor.getSelection();
           var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
@@ -631,12 +643,8 @@
 
              // prep the html for the collapsed, not in a heading case
             if (headings === null) {
-              // avoid an extra snapshot created by the matchHeading command
-              editor.fire("lockSnapshot", { dontUpdate: true });
-              editor.execCommand("matchHeading");
-              editor.fire("unlockSnapshot");
               // put the new heading into the headings array
-              headings = [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
+              headings = this.handleCollapsedSelection(editor);
             }
           }
 
