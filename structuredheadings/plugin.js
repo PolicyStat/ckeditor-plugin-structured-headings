@@ -352,17 +352,11 @@
 
           if (isInList(editor, editor.elementPath())) {
             editor.execCommand("applyPresetToList", value);
-            return;
-          }
-
-          if (value === "restart") {
+          } else if (value === "restart") {
             editor.execCommand("restartNumbering");
-            editor.fire("saveSnapshot");
-            return;
+          } else {
+            editor.execCommand("applyHeadingPreset", value);
           }
-
-          editor.execCommand("applyHeadingPreset", value);
-
         },
 
         onRender: function () {
