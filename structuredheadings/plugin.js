@@ -112,19 +112,19 @@
 
   var setupCommands = function (editor) {
     editor.addCommand("matchHeading",
-        CKEDITOR.plugins.structuredheadings.commands.matchHeading);
+      CKEDITOR.plugins.structuredheadings.commands.matchHeading);
     editor.addCommand("increaseHeadingLevel",
-            CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
+      CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
     editor.addCommand("decreaseHeadingLevel",
-            CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
+      CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
     editor.addCommand("restartNumbering",
-        CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
+      CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
     editor.addCommand("reapplyStyle",
-        CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
+      CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
     editor.addCommand("applyPresetToList",
-        CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
+      CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
     editor.addCommand("applyHeadingPreset",
-        CKEDITOR.plugins.structuredheadings.commands.applyHeadingPreset);
+      CKEDITOR.plugins.structuredheadings.commands.applyHeadingPreset);
   };
 
   /*
