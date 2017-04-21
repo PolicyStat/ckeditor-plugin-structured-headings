@@ -347,7 +347,7 @@
           this.add("restart", "Restart Styling", "Restart Styling");
         },
 
-        onClick: function (value) {  // eslint-disable-line max-statements
+        onClick: function (value) {
           editor.fire("saveSnapshot");
 
           if (isInList(editor, editor.elementPath())) {
