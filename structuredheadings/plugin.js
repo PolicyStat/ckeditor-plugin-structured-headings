@@ -357,6 +357,10 @@
           } else {
             editor.execCommand("applyHeadingPreset", value);
           }
+
+          if (value !== "restart" && value !== "clear") {
+            this.setValue(value);
+          }
         },
 
         onRender: function () {
