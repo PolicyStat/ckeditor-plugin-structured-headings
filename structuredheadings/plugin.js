@@ -123,6 +123,8 @@
         CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
     editor.addCommand("applyPresetToList",
         CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
+    editor.addCommand("applyHeadingPreset",
+        CKEDITOR.plugins.structuredheadings.commands.applyHeadingPreset);
   };
 
   /*
@@ -345,69 +347,20 @@
           this.add("restart", "Restart Styling", "Restart Styling");
         },
 
-        clearAutonumberClassesForHeading: function (heading) {
-          clearStyles(editor, heading);
-          cssUtils.clearLevel(editor, heading);
-          cssUtils.clearNumbering(editor, heading);
-        },
-
-        setAutonumberClassesForHeading: function (value, heading) {
-          cssUtils.setNumbering(editor, heading);
-          cssUtils.setLevel(editor, heading);
-          setCurrentStyle(editor, heading, value);
-        },
-        onClick: function (value) {  // eslint-disable-line max-statements
+        onClick: function (value) {
           editor.fire("saveSnapshot");
 
           if (isInList(editor, editor.elementPath())) {
             editor.execCommand("applyPresetToList", value);
-            return;
-          }
-
-          if (value === "restart") {
+          } else if (value === "restart") {
             editor.execCommand("restartNumbering");
-            editor.fire("saveSnapshot");
-            return;
-          }
-          var selection = editor.getSelection();
-          var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
-                editor,
-                selection
-              );
-          var func;
-
-          if (value === "clear") {
-            func = this.clearAutonumberClassesForHeading;
           } else {
-            func = this.setAutonumberClassesForHeading.bind(this, value);
-
-             // prep the html for the collapsed, not in a heading case
-            if (headings === null) {
-              // avoid an extra snapshot created by the matchHeading command
-              editor.fire("lockSnapshot", { dontUpdate: true });
-              editor.execCommand("matchHeading");
-              editor.fire("unlockSnapshot");
-              // put the new heading into the headings array
-              headings = [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
-            }
+            editor.execCommand("applyHeadingPreset", value);
           }
 
-          if (headings) {
-            for (var i = 0; i < headings.length; i++) {
-              func(headings[i]);
-            }
+          if (value !== "restart" && value !== "clear") {
+            this.setValue(value);
           }
-
-          editor.fire("lockSnapshot");
-          // the snapshot needs to be locked here, because
-          // execCommand will also create a snapshot, leading to
-          // an intermediate snapshot with some of the styles applied, but not all
-
-          // apply the correct bulletstyle for all numbered headings
-          editor.execCommand("reapplyStyle", value);
-          // set the combo box value
-          this.setValue(value, value);
-          editor.fire("unlockSnapshot");
         },
 
         onRender: function () {
@@ -649,7 +602,66 @@
           }
         }
       },
+      applyHeadingPreset: {
+        clearAutonumberClassesForHeading: function (editor, heading) {
+          clearStyles(editor, heading);
+          cssUtils.clearLevel(editor, heading);
+          cssUtils.clearNumbering(editor, heading);
+        },
 
+        setAutonumberClassesForHeading: function (editor, value, heading) {
+          cssUtils.setNumbering(editor, heading);
+          cssUtils.setLevel(editor, heading);
+          setCurrentStyle(editor, heading, value);
+        },
+
+        handleCollapsedSelection: function (editor) {
+          // avoid an extra snapshot created by the matchHeading command
+          editor.fire("lockSnapshot", { dontUpdate: true });
+          editor.execCommand("matchHeading");
+          editor.fire("unlockSnapshot");
+
+          // return the one matched current heading
+
+          return [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
+        },
+
+        exec: function (editor, value) {
+          var selection = editor.getSelection();
+          var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
+                editor,
+                selection
+              );
+          var func;
+
+          if (value === "clear") {
+            func = this.clearAutonumberClassesForHeading.bind(this, editor);
+          } else {
+            func = this.setAutonumberClassesForHeading.bind(this, editor, value);
+
+             // prep the html for the collapsed, not in a heading case
+            if (headings === null) {
+              // put the new heading into the headings array
+              headings = this.handleCollapsedSelection(editor);
+            }
+          }
+
+          if (headings) {
+            for (var i = 0; i < headings.length; i++) {
+              func(headings[i]);
+            }
+          }
+
+          editor.fire("lockSnapshot");
+          // the snapshot needs to be locked here, because
+          // execCommand will also create a snapshot, leading to
+          // an intermediate snapshot with some of the styles applied, but not all
+
+          // apply the correct bulletstyle for all numbered headings
+          editor.execCommand("reapplyStyle", value);
+          editor.fire("unlockSnapshot");
+        }
+      },
       applyPresetToList: {
         getPresetStyleArray: function (editor, presetName) {
           if (presetName === "clear") {
