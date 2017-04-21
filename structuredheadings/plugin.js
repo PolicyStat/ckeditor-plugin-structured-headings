@@ -227,8 +227,9 @@
  */
 
   CKEDITOR.plugins.add("structuredheadings", {
+    currentPreset: "1.1.1.1.1.",
     init: function (editor) {
-
+      var self = this;
       var TAB_KEY_CODE = 9;
 
       editor.config.autonumberStyleImgPath = this.path + "dialogs/img";
@@ -283,7 +284,7 @@
             if (!previousHeading || isNumbered(editor, previousHeading)) {
               cssUtils.setNumbering(editor, block);
               cssUtils.setLevel(editor, block);
-              editor.execCommand("reapplyStyle");
+              editor.execCommand("reapplyStyle", self.currentPreset);
             }
             this.setValue(
                 value,
@@ -356,6 +357,7 @@
             editor.execCommand("restartNumbering");
           } else {
             editor.execCommand("applyHeadingPreset", value);
+            self.currentPreset = value;
           }
 
           if (value !== "restart" && value !== "clear") {
