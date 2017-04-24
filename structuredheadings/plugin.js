@@ -224,7 +224,7 @@
     getCurrentPreset: function () {
       var editor = this.editor;
       // TODO validate some assumptions about ordering
-      var candidatePresets = editor.config.autonumberStyles.keys();
+      var candidatePresets = Object.keys(editor.config.autonumberStyles);
       var headingLevels = editor.config.numberedElements;
       var baseClass = editor.config.autonumberBaseClass;
       var sampleHeading;
