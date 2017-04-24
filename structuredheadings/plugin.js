@@ -247,12 +247,21 @@
           }
         }
 
-        // remove all presets that failed
+        // remove all presets that did not match
+
+        candidatePresets = candidatePresets.filter(function(presetName) {
+          return presetsToRemove.indexOf(presetName) === -1;
+        });
 
         // check if only 1 remains, return it
+
+        if (candidatePresets.length === 1) {
+          return candidatePresets[0];
+        }
       }
 
       // return one of whatever returns, this should never happen with the default
+      return candidatePresets[0];
 
     },
     init: function (editor) {
