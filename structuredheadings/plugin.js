@@ -221,8 +221,43 @@
 
   CKEDITOR.plugins.add("structuredheadings", {
     currentPreset: "1.1.1.1.1.",
+    getCurrentPreset: function () {
+      var editor = this.editor;
+      // TODO validate some assumptions about ordering
+      var candidatePresets = editor.config.autonumberStyles.keys();
+      var headingLevels = editor.config.numberedElements;
+      var baseClass = editor.config.autonumberBaseClass;
+      var sampleHeading;
+
+      for (var i = 0; i < headingLevels.length; i++) {
+        // if all our other updates work properly it shouldn't matter which one we pick
+        // so long as its autonumbered
+        var autonumberedHeadingSelector = headingLevels[i] + "." + baseClass;
+        var presetsToRemove = [];
+        sampleHeading = editor.document.findOne(autonumberedHeadingSelector);
+
+        // check all presets for a match
+
+        for (var j = 0; j < candidatePresets.length; j++) {
+          var candidatePresetName = candidatePresets[j];
+          var classForPresetAtLevel = editor.config.autonumberStyles[candidatePresetName][i];
+
+          if (!sampleHeading.hasClass(classForPresetAtLevel)) {
+            presetsToRemove.push(presetsToRemove);
+          }
+        }
+
+        // remove all presets that failed
+
+        // check if only 1 remains, return it
+      }
+
+      // return one of whatever returns, this should never happen with the default
+
+    },
     init: function (editor) {
       var self = this;
+      this.editor = editor;
       var TAB_KEY_CODE = 9;
 
       editor.config.autonumberStyleImgPath = this.path + "dialogs/img";
