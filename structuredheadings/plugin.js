@@ -227,20 +227,24 @@
       var candidatePresets = Object.keys(editor.config.autonumberStyles);
       var headingLevels = editor.config.numberedElements;
       var baseClass = editor.config.autonumberBaseClass;
-      var sampleHeading;
 
       for (var i = 0; i < headingLevels.length; i++) {
         // if all our other updates work properly it shouldn't matter which one we pick
         // so long as its autonumbered
         var autonumberedHeadingSelector = headingLevels[i] + "." + baseClass;
         var presetsToRemove = [];
-        sampleHeading = editor.document.findOne(autonumberedHeadingSelector);
+        var sampleHeading = editor.document.findOne(autonumberedHeadingSelector);
+
+        // no headings at current level
+        if (!sampleHeading) {
+          continue;
+        }
 
         // check all presets for a match
 
         for (var j = 0; j < candidatePresets.length; j++) {
           var candidatePresetName = candidatePresets[j];
-          if (!editor.config.autonumberStyles[candidatePresetName][i]) {
+          if (!editor.config.autonumberStyles[candidatePresetName]) {
             // skip the default classless case
             continue;
           }
@@ -253,7 +257,7 @@
 
         // remove all presets that did not match
 
-        candidatePresets = candidatePresets.filter(function(presetName) {
+        candidatePresets = candidatePresets.filter(function (presetName) {
           return presetsToRemove.indexOf(presetName) === -1;
         });
 
