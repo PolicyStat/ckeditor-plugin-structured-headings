@@ -37,8 +37,8 @@
         );
       });
     },
-
-    "increments autonumbering levels and preset": function () {
+    // eslint-disable-next-line max-len
+    "when creating next level heading, the autonumbering and numbering scheme css of the next level is used": function () {
       var bot = this.editorBot;
       var editor = bot.editor;
       editor.plugins.structuredheadings.currentScheme = "1. a. i. a. i.";
@@ -59,8 +59,8 @@
         );
       });
     },
-
-    "preserves autonumbering levels and preset": function () {
+    // eslint-disable-next-line max-len
+    "when creating same level heading, the autonumbering and numbering scheme css of the current level is used": function () {
       var bot = this.editorBot;
       var editor = bot.editor;
       editor.plugins.structuredheadings.currentScheme = "1. a. i. a. i.";
