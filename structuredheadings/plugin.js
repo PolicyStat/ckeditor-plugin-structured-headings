@@ -94,10 +94,6 @@
     }
   };
 
-  var setCurrentStyle = function (editor, element, style) {
-    editor.config.autonumberCurrentStyle = style;
-  };
-
   var getPreviousHeading = function (editor, element) {
     return element.getPrevious(function (node) {
       if (node.type === CKEDITOR.NODE_ELEMENT &&
@@ -112,19 +108,19 @@
 
   var setupCommands = function (editor) {
     editor.addCommand("matchHeading",
-        CKEDITOR.plugins.structuredheadings.commands.matchHeading);
+      CKEDITOR.plugins.structuredheadings.commands.matchHeading);
     editor.addCommand("increaseHeadingLevel",
-            CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
+      CKEDITOR.plugins.structuredheadings.commands.increaseHeadingLevel);
     editor.addCommand("decreaseHeadingLevel",
-            CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
+      CKEDITOR.plugins.structuredheadings.commands.decreaseHeadingLevel);
     editor.addCommand("restartNumbering",
-        CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
+      CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
     editor.addCommand("reapplyStyle",
-        CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
+      CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
     editor.addCommand("applyPresetToList",
-        CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
+      CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
     editor.addCommand("applyHeadingPreset",
-        CKEDITOR.plugins.structuredheadings.commands.applyHeadingPreset);
+      CKEDITOR.plugins.structuredheadings.commands.applyHeadingPreset);
   };
 
   /*
@@ -177,9 +173,6 @@
       ]
     };
 
-    editor.config.autonumberCurrentStyle =
-    editor.config.autonumberCurrentStyle || "1.1.1.1.1.";
-
     // maps each potential part of a heading preset to
     // the PolicyStat CSS class for lists
 
@@ -227,8 +220,9 @@
  */
 
   CKEDITOR.plugins.add("structuredheadings", {
+    currentScheme: "1.1.1.1.1.",
     init: function (editor) {
-
+      var self = this;
       var TAB_KEY_CODE = 9;
 
       editor.config.autonumberStyleImgPath = this.path + "dialogs/img";
@@ -283,7 +277,7 @@
             if (!previousHeading || isNumbered(editor, previousHeading)) {
               cssUtils.setNumbering(editor, block);
               cssUtils.setLevel(editor, block);
-              editor.execCommand("reapplyStyle");
+              editor.execCommand("reapplyStyle", self.currentScheme);
             }
             this.setValue(
                 value,
@@ -356,6 +350,7 @@
             editor.execCommand("restartNumbering");
           } else {
             editor.execCommand("applyHeadingPreset", value);
+            self.currentScheme = value;
           }
 
           if (value !== "restart" && value !== "clear") {
@@ -369,8 +364,10 @@
             var block = elementPath.block;
 
             if (block && isNumbered(editor, block)) {
-              this.setValue(editor.config.autonumberCurrentStyle,
-                        editor.config.autonumberCurrentStyle);
+              this.setValue(
+                self.currentScheme,
+                self.currentScheme
+              );
             } else {
               this.setValue("");
             }
@@ -544,7 +541,7 @@
           }
           if (isNumbered(editor, element)) {
             cssUtils.setLevel(editor, editor.elementPath().block);
-            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+            setStyle(editor, editor.elementPath().block, self.currentScheme);
           }
         }
       },
@@ -563,7 +560,7 @@
           }
           if (isNumbered(editor, element)) {
             cssUtils.setLevel(editor, editor.elementPath().block);
-            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+            setStyle(editor, editor.elementPath().block, self.currentScheme);
           }
         }
       },
@@ -612,7 +609,7 @@
         setAutonumberClassesForHeading: function (editor, value, heading) {
           cssUtils.setNumbering(editor, heading);
           cssUtils.setLevel(editor, heading);
-          setCurrentStyle(editor, heading, value);
+          self.currentScheme = value;
         },
 
         handleCollapsedSelection: function (editor) {
