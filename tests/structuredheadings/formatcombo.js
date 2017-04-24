@@ -19,7 +19,7 @@
 
     tearDown: function () {
       var editor = this.editorBot.editor;
-      editor.plugins.structuredheadings.currentPreset = null;
+      editor.plugins.structuredheadings.currentScheme = null;
     },
 
     "if no headings in document, the new heading is autonumbered": function () {
@@ -41,7 +41,7 @@
     "increments autonumbering levels and preset": function () {
       var bot = this.editorBot;
       var editor = bot.editor;
-      editor.plugins.structuredheadings.currentPreset = "1. a. i. a. i.";
+      editor.plugins.structuredheadings.currentScheme = "1. a. i. a. i.";
 
       bot.setHtmlWithSelection(
         "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1><p>^foo</p>"
@@ -63,7 +63,7 @@
     "preserves autonumbering levels and preset": function () {
       var bot = this.editorBot;
       var editor = bot.editor;
-      editor.plugins.structuredheadings.currentPreset = "1. a. i. a. i.";
+      editor.plugins.structuredheadings.currentScheme = "1. a. i. a. i.";
 
       bot.setHtmlWithSelection(
         "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1><p>baz</p><p>^foo</p>"
