@@ -37,6 +37,20 @@
         "1.1.1.1.1.",
         getDetectedPreset(editor)
       );
+    },
+
+    "invalid combos return numbered": function () {
+      var bot = this.editorBot;
+      var editor = bot.editor;
+      bot.setHtmlWithSelection(
+        "<h1 class=\"autonumber autonumber-0 autonumber-a\">^foo</h1>" +
+        "<h2 class=\"autonumber autonumber-1 autonumber-N\">bar</h2>"
+      );
+
+      assert.areEqual(
+        "1.1.1.1.1.",
+        getDetectedPreset(editor)
+      );
     }
 
 
