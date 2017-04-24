@@ -38,23 +38,50 @@
       });
     },
 
-    "if previous heading is autonumber, the new heading is autonumbered": function () {
+    "increments autonumbering levels and preset": function () {
       var bot = this.editorBot;
-      bot.setHtmlWithSelection("<h1 class=\"autonumber autonumber-0\">bar</h1><p>^foo</p>");
+      var editor = bot.editor;
+      editor.plugins.structuredheadings.currentPreset = "1. a. i. a. i.";
+
+      bot.setHtmlWithSelection(
+        "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1><p>^foo</p>"
+      );
 
       bot.combo(comboName, function (combo) {
         // click h2
         combo.onClick("h2");
         // the new h2 has autonumbering set, at the next level from h1
         assert.areSame(
-            "<h1 class=\"autonumber autonumber-0\">bar</h1>" +
-            "<h2 class=\"autonumber autonumber-1\">^foo</h2>",
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1>" +
+            "<h2 class=\"autonumber autonumber-1 autonumber-a\">^foo</h2>",
             bot.htmlWithSelection(),
             "applied h2 block autonumber style"
         );
       });
     },
 
+    "preserves autonumbering levels and preset": function () {
+      var bot = this.editorBot;
+      var editor = bot.editor;
+      editor.plugins.structuredheadings.currentPreset = "1. a. i. a. i.";
+
+      bot.setHtmlWithSelection(
+        "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1><p>baz</p><p>^foo</p>"
+      );
+
+      bot.combo(comboName, function (combo) {
+        // click h1
+        combo.onClick("h1");
+        // the new h2 has autonumbering set, at the next level from h1
+        assert.areSame(
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">bar</h1>" +
+            "<p>baz</p>" +
+            "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>",
+            bot.htmlWithSelection(),
+            "applied h1 block autonumber style"
+        );
+      });
+    },
 
     "if previous heading is not autonumber, the new heading is not autonumbered": function () {
       var bot = this.editorBot;
