@@ -51,6 +51,19 @@
         "1.1.1.1.1.",
         getDetectedPreset(editor)
       );
+    },
+
+    "can detect based off of one level": function () {
+      var bot = this.editorBot;
+      var editor = bot.editor;
+      bot.setHtmlWithSelection(
+        "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>"
+      );
+
+      assert.areEqual(
+        "1. a. i. a. i.",
+        getDetectedPreset(editor)
+      );
     }
 
 
