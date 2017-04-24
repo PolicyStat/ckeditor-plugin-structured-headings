@@ -94,10 +94,6 @@
     }
   };
 
-  var setCurrentStyle = function (editor, element, style) {
-    editor.config.autonumberCurrentStyle = style;
-  };
-
   var getPreviousHeading = function (editor, element) {
     return element.getPrevious(function (node) {
       if (node.type === CKEDITOR.NODE_ELEMENT &&
@@ -176,9 +172,6 @@
         "autonumber-a"
       ]
     };
-
-    editor.config.autonumberCurrentStyle =
-    editor.config.autonumberCurrentStyle || "1.1.1.1.1.";
 
     // maps each potential part of a heading preset to
     // the PolicyStat CSS class for lists
@@ -371,8 +364,10 @@
             var block = elementPath.block;
 
             if (block && isNumbered(editor, block)) {
-              this.setValue(editor.config.autonumberCurrentStyle,
-                        editor.config.autonumberCurrentStyle);
+              this.setValue(
+                self.currentPreset,
+                self.currentPreset
+              );
             } else {
               this.setValue("");
             }
@@ -546,7 +541,7 @@
           }
           if (isNumbered(editor, element)) {
             cssUtils.setLevel(editor, editor.elementPath().block);
-            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+            setStyle(editor, editor.elementPath().block, self.currentPreset);
           }
         }
       },
@@ -565,7 +560,7 @@
           }
           if (isNumbered(editor, element)) {
             cssUtils.setLevel(editor, editor.elementPath().block);
-            setStyle(editor, editor.elementPath().block, editor.config.autonumberCurrentStyle);
+            setStyle(editor, editor.elementPath().block, self.currentPreset);
           }
         }
       },
@@ -614,7 +609,7 @@
         setAutonumberClassesForHeading: function (editor, value, heading) {
           cssUtils.setNumbering(editor, heading);
           cssUtils.setLevel(editor, heading);
-          setCurrentStyle(editor, heading, value);
+          self.currentPreset = value;
         },
 
         handleCollapsedSelection: function (editor) {
