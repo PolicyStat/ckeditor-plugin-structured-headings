@@ -240,6 +240,10 @@
 
         for (var j = 0; j < candidatePresets.length; j++) {
           var candidatePresetName = candidatePresets[j];
+          if (!editor.config.autonumberStyles[candidatePresetName][i]) {
+            // skip the default classless case
+            continue;
+          }
           var classForPresetAtLevel = editor.config.autonumberStyles[candidatePresetName][i];
 
           if (!sampleHeading.hasClass(classForPresetAtLevel)) {
