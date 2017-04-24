@@ -220,7 +220,7 @@
  */
 
   CKEDITOR.plugins.add("structuredheadings", {
-    currentPreset: "1.1.1.1.1.",
+    currentScheme: "1.1.1.1.1.",
     init: function (editor) {
       var self = this;
       var TAB_KEY_CODE = 9;
@@ -277,7 +277,7 @@
             if (!previousHeading || isNumbered(editor, previousHeading)) {
               cssUtils.setNumbering(editor, block);
               cssUtils.setLevel(editor, block);
-              editor.execCommand("reapplyStyle", self.currentPreset);
+              editor.execCommand("reapplyStyle", self.currentScheme);
             }
             this.setValue(
                 value,
@@ -350,7 +350,7 @@
             editor.execCommand("restartNumbering");
           } else {
             editor.execCommand("applyHeadingPreset", value);
-            self.currentPreset = value;
+            self.currentScheme = value;
           }
 
           if (value !== "restart" && value !== "clear") {
@@ -365,8 +365,8 @@
 
             if (block && isNumbered(editor, block)) {
               this.setValue(
-                self.currentPreset,
-                self.currentPreset
+                self.currentScheme,
+                self.currentScheme
               );
             } else {
               this.setValue("");
@@ -541,7 +541,7 @@
           }
           if (isNumbered(editor, element)) {
             cssUtils.setLevel(editor, editor.elementPath().block);
-            setStyle(editor, editor.elementPath().block, self.currentPreset);
+            setStyle(editor, editor.elementPath().block, self.currentScheme);
           }
         }
       },
@@ -560,7 +560,7 @@
           }
           if (isNumbered(editor, element)) {
             cssUtils.setLevel(editor, editor.elementPath().block);
-            setStyle(editor, editor.elementPath().block, self.currentPreset);
+            setStyle(editor, editor.elementPath().block, self.currentScheme);
           }
         }
       },
@@ -609,7 +609,7 @@
         setAutonumberClassesForHeading: function (editor, value, heading) {
           cssUtils.setNumbering(editor, heading);
           cssUtils.setLevel(editor, heading);
-          self.currentPreset = value;
+          self.currentScheme = value;
         },
 
         handleCollapsedSelection: function (editor) {
