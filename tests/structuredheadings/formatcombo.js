@@ -17,6 +17,11 @@
       //Anything to be run before each test if needed
     },
 
+    tearDown: function () {
+      var editor = this.editorBot.editor;
+      editor.plugins.structuredheadings.currentPreset = null;
+    },
+
     "if no headings in document, the new heading is autonumbered": function () {
       var bot = this.editorBot;
       bot.setHtmlWithSelection("<p>^foo</p>");
