@@ -251,7 +251,7 @@
           var classForPresetAtLevel = editor.config.autonumberStyles[candidatePresetName][i];
 
           if (!sampleHeading.hasClass(classForPresetAtLevel)) {
-            presetsToRemove.push(presetsToRemove);
+            presetsToRemove.push(classForPresetAtLevel);
           }
         }
 
