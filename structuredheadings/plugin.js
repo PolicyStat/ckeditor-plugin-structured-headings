@@ -227,12 +227,12 @@
 
   CKEDITOR.plugins.add("structuredheadings", {
     currentScheme: "1.1.1.1.1.",
-    getUnmatchingSchemes: function (sampleHeading, candidateSchemes) {
+    getUnmatchingSchemes: function (sampleHeading, candidateSchemes, level) {
       var editor = this.editor;
       var disqualifiedSchemes = [];
       for (var j = 0; j < candidateSchemes.length; j++) {
         var candidateSchemeName = candidateSchemes[j];
-        var classForPresetAtLevel = editor.config.autonumberStyles[candidateSchemeName][i];
+        var classForPresetAtLevel = editor.config.autonumberStyles[candidateSchemeName][level];
 
         if (!sampleHeading.hasClass(classForPresetAtLevel)) {
           disqualifiedSchemes.push(candidateSchemeName);
@@ -263,7 +263,7 @@
         }
 
         disqualifiedSchemes = disqualifiedSchemes.concat(
-          this.getUnmatchingSchemes(sampleHeading, candidateSchemes)
+          this.getUnmatchingSchemes(sampleHeading, candidateSchemes, i)
         );
       }
 
