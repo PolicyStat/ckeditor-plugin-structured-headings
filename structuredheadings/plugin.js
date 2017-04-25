@@ -227,7 +227,10 @@
 
   CKEDITOR.plugins.add("structuredheadings", {
     currentScheme: "1.1.1.1.1.",
-    getUnmatchingSchemes: function (sampleHeading, candidateSchemes, level) {
+    getNonMatchingSchemes: function (sampleHeading, candidateSchemes, level) {
+      // giving a heading, possible numbering schemes, and the level index
+      // (which can technically be recalculated based on configs, but oh well)
+      // return the schemes that do not match the heading and its css classes
       var editor = this.editor;
       var disqualifiedSchemes = [];
       for (var j = 0; j < candidateSchemes.length; j++) {
@@ -242,8 +245,11 @@
       return disqualifiedSchemes;
     },
     getCurrentScheme: function () {
+      // check the document's headings,
+      // eliminating numbering schemes that do not match,
+      // until we are left with a matching scheme, or just keep the current one
+      // (inconsistencies will be fixed when the numbering scheme is next applied)
       var editor = this.editor;
-      // TODO validate some assumptions about ordering
       var candidateSchemes = editor.config.autonumberStylesWithClasses;
       var headingLevels = editor.config.numberedElements;
       var disqualifiedSchemes = [];
@@ -263,12 +269,11 @@
         }
 
         disqualifiedSchemes = disqualifiedSchemes.concat(
-          this.getUnmatchingSchemes(sampleHeading, candidateSchemes, i)
+          this.getNonMatchingSchemes(sampleHeading, candidateSchemes, i)
         );
       }
 
-      // remove all presets that did not match
-
+      // remove all presets that did not match, from the total set of numbering schemes
       candidateSchemes = candidateSchemes.filter(function (presetName) {
         return disqualifiedSchemes.indexOf(presetName) === -1;
       });
@@ -280,6 +285,7 @@
         return candidateSchemes[0];
       } else {
         // return whatever was already set, for consistency
+        // this also handles the 'null' css scheme case since it's the default
         return this.currentScheme;
       }
 
