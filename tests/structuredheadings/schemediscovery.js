@@ -11,6 +11,8 @@
     allowedForTests: "h1; h2; h3; h4; h5; p"
   };
 
+  var VERY_LAST_PRIORITY = 9999;
+
   var detectScheme = function (editor) {
     return editor.plugins.structuredheadings.detectScheme();
   };
@@ -75,31 +77,56 @@
       var bot = this.editorBot;
       var editor = bot.editor;
 
-      bot.setHtmlWithSelection(
+      var listener = editor.on(
+        "dataReady",
+        function () {
+          listener.removeListener();
+          resume(function () {
+            assert.areEqual(
+              "1.1.1.1.1.",
+              getCurrentScheme(editor)
+            );
+          });
+        },
+        null,
+        null,
+        VERY_LAST_PRIORITY
+      );
+
+      editor.setData(
         "<h1 class=\"autonumber autonumber-0\">^foo</h1>" +
         "<h2 class=\"autonumber autonumber-1\">foo</h2>"
       );
 
-      assert.areEqual(
-        "1.1.1.1.1.",
-        getCurrentScheme(editor)
-      );
+      wait();
     },
 
     "autodetect falls to default if nothing matches": function () {
       var bot = this.editorBot;
       var editor = bot.editor;
+      var listener = editor.on(
+        "dataReady",
+        function () {
+          listener.removeListener();
+          resume(function () {
+            assert.areEqual(
+              "1.1.1.1.1.",
+              getCurrentScheme(editor)
+            );
+          });
+        },
+        null,
+        null,
+        VERY_LAST_PRIORITY
+      );
 
       // A.A. is not a valid default
-      bot.setHtmlWithSelection(
+      editor.setData(
         "<h1 class=\"autonumber autonumber-0 autonumber-A\">^foo</h1>" +
         "<h2 class=\"autonumber autonumber-1 autonumber-A\">foo</h2>"
       );
 
-      assert.areEqual(
-        "1.1.1.1.1.",
-        getCurrentScheme(editor)
-      );
+      wait();
     },
 
     "autodetect will detect a schemed document": function () {
@@ -110,7 +137,7 @@
         "dataReady",
         function () {
           listener.removeListener();
-          resume(function() {
+          resume(function () {
             assert.areEqual(
               "1. a. i. a. i.",
               getCurrentScheme(editor)
@@ -119,11 +146,11 @@
         },
         null,
         null,
-        9999
+        VERY_LAST_PRIORITY
       );
 
       // this is quite WTF, somehow setHtmlWithSelection doesn't fire dataReady events
-      bot.editor.setData(
+      editor.setData(
         "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>" +
         "<h2 class=\"autonumber autonumber-1 autonumber-a\">foo</h2>"
       );
