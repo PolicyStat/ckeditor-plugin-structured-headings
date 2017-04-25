@@ -93,8 +93,9 @@
         VERY_LAST_PRIORITY
       );
 
+      // cannot use bot.setHtmlWithSelection, it does not fire dataReady events
       editor.setData(
-        "<h1 class=\"autonumber autonumber-0\">^foo</h1>" +
+        "<h1 class=\"autonumber autonumber-0\">foo</h1>" +
         "<h2 class=\"autonumber autonumber-1\">foo</h2>"
       );
 
@@ -121,8 +122,9 @@
       );
 
       // A.A. is not a valid default
+      // cannot use bot.setHtmlWithSelection, it does not fire dataReady events
       editor.setData(
-        "<h1 class=\"autonumber autonumber-0 autonumber-A\">^foo</h1>" +
+        "<h1 class=\"autonumber autonumber-0 autonumber-A\">foo</h1>" +
         "<h2 class=\"autonumber autonumber-1 autonumber-A\">foo</h2>"
       );
 
@@ -149,9 +151,9 @@
         VERY_LAST_PRIORITY
       );
 
-      // this is quite WTF, somehow setHtmlWithSelection doesn't fire dataReady events
+      // cannot use bot.setHtmlWithSelection, it does not fire dataReady events
       editor.setData(
-        "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>" +
+        "<h1 class=\"autonumber autonumber-0 autonumber-N\">foo</h1>" +
         "<h2 class=\"autonumber autonumber-1 autonumber-a\">foo</h2>"
       );
       wait();
