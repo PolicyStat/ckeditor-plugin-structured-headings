@@ -76,7 +76,7 @@
 
       bot.setHtmlWithSelection(
         "<h1 class=\"autonumber autonumber-0\">^foo</h1>" +
-        "<h2 class=\"autonumber autonumber-1\">^foo</h2>"
+        "<h2 class=\"autonumber autonumber-1\">foo</h2>"
       );
 
       assert.areEqual(
@@ -92,7 +92,7 @@
       // A.A. is not a valid default
       bot.setHtmlWithSelection(
         "<h1 class=\"autonumber autonumber-0 autonumber-A\">^foo</h1>" +
-        "<h2 class=\"autonumber autonumber-1 autonumber-A\">^foo</h2>"
+        "<h2 class=\"autonumber autonumber-1 autonumber-A\">foo</h2>"
       );
 
       assert.areEqual(
@@ -104,15 +104,30 @@
     "autodetect will detect a schemed document": function () {
       var bot = this.editorBot;
       var editor = bot.editor;
-      bot.setHtmlWithSelection(
-        "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>" +
-        "<h2 class=\"autonumber autonumber-1 autonumber-a\">^foo</h2>"
+
+      var listener = editor.on(
+        "dataReady",
+        function () {
+          listener.removeListener();
+          resume(function() {
+            assert.areEqual(
+              "1. a. i. a. i.",
+              getCurrentScheme(editor)
+            );
+          });
+        },
+        null,
+        null,
+        9999
       );
 
-      assert.areEqual(
-        "1. a. i. a. i.",
-        getCurrentScheme(editor)
+      // this is quite WTF, somehow setHtmlWithSelection doesn't fire dataReady events
+      bot.editor.setData(
+        "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>" +
+        "<h2 class=\"autonumber autonumber-1 autonumber-a\">foo</h2>"
       );
+      wait();
+
     }
 
   });
