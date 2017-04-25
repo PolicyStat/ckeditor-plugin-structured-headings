@@ -273,6 +273,12 @@
         );
       }
 
+      if (disqualifiedSchemes.length === 0) {
+        // no headings, or the headings didn't actually tell us anything about
+        // the current scheme
+        return this.currentScheme;
+      }
+
       // remove all presets that did not match, from the total set of numbering schemes
       candidateSchemes = candidateSchemes.filter(function (presetName) {
         return disqualifiedSchemes.indexOf(presetName) === -1;
