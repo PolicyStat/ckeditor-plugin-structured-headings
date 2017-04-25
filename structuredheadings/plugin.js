@@ -273,26 +273,20 @@
         );
       }
 
-      if (disqualifiedSchemes.length === 0) {
-        // no headings, or the headings didn't actually tell us anything about
-        // the current scheme
-        return this.currentScheme;
-      }
-
       // remove all presets that did not match, from the total set of numbering schemes
       candidateSchemes = candidateSchemes.filter(function (presetName) {
         return disqualifiedSchemes.indexOf(presetName) === -1;
       });
 
-      // return one of whatever returns, this should never happen with the default
-      if (candidateSchemes.length > 0) {
-        // just return the first, if there is more than 1, it means
-        // the headings are configured in a way that the scheme was left ambiguous
-        return candidateSchemes[0];
-      } else {
+      // we eliminated everything, or didn't eliminate anything
+      if (candidateSchemes.length === 0 || disqualifiedSchemes.length === 0) {
         // return whatever was already set, for consistency
         // this also handles the 'null' css scheme case since it's the default
         return this.currentScheme;
+      } else {
+        // just return the first, if there is more than 1, it means
+        // the headings are configured in a way that the scheme was left ambiguous
+        return candidateSchemes[0];
       }
 
     },
