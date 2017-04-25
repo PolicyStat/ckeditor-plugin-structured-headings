@@ -64,8 +64,15 @@
         "1. a. i. a. i.",
         detectScheme(editor)
       );
-    }
+    },
 
+    "autodetect will detect a default scheme document": function () {
+
+    },
+
+    "autodetect will detect a schemed document": function() {
+
+    }
 
   });
 })();
