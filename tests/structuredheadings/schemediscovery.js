@@ -1,3 +1,4 @@
+/* global wait, resume */
 /* eslint-disable */
 /* bender-tags: editor,unit */
 /* bender-ckeditor-plugins: wysiwygarea,structuredheadings,toolbar,basicstyles,dialog,richcombo,undo */
