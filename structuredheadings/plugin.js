@@ -274,7 +274,7 @@
       }
 
       // remove all presets that did not match, from the total set of numbering schemes
-      candidateSchemes = candidateSchemes.filter(function (presetName) {
+      candidateSchemes = candidateSchemes.filter(function isDisqualified(presetName) {
         return disqualifiedSchemes.indexOf(presetName) === -1;
       });
 
