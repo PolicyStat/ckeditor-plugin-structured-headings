@@ -227,12 +227,26 @@
 
   CKEDITOR.plugins.add("structuredheadings", {
     currentScheme: "1.1.1.1.1.",
+    getUnmatchingSchemes: function (sampleHeading, candidateSchemes) {
+      var editor = this.editor;
+      var disqualifiedSchemes = [];
+      for (var j = 0; j < candidateSchemes.length; j++) {
+        var candidateSchemeName = candidateSchemes[j];
+        var classForPresetAtLevel = editor.config.autonumberStyles[candidateSchemeName][i];
+
+        if (!sampleHeading.hasClass(classForPresetAtLevel)) {
+          disqualifiedSchemes.push(candidateSchemeName);
+        }
+      }
+
+      return disqualifiedSchemes;
+    },
     getCurrentScheme: function () {
       var editor = this.editor;
       // TODO validate some assumptions about ordering
       var candidateSchemes = editor.config.autonumberStylesWithClasses;
       var headingLevels = editor.config.numberedElements;
-      var disqualifiedPresets = [];
+      var disqualifiedSchemes = [];
 
       for (var i = 0; i < headingLevels.length; i++) {
         var autonumberedHeadingSelector = headingLevels[i] +
@@ -248,22 +262,15 @@
           continue;
         }
 
-        // check all schemes for a match
-
-        for (var j = 0; j < candidateSchemes.length; j++) {
-          var candidateSchemeName = candidateSchemes[j];
-          var classForPresetAtLevel = editor.config.autonumberStyles[candidateSchemeName][i];
-
-          if (!sampleHeading.hasClass(classForPresetAtLevel)) {
-            disqualifiedPresets.push(candidateSchemeName);
-          }
-        }
+        disqualifiedSchemes = disqualifiedSchemes.concat(
+          this.getUnmatchingSchemes(sampleHeading, candidateSchemes)
+        );
       }
 
       // remove all presets that did not match
 
       candidateSchemes = candidateSchemes.filter(function (presetName) {
-        return disqualifiedPresets.indexOf(presetName) === -1;
+        return disqualifiedSchemes.indexOf(presetName) === -1;
       });
 
       // return one of whatever returns, this should never happen with the default
