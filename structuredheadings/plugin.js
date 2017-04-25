@@ -173,6 +173,12 @@
       ]
     };
 
+    editor.config.autonumberStylesWithClasses = Object.keys(
+      editor.config.autonumberStyles
+    ).filter(function (styleName) {
+      return editor.config.autonumberStyles[styleName] !== null;
+    });
+
     // maps each potential part of a heading preset to
     // the PolicyStat CSS class for lists
 
@@ -224,15 +230,14 @@
     getCurrentScheme: function () {
       var editor = this.editor;
       // TODO validate some assumptions about ordering
-      var candidatePresets = Object.keys(editor.config.autonumberStyles);
+      var candidatePresets = editor.config.autonumberStylesWithClasses;
       var headingLevels = editor.config.numberedElements;
-      var baseClass = editor.config.autonumberBaseClass;
+      var disqualifiedPresets = [];
 
       for (var i = 0; i < headingLevels.length; i++) {
         // if all our other updates work properly it shouldn't matter which one we pick
         // so long as its autonumbered
-        var autonumberedHeadingSelector = headingLevels[i] + "." + baseClass;
-        var presetsToRemove = [];
+        var autonumberedHeadingSelector = headingLevels[i] + "." + editor.config.autonumberBaseClass;
         var sampleHeading = editor.document.findOne(autonumberedHeadingSelector);
 
         // no headings at current level
@@ -244,32 +249,26 @@
 
         for (var j = 0; j < candidatePresets.length; j++) {
           var candidatePresetName = candidatePresets[j];
-          if (!editor.config.autonumberStyles[candidatePresetName]) {
-            // skip the default classless case
-            continue;
-          }
           var classForPresetAtLevel = editor.config.autonumberStyles[candidatePresetName][i];
 
           if (!sampleHeading.hasClass(classForPresetAtLevel)) {
-            presetsToRemove.push(candidatePresetName);
+            disqualifiedPresets.push(candidatePresetName);
           }
-        }
-
-        // remove all presets that did not match
-
-        candidatePresets = candidatePresets.filter(function (presetName) {
-          return presetsToRemove.indexOf(presetName) === -1;
-        });
-
-        // check if only 1 remains, return it
-
-        if (candidatePresets.length === 1) {
-          return candidatePresets[0];
         }
       }
 
+      // remove all presets that did not match
+
+      candidatePresets = candidatePresets.filter(function (presetName) {
+        return disqualifiedPresets.indexOf(presetName) === -1;
+      });
+
       // return one of whatever returns, this should never happen with the default
-      return candidatePresets[0];
+      if (candidatePresets.length) {
+        return candidatePresets[0];
+      } else {
+        return this.currentScheme;
+      }
 
     },
     init: function (editor) {
