@@ -302,6 +302,10 @@
       setupCommands(editor);
       setupStyles(editor);
 
+      editor.on("instanceReady", function () {
+        self.currentScheme = self.detectScheme();
+      });
+
       //Format Dropdown
       editor.ui.addRichCombo("NumFormats", {
         label: "Formats",
