@@ -74,8 +74,22 @@
 
     },
 
-    "autodetect will detect a schemed document": function() {
+    "autodetect falls to default if nothing matches": function () {
 
+    },
+
+    "autodetect will detect a schemed document": function () {
+      var bot = this.editorBot;
+      var editor = bot.editor;
+      bot.setHtmlWithSelection(
+        "<h1 class=\"autonumber autonumber-0 autonumber-N\">^foo</h1>" +
+        "<h2 class=\"autonumber autonumber-1 autonumber-a\">^foo</h2>"
+      );
+
+      assert.areEqual(
+        "1. a. i. a. i.",
+        getCurrentScheme(editor)
+      );
     }
 
   });
