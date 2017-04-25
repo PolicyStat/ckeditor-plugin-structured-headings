@@ -10,8 +10,8 @@
     allowedForTests: "h1; h2; h3; h4; h5; p"
   };
 
-  function getDetectedPreset(editor) {
-    return editor.plugins.structuredheadings.getCurrentPreset();
+  function getDetectedScheme(editor) {
+    return editor.plugins.structuredheadings.getCurrentScheme();
   };
 
   bender.test({
@@ -22,7 +22,7 @@
     tearDown: function () {
       // reset the plugin between tests
       var editor = this.editorBot.editor;
-      editor.plugins.structuredheadings.currentPreset = null;
+      editor.plugins.structuredheadings.currentScheme = null;
     },
 
     "default is numbered": function () {
@@ -35,7 +35,7 @@
 
       assert.areEqual(
         "1.1.1.1.1.",
-        getDetectedPreset(editor)
+        getDetectedScheme(editor)
       );
     },
 
@@ -49,7 +49,7 @@
 
       assert.areEqual(
         "1.1.1.1.1.",
-        getDetectedPreset(editor)
+        getDetectedScheme(editor)
       );
     },
 
@@ -62,7 +62,7 @@
 
       assert.areEqual(
         "1. a. i. a. i.",
-        getDetectedPreset(editor)
+        getDetectedScheme(editor)
       );
     }
 
