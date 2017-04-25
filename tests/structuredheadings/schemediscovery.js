@@ -71,11 +71,34 @@
     },
 
     "autodetect will detect a default scheme document": function () {
+      var bot = this.editorBot;
+      var editor = bot.editor;
 
+      bot.setHtmlWithSelection(
+        "<h1 class=\"autonumber autonumber-0\">^foo</h1>" +
+        "<h2 class=\"autonumber autonumber-1\">^foo</h2>"
+      );
+
+      assert.areEqual(
+        "1.1.1.1.1.",
+        getCurrentScheme(editor)
+      );
     },
 
     "autodetect falls to default if nothing matches": function () {
+      var bot = this.editorBot;
+      var editor = bot.editor;
 
+      // A.A. is not a valid default
+      bot.setHtmlWithSelection(
+        "<h1 class=\"autonumber autonumber-0 autonumber-A\">^foo</h1>" +
+        "<h2 class=\"autonumber autonumber-1 autonumber-A\">^foo</h2>"
+      );
+
+      assert.areEqual(
+        "1.1.1.1.1.",
+        getCurrentScheme(editor)
+      );
     },
 
     "autodetect will detect a schemed document": function () {
