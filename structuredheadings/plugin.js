@@ -235,17 +235,20 @@
       var disqualifiedPresets = [];
 
       for (var i = 0; i < headingLevels.length; i++) {
-        // if all our other updates work properly it shouldn't matter which one we pick
+        var autonumberedHeadingSelector = headingLevels[i] +
+          "." +
+          editor.config.autonumberBaseClass;
+
+        // it shouldn't matter which one we pick
         // so long as its autonumbered
-        var autonumberedHeadingSelector = headingLevels[i] + "." + editor.config.autonumberBaseClass;
         var sampleHeading = editor.document.findOne(autonumberedHeadingSelector);
 
-        // no headings at current level
+        // no headings at current level are autonumbered
         if (!sampleHeading) {
           continue;
         }
 
-        // check all presets for a match
+        // check all schemes for a match
 
         for (var j = 0; j < candidateSchemes.length; j++) {
           var candidateSchemeName = candidateSchemes[j];
@@ -264,9 +267,12 @@
       });
 
       // return one of whatever returns, this should never happen with the default
-      if (candidateSchemes.length) {
+      if (candidateSchemes.length > 0) {
+        // just return the first, if there is more than 1, it means
+        // the headings are configured in a way that the scheme was left ambiguous
         return candidateSchemes[0];
       } else {
+        // return whatever was already set, for consistency
         return this.currentScheme;
       }
 
