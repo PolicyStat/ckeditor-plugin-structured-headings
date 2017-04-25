@@ -10,7 +10,7 @@
     allowedForTests: "h1; h2; h3; h4; h5; p"
   };
 
-  var getDetectedScheme = function (editor) {
+  var detectScheme = function (editor) {
     return editor.plugins.structuredheadings.getCurrentScheme();
   };
 
@@ -35,7 +35,7 @@
 
       assert.areEqual(
         "1.1.1.1.1.",
-        getDetectedScheme(editor)
+        detectScheme(editor)
       );
     },
 
@@ -49,7 +49,7 @@
 
       assert.areEqual(
         "1.1.1.1.1.",
-        getDetectedScheme(editor)
+        detectScheme(editor)
       );
     },
 
@@ -62,7 +62,7 @@
 
       assert.areEqual(
         "1. a. i. a. i.",
-        getDetectedScheme(editor)
+        detectScheme(editor)
       );
     }
 
