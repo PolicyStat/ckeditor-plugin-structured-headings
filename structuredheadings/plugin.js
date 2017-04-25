@@ -302,7 +302,7 @@
       setupCommands(editor);
       setupStyles(editor);
 
-      editor.on("instanceReady", function () {
+      editor.on("dataReady", function () {
         self.currentScheme = self.detectScheme();
       });
 
