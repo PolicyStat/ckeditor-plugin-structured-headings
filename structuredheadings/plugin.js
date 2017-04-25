@@ -244,7 +244,7 @@
 
       return disqualifiedSchemes;
     },
-    getCurrentScheme: function () {
+    detectScheme: function () {
       // check the document's headings,
       // eliminating numbering schemes that do not match,
       // until we are left with a matching scheme, or just keep the current one

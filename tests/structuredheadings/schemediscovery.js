@@ -11,7 +11,11 @@
   };
 
   var detectScheme = function (editor) {
-    return editor.plugins.structuredheadings.getCurrentScheme();
+    return editor.plugins.structuredheadings.detectScheme();
+  };
+
+  var getCurrentScheme = function (editor) {
+    return editor.plugins.structuredheadings.currentScheme;
   };
 
   bender.test({
