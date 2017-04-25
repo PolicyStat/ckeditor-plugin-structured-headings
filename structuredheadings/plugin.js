@@ -230,7 +230,7 @@
     getCurrentScheme: function () {
       var editor = this.editor;
       // TODO validate some assumptions about ordering
-      var candidatePresets = editor.config.autonumberStylesWithClasses;
+      var candidateSchemes = editor.config.autonumberStylesWithClasses;
       var headingLevels = editor.config.numberedElements;
       var disqualifiedPresets = [];
 
@@ -247,25 +247,25 @@
 
         // check all presets for a match
 
-        for (var j = 0; j < candidatePresets.length; j++) {
-          var candidatePresetName = candidatePresets[j];
-          var classForPresetAtLevel = editor.config.autonumberStyles[candidatePresetName][i];
+        for (var j = 0; j < candidateSchemes.length; j++) {
+          var candidateSchemeName = candidateSchemes[j];
+          var classForPresetAtLevel = editor.config.autonumberStyles[candidateSchemeName][i];
 
           if (!sampleHeading.hasClass(classForPresetAtLevel)) {
-            disqualifiedPresets.push(candidatePresetName);
+            disqualifiedPresets.push(candidateSchemeName);
           }
         }
       }
 
       // remove all presets that did not match
 
-      candidatePresets = candidatePresets.filter(function (presetName) {
+      candidateSchemes = candidateSchemes.filter(function (presetName) {
         return disqualifiedPresets.indexOf(presetName) === -1;
       });
 
       // return one of whatever returns, this should never happen with the default
-      if (candidatePresets.length) {
-        return candidatePresets[0];
+      if (candidateSchemes.length) {
+        return candidateSchemes[0];
       } else {
         return this.currentScheme;
       }
