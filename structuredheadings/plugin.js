@@ -26,14 +26,15 @@
       "h6"
     ];
 
-    editor.config.styleNames = {
-      "h1": "Super Heading", // unused placeholder since pstat doesn't use h1
-      "h2": "Part Heading",
-      "h3": "Subpart Heading",
-      "h4": "Section Heading",
-      "h5": "Subsection Heading",
-      "h6": "Subsection Subheading" // unused placeholder again
-    };
+    editor.config.styleNames =
+      editor.config.styleNames || {
+        "h1": "Super Heading", // unused placeholder since pstat doesn't use h1
+        "h2": "Part Heading",
+        "h3": "Subpart Heading",
+        "h4": "Section Heading",
+        "h5": "Subsection Heading",
+        "h6": "Subsection Subheading" // unused placeholder again
+      };
     for (var e in editor.config.numberedElements) {
       elementStyles[editor.config.numberedElements[e]] =
         //eslint-disable-next-line new-cap
@@ -335,11 +336,13 @@
           this.add("p", elementStyles.p.buildPreview("Paragraph"), "Paragraph");
 
           for (var key in editor.config.numberedElements) {
+            var styleName = editor.config.styleNames[key];
             this.add(editor.config.numberedElements[key],
               elementStyles[ editor.config.numberedElements[key] ].buildPreview(
-                "Heading " + editor.config.numberedElements[key].slice(1)
+                styleName
               ),
-              "Heading " + editor.config.numberedElements[key].slice(1));
+              styleName
+            );
           }
 
           this.add("pre", elementStyles.pre.buildPreview("Formatted Text"), "Preformatted Text");
