@@ -336,9 +336,10 @@
           this.add("p", elementStyles.p.buildPreview("Paragraph"), "Paragraph");
 
           for (var key in editor.config.numberedElements) {
-            var styleName = editor.config.styleNames[key];
-            this.add(editor.config.numberedElements[key],
-              elementStyles[ editor.config.numberedElements[key] ].buildPreview(
+            var levelTag = editor.config.numberedElements[key];
+            var styleName = editor.config.styleNames[levelTag];
+            this.add(levelTag,
+              elementStyles[ levelTag ].buildPreview(
                 styleName
               ),
               styleName
