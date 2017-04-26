@@ -25,6 +25,15 @@
       "h5",
       "h6"
     ];
+
+    editor.config.styleNames = {
+      "h1": "Super Heading", // unused placeholder since pstat doesn't use h1
+      "h2": "Part Heading",
+      "h3": "Subpart Heading",
+      "h4": "Section Heading",
+      "h5": "Subsection Heading",
+      "h6": "Subsection Subheading" // unused placeholder again
+    };
     for (var e in editor.config.numberedElements) {
       elementStyles[editor.config.numberedElements[e]] =
         //eslint-disable-next-line new-cap
