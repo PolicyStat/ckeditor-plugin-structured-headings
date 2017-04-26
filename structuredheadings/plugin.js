@@ -366,10 +366,9 @@
               cssUtils.setLevel(editor, block);
               editor.execCommand("reapplyStyle", self.currentScheme);
             }
-            var styleName = editor.config.styleNames[value];
             this.setValue(
                 value,
-                styleName
+                editor.config.styleNames[value]
             );
           }
 
