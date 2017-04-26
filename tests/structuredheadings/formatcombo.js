@@ -19,7 +19,7 @@
 
     tearDown: function () {
       var editor = this.editorBot.editor;
-      editor.plugins.structuredheadings.currentScheme = null;
+      editor.plugins.structuredheadings.currentScheme = "1.1.1.1.1.";
     },
 
     "if no headings in document, the new heading is autonumbered": function () {

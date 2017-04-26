@@ -173,6 +173,12 @@
       ]
     };
 
+    editor.config.autonumberStylesWithClasses = Object.keys(
+      editor.config.autonumberStyles
+    ).filter(function (styleName) {
+      return editor.config.autonumberStyles[styleName] !== null;
+    });
+
     // maps each potential part of a heading preset to
     // the PolicyStat CSS class for lists
 
@@ -221,8 +227,72 @@
 
   CKEDITOR.plugins.add("structuredheadings", {
     currentScheme: "1.1.1.1.1.",
+    getNonMatchingSchemes: function (sampleHeading, candidateSchemes, level) {
+      // giving a heading, possible numbering schemes, and the level index
+      // (which can technically be recalculated based on configs, but oh well)
+      // return the schemes that do not match the heading and its css classes
+      var editor = this.editor;
+      var disqualifiedSchemes = [];
+      for (var j = 0; j < candidateSchemes.length; j++) {
+        var candidateSchemeName = candidateSchemes[j];
+        var classForPresetAtLevel = editor.config.autonumberStyles[candidateSchemeName][level];
+
+        if (!sampleHeading.hasClass(classForPresetAtLevel)) {
+          disqualifiedSchemes.push(candidateSchemeName);
+        }
+      }
+
+      return disqualifiedSchemes;
+    },
+    detectScheme: function () {
+      // check the document's headings,
+      // eliminating numbering schemes that do not match,
+      // until we are left with a matching scheme, or just keep the current one
+      // (inconsistencies will be fixed when the numbering scheme is next applied)
+      var editor = this.editor;
+      var candidateSchemes = editor.config.autonumberStylesWithClasses;
+      var headingLevels = editor.config.numberedElements;
+      var disqualifiedSchemes = [];
+
+      for (var i = 0; i < headingLevels.length; i++) {
+        var autonumberedHeadingSelector = headingLevels[i] +
+          "." +
+          editor.config.autonumberBaseClass;
+
+        // it shouldn't matter which one we pick
+        // so long as its autonumbered
+        var sampleHeading = editor.document.findOne(autonumberedHeadingSelector);
+
+        // no headings at current level are autonumbered
+        if (!sampleHeading) {
+          continue;
+        }
+
+        disqualifiedSchemes = disqualifiedSchemes.concat(
+          this.getNonMatchingSchemes(sampleHeading, candidateSchemes, i)
+        );
+      }
+
+      // remove all presets that did not match, from the total set of numbering schemes
+      candidateSchemes = candidateSchemes.filter(function isDisqualified(presetName) {
+        return disqualifiedSchemes.indexOf(presetName) === -1;
+      });
+
+      // we eliminated everything, or didn't eliminate anything
+      if (candidateSchemes.length === 0 || disqualifiedSchemes.length === 0) {
+        // return whatever was already set, for consistency
+        // this also handles the 'null' css scheme case since it's the default
+        return this.currentScheme;
+      } else {
+        // just return the first, if there is more than 1, it means
+        // the headings are configured in a way that the scheme was left ambiguous
+        return candidateSchemes[0];
+      }
+
+    },
     init: function (editor) {
       var self = this;
+      this.editor = editor;
       var TAB_KEY_CODE = 9;
 
       editor.config.autonumberStyleImgPath = this.path + "dialogs/img";
@@ -231,6 +301,10 @@
       setupElements(editor);
       setupCommands(editor);
       setupStyles(editor);
+
+      editor.on("dataReady", function () {
+        self.currentScheme = self.detectScheme();
+      });
 
       //Format Dropdown
       editor.ui.addRichCombo("NumFormats", {
