@@ -383,17 +383,17 @@
             var currentTag = this.getValue();
             var elementPath = ev.data.path;
             var elementList = editor.config.numberedElements.concat(["pre", "p", "div"]);
-            for (var tag in elementList) {
-              if (elementStyles[elementList[tag]].checkActive(elementPath, editor)) {
-                if (elementList[tag] !== currentTag) {
-                  if (elementList[tag] === "p") {
-                    this.setValue(elementList[tag], "Paragraph");
-                  } else if (elementList[tag] === "pre") {
-                    this.setValue(elementList[tag], "Formatted Text");
+            for (var tagIndex in elementList) {
+              if (elementStyles[elementList[tagIndex]].checkActive(elementPath, editor)) {
+                if (elementList[tagIndex] !== currentTag) {
+                  if (elementList[tagIndex] === "p") {
+                    this.setValue(elementList[tagIndex], "Paragraph");
+                  } else if (elementList[tagIndex] === "pre") {
+                    this.setValue(elementList[tagIndex], "Formatted Text");
                   } else {
                     this.setValue(
-                        elementList[tag],
-                        self.getStyleNameForHeadingTag(tag)
+                        elementList[tagIndex],
+                        self.getStyleNameForHeadingTag(elementList[tagIndex])
                     );
                   }
                 }
