@@ -409,15 +409,15 @@
 
       //Style Dropdown
       editor.ui.addRichCombo("NumStyles", {
-        label: "Styling",
-        title: "Styling",
+        label: "Numbering",
+        title: "Numbering",
         toolbar: "styles,8",
         allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*)",
 
         panel: {
           css: [ CKEDITOR.skin.getPath("editor") ].concat(editor.config.contentsCss),
           multiSelect: false,
-          attributes: { "aria-label": "Styling" }
+          attributes: { "aria-label": "Numbering" }
         },
 
         init: function () {
@@ -426,8 +426,8 @@
           }
 
           this.startGroup("Only for Headings");
-          this.add("clear", "Clear Styling", "Clear Styling");
-          this.add("restart", "Restart Styling", "Restart Styling");
+          this.add("clear", "Clear Numbering", "Clear Numbering");
+          this.add("restart", "Restart Numbering", "Restart Numbering");
         },
 
         onClick: function (value) {
