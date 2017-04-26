@@ -300,6 +300,9 @@
       }
 
     },
+    getStyleNameForHeadingTag: function (tagName) {
+      return this.editor.config.styleNames[tagName];
+    },
     init: function (editor) {
       var self = this;
       this.editor = editor;
@@ -337,7 +340,7 @@
 
           for (var key in editor.config.numberedElements) {
             var levelTag = editor.config.numberedElements[key];
-            var styleName = editor.config.styleNames[levelTag];
+            var styleName = self.getStyleNameForHeadingTag(levelTag);
             this.add(levelTag,
               elementStyles[ levelTag ].buildPreview(
                 styleName
@@ -368,7 +371,7 @@
             }
             this.setValue(
                 value,
-                editor.config.styleNames[value]
+                self.getStyleNameForHeadingTag(value)
             );
           }
 
@@ -390,7 +393,7 @@
                   } else {
                     this.setValue(
                         elementList[tag],
-                        "Heading " + editor.config.numberedElements[tag].slice(1)
+                        self.getStyleNameForHeadingTag(tag)
                     );
                   }
                 }
