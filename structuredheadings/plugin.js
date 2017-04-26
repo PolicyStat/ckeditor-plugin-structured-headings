@@ -309,14 +309,14 @@
       //Format Dropdown
       editor.ui.addRichCombo("NumFormats", {
         label: "Formats",
-        title: "Numbering Formats",
+        title: "Formatting",
         toolbar: "styles,7",
         allowedContent: editor.config.numberedElements.concat(["pre", "p", "div"]),
 
         panel: {
           css: [ CKEDITOR.skin.getPath("editor") ].concat(editor.config.contentsCss),
           multiSelect: false,
-          attributes: { "aria-label": "Numbering Formats" }
+          attributes: { "aria-label": "Formatting" }
         },
 
         init: function () {
