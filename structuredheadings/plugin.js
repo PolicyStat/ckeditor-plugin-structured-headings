@@ -308,7 +308,7 @@
 
       //Format Dropdown
       editor.ui.addRichCombo("NumFormats", {
-        label: "Formats",
+        label: "Formatting",
         title: "Formatting",
         toolbar: "styles,7",
         allowedContent: editor.config.numberedElements.concat(["pre", "p", "div"]),
