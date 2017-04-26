@@ -366,11 +366,11 @@
               cssUtils.setLevel(editor, block);
               editor.execCommand("reapplyStyle", self.currentScheme);
             }
+            var styleName = editor.config.styleNames[value];
             this.setValue(
                 value,
-                "Heading " + editor.config.numberedElements[
-                    editor.config.numberedElements.indexOf(value)
-                ].slice(1));
+                styleName
+            );
           }
 
           editor.fire("saveSnapshot");
