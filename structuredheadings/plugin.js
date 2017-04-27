@@ -183,6 +183,9 @@
       ]
     };
 
+    editor.config.autonumberDefaultScheme =
+    editor.config.autonumberDefaultScheme || "1.1.1.1.1.";
+
     editor.config.autonumberStylesWithClasses = Object.keys(
       editor.config.autonumberStyles
     ).filter(function (styleName) {
@@ -236,7 +239,7 @@
  */
 
   CKEDITOR.plugins.add("structuredheadings", {
-    currentScheme: "1.1.1.1.1.",
+    currentScheme: null,
     getNonMatchingSchemes: function (sampleHeading, candidateSchemes, level) {
       // giving a heading, possible numbering schemes, and the level index
       // (which can technically be recalculated based on configs, but oh well)
@@ -314,6 +317,7 @@
       setupElements(editor);
       setupCommands(editor);
       setupStyles(editor);
+      self.currentScheme = editor.config.autonumberDefaultScheme;
 
       editor.on("dataReady", function () {
         self.currentScheme = self.detectScheme();
