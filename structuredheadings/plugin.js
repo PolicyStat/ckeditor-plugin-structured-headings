@@ -29,10 +29,10 @@
     editor.config.styleNames =
       editor.config.styleNames || {
         "h1": "Super Heading", // unused placeholder since pstat doesn't use h1
-        "h2": "Part Heading",
-        "h3": "Subpart Heading",
+        "h2": "Heading",
+        "h3": "Subheading",
         "h4": "Section Heading",
-        "h5": "Subsection Heading",
+        "h5": "Section Subheading",
         "h6": "Subsection Subheading" // unused placeholder again
       };
     for (var e in editor.config.numberedElements) {
