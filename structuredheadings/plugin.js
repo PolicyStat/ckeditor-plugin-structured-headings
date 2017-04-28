@@ -25,6 +25,16 @@
       "h5",
       "h6"
     ];
+
+    editor.config.styleNames =
+      editor.config.styleNames || {
+        "h1": "Super Heading", // unused placeholder since pstat doesn't use h1
+        "h2": "Heading",
+        "h3": "Subheading",
+        "h4": "Section Heading",
+        "h5": "Section Subheading",
+        "h6": "Subsection Subheading" // unused placeholder again
+      };
     for (var e in editor.config.numberedElements) {
       elementStyles[editor.config.numberedElements[e]] =
         //eslint-disable-next-line new-cap
@@ -129,49 +139,52 @@
   var setupStyles = function (editor) {
 
     editor.config.autonumberBaseClass =
-    editor.config.autonumberBaseClass || "autonumber";
+      editor.config.autonumberBaseClass || "autonumber";
 
     editor.config.autonumberRestartClass =
-    editor.config.autonumberRestartClass || "autonumber-restart";
+      editor.config.autonumberRestartClass || "autonumber-restart";
 
     editor.config.autonumberLevelClasses =
-    editor.config.autonumberLevelClasses || [
-      "autonumber-0",
-      "autonumber-1",
-      "autonumber-2",
-      "autonumber-3",
-      "autonumber-4",
-      "autonumber-5"
-    ];
+      editor.config.autonumberLevelClasses || [
+        "autonumber-0",
+        "autonumber-1",
+        "autonumber-2",
+        "autonumber-3",
+        "autonumber-4",
+        "autonumber-5"
+      ];
 
     editor.config.autonumberStyles =
-    editor.config.autonumberStyles || {
-      "1.1.1.1.1.": null,
-      "1. a. i. a. i.": [
-        "autonumber-N",
-        "autonumber-a",
-        "autonumber-r",
-        "autonumber-a",
-        "autonumber-r",
-        "autonumber-a"
-      ],
-      "A. a. i. a. i. a.": [
-        "autonumber-A",
-        "autonumber-a",
-        "autonumber-r",
-        "autonumber-a",
-        "autonumber-r",
-        "autonumber-a"
-      ],
-      "I. A. 1. a. 1.": [
-        "autonumber-R",
-        "autonumber-A",
-        "autonumber-N",
-        "autonumber-a",
-        "autonumber-N",
-        "autonumber-a"
-      ]
-    };
+      editor.config.autonumberStyles || {
+        "1.1.1.1.1.": null,
+        "1. a. i. a. i.": [
+          "autonumber-N",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a"
+        ],
+        "A. a. i. a. i. a.": [
+          "autonumber-A",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a"
+        ],
+        "I. A. 1. a. 1.": [
+          "autonumber-R",
+          "autonumber-A",
+          "autonumber-N",
+          "autonumber-a",
+          "autonumber-N",
+          "autonumber-a"
+        ]
+      };
+
+    editor.config.autonumberDefaultScheme =
+      editor.config.autonumberDefaultScheme || "1.1.1.1.1.";
 
     editor.config.autonumberStylesWithClasses = Object.keys(
       editor.config.autonumberStyles
@@ -226,7 +239,7 @@
  */
 
   CKEDITOR.plugins.add("structuredheadings", {
-    currentScheme: "1.1.1.1.1.",
+    currentScheme: null,
     getNonMatchingSchemes: function (sampleHeading, candidateSchemes, level) {
       // giving a heading, possible numbering schemes, and the level index
       // (which can technically be recalculated based on configs, but oh well)
@@ -290,6 +303,9 @@
       }
 
     },
+    getStyleNameForHeadingTag: function (tagName) {
+      return this.editor.config.styleNames[tagName];
+    },
     init: function (editor) {
       var self = this;
       this.editor = editor;
@@ -301,6 +317,7 @@
       setupElements(editor);
       setupCommands(editor);
       setupStyles(editor);
+      self.currentScheme = editor.config.autonumberDefaultScheme;
 
       editor.on("dataReady", function () {
         self.currentScheme = self.detectScheme();
@@ -308,15 +325,15 @@
 
       //Format Dropdown
       editor.ui.addRichCombo("NumFormats", {
-        label: "Formats",
-        title: "Numbering Formats",
+        label: "Formatting",
+        title: "Text Formatting",
         toolbar: "styles,7",
         allowedContent: editor.config.numberedElements.concat(["pre", "p", "div"]),
 
         panel: {
           css: [ CKEDITOR.skin.getPath("editor") ].concat(editor.config.contentsCss),
           multiSelect: false,
-          attributes: { "aria-label": "Numbering Formats" }
+          attributes: { "aria-label": "Text Formatting" }
         },
 
         init: function () {
@@ -326,11 +343,14 @@
           this.add("p", elementStyles.p.buildPreview("Paragraph"), "Paragraph");
 
           for (var key in editor.config.numberedElements) {
-            this.add(editor.config.numberedElements[key],
-              elementStyles[ editor.config.numberedElements[key] ].buildPreview(
-                "Heading " + editor.config.numberedElements[key].slice(1)
+            var levelTag = editor.config.numberedElements[key];
+            var styleName = self.getStyleNameForHeadingTag(levelTag);
+            this.add(levelTag,
+              elementStyles[ levelTag ].buildPreview(
+                styleName
               ),
-              "Heading " + editor.config.numberedElements[key].slice(1));
+              styleName
+            );
           }
 
           this.add("pre", elementStyles.pre.buildPreview("Formatted Text"), "Preformatted Text");
@@ -355,9 +375,8 @@
             }
             this.setValue(
                 value,
-                "Heading " + editor.config.numberedElements[
-                    editor.config.numberedElements.indexOf(value)
-                ].slice(1));
+                self.getStyleNameForHeadingTag(value)
+            );
           }
 
           editor.fire("saveSnapshot");
@@ -368,17 +387,17 @@
             var currentTag = this.getValue();
             var elementPath = ev.data.path;
             var elementList = editor.config.numberedElements.concat(["pre", "p", "div"]);
-            for (var tag in elementList) {
-              if (elementStyles[elementList[tag]].checkActive(elementPath, editor)) {
-                if (elementList[tag] !== currentTag) {
-                  if (elementList[tag] === "p") {
-                    this.setValue(elementList[tag], "Paragraph");
-                  } else if (elementList[tag] === "pre") {
-                    this.setValue(elementList[tag], "Formatted Text");
+            for (var tagIndex in elementList) {
+              if (elementStyles[elementList[tagIndex]].checkActive(elementPath, editor)) {
+                if (elementList[tagIndex] !== currentTag) {
+                  if (elementList[tagIndex] === "p") {
+                    this.setValue(elementList[tagIndex], "Paragraph");
+                  } else if (elementList[tagIndex] === "pre") {
+                    this.setValue(elementList[tagIndex], "Formatted Text");
                   } else {
                     this.setValue(
-                        elementList[tag],
-                        "Heading " + editor.config.numberedElements[tag].slice(1)
+                        elementList[tagIndex],
+                        self.getStyleNameForHeadingTag(elementList[tagIndex])
                     );
                   }
                 }
@@ -394,15 +413,15 @@
 
       //Style Dropdown
       editor.ui.addRichCombo("NumStyles", {
-        label: "Styling",
-        title: "Styling",
+        label: "Numbering",
+        title: "Numbering",
         toolbar: "styles,8",
         allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*)",
 
         panel: {
           css: [ CKEDITOR.skin.getPath("editor") ].concat(editor.config.contentsCss),
           multiSelect: false,
-          attributes: { "aria-label": "Styling" }
+          attributes: { "aria-label": "Numbering" }
         },
 
         init: function () {
@@ -411,8 +430,8 @@
           }
 
           this.startGroup("Only for Headings");
-          this.add("clear", "Clear Styling", "Clear Styling");
-          this.add("restart", "Restart Styling", "Restart Styling");
+          this.add("clear", "Clear Numbering", "Clear Numbering");
+          this.add("restart", "Restart Numbering", "Restart Numbering");
         },
 
         onClick: function (value) {
