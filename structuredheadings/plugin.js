@@ -139,52 +139,52 @@
   var setupStyles = function (editor) {
 
     editor.config.autonumberBaseClass =
-    editor.config.autonumberBaseClass || "autonumber";
+      editor.config.autonumberBaseClass || "autonumber";
 
     editor.config.autonumberRestartClass =
-    editor.config.autonumberRestartClass || "autonumber-restart";
+      editor.config.autonumberRestartClass || "autonumber-restart";
 
     editor.config.autonumberLevelClasses =
-    editor.config.autonumberLevelClasses || [
-      "autonumber-0",
-      "autonumber-1",
-      "autonumber-2",
-      "autonumber-3",
-      "autonumber-4",
-      "autonumber-5"
-    ];
+      editor.config.autonumberLevelClasses || [
+        "autonumber-0",
+        "autonumber-1",
+        "autonumber-2",
+        "autonumber-3",
+        "autonumber-4",
+        "autonumber-5"
+      ];
 
     editor.config.autonumberStyles =
-    editor.config.autonumberStyles || {
-      "1.1.1.1.1.": null,
-      "1. a. i. a. i.": [
-        "autonumber-N",
-        "autonumber-a",
-        "autonumber-r",
-        "autonumber-a",
-        "autonumber-r",
-        "autonumber-a"
-      ],
-      "A. a. i. a. i. a.": [
-        "autonumber-A",
-        "autonumber-a",
-        "autonumber-r",
-        "autonumber-a",
-        "autonumber-r",
-        "autonumber-a"
-      ],
-      "I. A. 1. a. 1.": [
-        "autonumber-R",
-        "autonumber-A",
-        "autonumber-N",
-        "autonumber-a",
-        "autonumber-N",
-        "autonumber-a"
-      ]
-    };
+      editor.config.autonumberStyles || {
+        "1.1.1.1.1.": null,
+        "1. a. i. a. i.": [
+          "autonumber-N",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a"
+        ],
+        "A. a. i. a. i. a.": [
+          "autonumber-A",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a",
+          "autonumber-r",
+          "autonumber-a"
+        ],
+        "I. A. 1. a. 1.": [
+          "autonumber-R",
+          "autonumber-A",
+          "autonumber-N",
+          "autonumber-a",
+          "autonumber-N",
+          "autonumber-a"
+        ]
+      };
 
     editor.config.autonumberDefaultScheme =
-    editor.config.autonumberDefaultScheme || "1.1.1.1.1.";
+      editor.config.autonumberDefaultScheme || "1.1.1.1.1.";
 
     editor.config.autonumberStylesWithClasses = Object.keys(
       editor.config.autonumberStyles
