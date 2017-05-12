@@ -34,8 +34,19 @@
           "<h1 class=\"autonumber autonumber-0\">^Heading</h1>", updatedContent,
           "Header Decreased"
             );
-    }
+    },
 
+    "do not accidentally blow up existing numbering style": function () {
+      this.editorBot.setHtmlWithSelection("<h1 autonumber autonumber-0 autonumber-N>^Heading</h1>");
+      this.editorBot.execCommand("restartNumbering");
+      var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
+
+      assert.areSame(
+        "<h1 class=\"autonumber autonumber-0 autonumber-N autonumber-restart\">^Heading</h1>",
+        updatedContent,
+        "Header Numbered and Restarted"
+      );
+    }
 
   });
 })();
