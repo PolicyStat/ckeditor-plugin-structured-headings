@@ -42,7 +42,7 @@
       var updatedContent = bender.tools.getHtmlWithSelection(this.editorBot.editor);
 
       assert.areSame(
-        "<h1 class=\"autonumber autonumber-0 autonumber-N autonumber-restart\">^Heading</h1>",
+        "<h1 class=\"autonumber autonumber-N autonumber-0 autonumber-restart\">^Heading</h1>",
         updatedContent,
         "Header Numbered and Restarted"
       );
