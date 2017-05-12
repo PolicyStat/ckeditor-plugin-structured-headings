@@ -667,6 +667,8 @@
           var element = editor.elementPath().block;
 
           if (!element.hasClass(editor.config.autonumberRestartClass)) {
+            cssUtils.setNumbering(editor, element);
+            cssUtils.setLevel(editor, element);
             element.addClass(editor.config.autonumberRestartClass);
           } else {
             element.removeClass(editor.config.autonumberRestartClass);
