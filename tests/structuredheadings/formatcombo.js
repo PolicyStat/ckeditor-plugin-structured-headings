@@ -37,6 +37,23 @@
         );
       });
     },
+
+    "if no headings in document, a range of new headings is autonumbered": function () {
+      var bot = this.editorBot;
+      bot.setHtmlWithSelection("<p>[foo</p><p>bar]</p>");
+
+      bot.combo(comboName, function (combo) {
+        // click h2
+        combo.onClick("h2");
+        // the new h2 has autonumbering set, since no prior heading exists
+        assert.areSame(
+            "<h2 class=\"autonumber autonumber-1\">[foo</h2>" +
+            "<h2 class=\"autonumber autonumber-1\">bar]</h2>",
+            bot.htmlWithSelection(),
+            "applied h2 block autonumberstyle"
+        );
+      });
+    },
     // eslint-disable-next-line max-len
     "when creating next level heading, the autonumbering and numbering scheme css of the next level is used": function () {
       var bot = this.editorBot;
