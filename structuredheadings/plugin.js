@@ -369,9 +369,10 @@
             this.setValue(value, "Formatted Text");
           } else {
             if (!previousHeading || isNumbered(editor, previousHeading)) {
-              cssUtils.setNumbering(editor, block);
-              cssUtils.setLevel(editor, block);
-              editor.execCommand("reapplyStyle", self.currentScheme);
+              // we reuse command logic, but don't want to modify the snap
+              editor.fire("lockSnapshot", { dontUpdate: true });
+              editor.execCommand("applyHeadingPreset", self.currentScheme);
+              editor.fire("unlockSnapshot");
             }
             this.setValue(
                 value,
