@@ -670,7 +670,6 @@
             cssUtils.setNumbering(editor, element);
             cssUtils.setLevel(editor, element);
             element.addClass(editor.config.autonumberRestartClass);
-            setStyle(editor, element);
           } else {
             element.removeClass(editor.config.autonumberRestartClass);
           }
