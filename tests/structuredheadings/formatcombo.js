@@ -304,6 +304,11 @@
           "undid the p"
         );
       });
+    },
+    "div filter not erroneously added": function() {
+      // recall we don't have "div" in allowedForTest
+      var editor = this.editorBot.editor;
+      assert.isFalse(editor.filter.check("div"));
     }
 
   });
