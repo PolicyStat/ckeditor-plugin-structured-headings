@@ -306,6 +306,20 @@
     getStyleNameForHeadingTag: function (tagName) {
       return this.editor.config.styleNames[tagName];
     },
+    getFormatElements: function (editor) {
+      // always allow pre
+      var elementNames = ["pre"];
+
+      if (editor.filter.check("p")) {
+        elementNames.push("p");
+      }
+
+      if (editor.filter.check("div")) {
+        elementNames.push("div");
+      }
+
+      return elementNames;
+    },
     init: function (editor) {
       var self = this;
       this.editor = editor;
@@ -324,11 +338,12 @@
       });
 
       //Format Dropdown
+
       editor.ui.addRichCombo("NumFormats", {
         label: "Formatting",
         title: "Text Formatting",
         toolbar: "styles,7",
-        allowedContent: editor.config.numberedElements.concat(["pre", "p", "div"]),
+        allowedContent: editor.config.numberedElements.concat(self.getFormatElements(editor)),
 
         panel: {
           css: [ CKEDITOR.skin.getPath("editor") ].concat(editor.config.contentsCss),
