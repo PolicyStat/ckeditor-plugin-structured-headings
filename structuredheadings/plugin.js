@@ -310,11 +310,11 @@
       // always allow pre
       var elementNames = ["pre"];
 
-      if (editor.filter.check("p")) {
+      if (editor.filter.check("p", true, true)) {
         elementNames.push("p");
       }
 
-      if (editor.filter.check("div")) {
+      if (editor.filter.check("div", true, true)) {
         elementNames.push("div");
       }
 
