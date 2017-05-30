@@ -521,21 +521,11 @@
  */
 
   CKEDITOR.plugins.structuredheadings = {
-    getHeadingsInSelection: function (editor, selection) {
-      // forget Firefox multirange for now
-      var range = selection.getRanges()[0];
-      if (range.collapsed) {
-        var block = CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor);
-        if (editor.config.numberedElements.indexOf(block.getName()) !== -1) {
-          return [block];
-        }
-        // we were in a collapsed selection, but it isn't a heading
+    getHeadingIteratorForRange: function (editor, range) {
+      var iterator = range.createIterator();
+      iterator.enforceRealBlocks = true;
 
-        return null;
-      }
-
-      var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap
-      walker.evaluator = function isHeading(node) {
+      var isHeading = function (node) {
         if (node.type !== CKEDITOR.NODE_ELEMENT) {
           return false;
         }
@@ -546,15 +536,15 @@
         return false;
       };
 
-      var headings = [];
-      var current = walker.next();
-
-      while (current) {
-        headings.push(current);
-        current = walker.next();
+     var filteredIterator = function () {
+      var nextParagraph = iterator.getNextParagraph();
+      while (nextParagraph && !isHeading(nextParagraph)) {
+        nextParagraph = iterator.getNextParagraph();
       }
+      return nextParagraph;
+     };
 
-      return headings;
+     return filteredIterator;
     },
     clearAllInSelection: function (editor) {
       var selection = editor.getSelection();
