@@ -723,10 +723,11 @@
 
         exec: function (editor, value) {
           var selection = editor.getSelection();
-          var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
+          var range = selection.getRanges()[0];
+          var headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForRange(
                 editor,
-                selection
-              );
+                range
+          );
           var func;
 
           if (value === "clear") {
@@ -735,15 +736,24 @@
             func = this.setAutonumberClassesForHeading.bind(this, editor, value);
 
              // prep the html for the collapsed, not in a heading case
-            if (headings === null) {
-              // put the new heading into the headings array
-              headings = this.handleCollapsedSelection(editor);
+            if (headingIterator === null) {
+              // handle the collapsed selection by matching
+              this.handleCollapsedSelection(editor);
+              // then get a new selection
+              selection = editor.getSelection();
+              range = selection.getRanges()[0];
+              headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForRange(
+                editor,
+                range
+              );
             }
           }
 
-          if (headings) {
-            for (var i = 0; i < headings.length; i++) {
-              func(headings[i]);
+          if (headingIterator) {
+            var heading = headingIterator();
+            while (heading) {
+              func(heading);
+              heading = headingIterator();
             }
           }
 
