@@ -521,6 +521,15 @@
  */
 
   CKEDITOR.plugins.structuredheadings = {
+    getHeadingIteratorForSelection: function (editor) {
+      var selection = editor.getSelection();
+      var range = selection.getRanges()[0];
+      var headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForRange(
+            editor,
+            range
+      );
+      return headingIterator;
+    },
     getHeadingIteratorForRange: function (editor, range) {
       var iterator = range.createIterator();
       iterator.enforceRealBlocks = true;
@@ -722,13 +731,11 @@
         },
 
         exec: function (editor, value) {
-          var selection = editor.getSelection();
-          var range = selection.getRanges()[0];
-          var headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForRange(
-                editor,
-                range
+          var headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForSelection(
+            editor
           );
           var func;
+          var heading = headingIterator();
 
           if (value === "clear") {
             func = this.clearAutonumberClassesForHeading.bind(this, editor);
@@ -736,25 +743,20 @@
             func = this.setAutonumberClassesForHeading.bind(this, editor, value);
 
              // prep the html for the collapsed, not in a heading case
-            if (headingIterator === null) {
-              // handle the collapsed selection by matching
+            if (heading === null) {
+              // handle the collapsed selection by matching and converting to heading
               this.handleCollapsedSelection(editor);
-              // then get a new selection
-              selection = editor.getSelection();
-              range = selection.getRanges()[0];
-              headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForRange(
-                editor,
-                range
+              // then get a new iterator
+              headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForSelection(
+                editor
               );
+              heading = headingIterator();
             }
           }
 
-          if (headingIterator) {
-            var heading = headingIterator();
-            while (heading) {
-              func(heading);
-              heading = headingIterator();
-            }
+          while (heading) {
+            func(heading);
+            heading = headingIterator();
           }
 
           editor.fire("lockSnapshot");
