@@ -21,7 +21,7 @@
       editor.plugins.structuredheadings.currentScheme = "1.1.1.1.1.";
     },
 
-    "applies headings correctly when paragraph is followed by another paragraph, and triple clicked": function () {
+    "two paragraphs, one triple clicked and made a heading": function () {
       var bot = this.editorBot;
       bot.editor.plugins.structuredheadings.currentScheme = "1. a. i. a. i.";
       bot.setHtmlWithSelection("<p>[foo</p><p>]bar</p>");
