@@ -729,8 +729,7 @@
 
           return [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
         },
-
-        exec: function (editor, value) {
+        exec: function (editor, value) { // eslint-disable-line max-statements
           var headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForSelection(
             editor
           );
