@@ -18,11 +18,12 @@
 
     tearDown: function () {
       var editor = this.editorBot.editor;
-      editor.plugins.structuredheadings.currentScheme = "1. a. i. a. i.";
+      editor.plugins.structuredheadings.currentScheme = "1.1.1.1.1.";
     },
 
     "applies headings correctly when paragraph is followed by another paragraph, and triple clicked": function () {
       var bot = this.editorBot;
+      bot.editor.plugins.structuredheadings.currentScheme = "1. a. i. a. i.";
       bot.setHtmlWithSelection("<p>[foo</p><p>]bar</p>");
 
       bot.combo(comboName, function (combo) {
@@ -30,8 +31,8 @@
         combo.onClick("h2");
         // the new h2 has autonumbering set, since no prior heading exists
         assert.areSame(
-          "<h2 class=\"autonumber autonumber-a autonumber-1\">foo</h2>" +
-          "<h2 class=\"autonumber autonumber-a autonumber-1\">bar</h2>",
+          "<h2 class=\"autonumber autonumber-1 autonumber-a\">foo</h2>" +
+          "<h2 class=\"autonumber autonumber-1 autonumber-a\">bar</h2>",
           bot.getData(),
           "applied h2 and remains autonumbered"
         );
