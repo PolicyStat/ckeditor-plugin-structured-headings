@@ -733,13 +733,13 @@
           var headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForSelection(
             editor
           );
-          var func;
+          var clearOrNumberHeading;
           var heading = headingIterator();
 
           if (value === "clear") {
-            func = this.clearAutonumberClassesForHeading.bind(this, editor);
+            clearOrNumberHeading = this.clearAutonumberClassesForHeading.bind(this, editor);
           } else {
-            func = this.setAutonumberClassesForHeading.bind(this, editor, value);
+            clearOrNumberHeading = this.setAutonumberClassesForHeading.bind(this, editor, value);
 
              // prep the html for the collapsed, not in a heading case
             if (heading === null) {
@@ -754,7 +754,7 @@
           }
 
           while (heading) {
-            func(heading);
+            clearOrNumberHeading(heading);
             heading = headingIterator();
           }
 
