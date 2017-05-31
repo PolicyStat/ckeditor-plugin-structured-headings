@@ -545,7 +545,7 @@
         return false;
       };
 
-     var filteredIterator = function () {
+     var nextHeadingOrNull = function () {
       var nextParagraph = iterator.getNextParagraph();
       while (nextParagraph && !isHeading(nextParagraph)) {
         nextParagraph = iterator.getNextParagraph();
@@ -553,7 +553,7 @@
       return nextParagraph;
      };
 
-     return filteredIterator;
+     return nextHeadingOrNull;
     },
     clearAllInSelection: function (editor) {
       var selection = editor.getSelection();
