@@ -730,7 +730,7 @@
           return [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
         },
         exec: function (editor, value) { // eslint-disable-line max-statements
-          // eslint-disable-next-line max-statements max-len
+          // eslint-disable-next-line max-len
           var getNextHeading = CKEDITOR.plugins.structuredheadings.getNextHeadingForSelectionWithIterator(
             editor
           );
@@ -747,7 +747,7 @@
               // handle the collapsed selection by matching and converting to heading
               this.handleCollapsedSelection(editor);
               // then get a new iterator
-              // eslint-disable-next-line max-statements max-len
+              // eslint-disable-next-line max-len
               getNextHeading = CKEDITOR.plugins.structuredheadings.getNextHeadingForSelectionWithIterator(
                 editor
               );
