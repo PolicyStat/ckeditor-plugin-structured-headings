@@ -521,21 +521,20 @@
  */
 
   CKEDITOR.plugins.structuredheadings = {
-    getHeadingsInSelection: function (editor, selection) {
-      // forget Firefox multirange for now
+    getNextHeadingForSelectionWithIterator: function (editor) {
+      var selection = editor.getSelection();
       var range = selection.getRanges()[0];
-      if (range.collapsed) {
-        var block = CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor);
-        if (editor.config.numberedElements.indexOf(block.getName()) !== -1) {
-          return [block];
-        }
-        // we were in a collapsed selection, but it isn't a heading
+      var headingIterator = CKEDITOR.plugins.structuredheadings.getNextHeadingForRangeWithIterator(
+            editor,
+            range
+      );
+      return headingIterator;
+    },
+    getNextHeadingForRangeWithIterator: function (editor, range) {
+      var iterator = range.createIterator();
+      iterator.enforceRealBlocks = true;
 
-        return null;
-      }
-
-      var walker = new CKEDITOR.dom.walker(range); // eslint-disable-line new-cap
-      walker.evaluator = function isHeading(node) {
+      var isHeading = function (node) {
         if (node.type !== CKEDITOR.NODE_ELEMENT) {
           return false;
         }
@@ -546,15 +545,15 @@
         return false;
       };
 
-      var headings = [];
-      var current = walker.next();
-
-      while (current) {
-        headings.push(current);
-        current = walker.next();
+     var nextHeadingOrNull = function () {
+      var nextParagraph = iterator.getNextParagraph();
+      while (nextParagraph && !isHeading(nextParagraph)) {
+        nextParagraph = iterator.getNextParagraph();
       }
+      return nextParagraph;
+     };
 
-      return headings;
+     return nextHeadingOrNull;
     },
     clearAllInSelection: function (editor) {
       var selection = editor.getSelection();
@@ -730,31 +729,35 @@
 
           return [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
         },
-
-        exec: function (editor, value) {
-          var selection = editor.getSelection();
-          var headings = CKEDITOR.plugins.structuredheadings.getHeadingsInSelection(
-                editor,
-                selection
-              );
-          var func;
+        exec: function (editor, value) { // eslint-disable-line max-statements
+          // eslint-disable-next-line max-len
+          var getNextHeading = CKEDITOR.plugins.structuredheadings.getNextHeadingForSelectionWithIterator(
+            editor
+          );
+          var clearOrNumberHeading;
+          var heading = getNextHeading();
 
           if (value === "clear") {
-            func = this.clearAutonumberClassesForHeading.bind(this, editor);
+            clearOrNumberHeading = this.clearAutonumberClassesForHeading.bind(this, editor);
           } else {
-            func = this.setAutonumberClassesForHeading.bind(this, editor, value);
+            clearOrNumberHeading = this.setAutonumberClassesForHeading.bind(this, editor, value);
 
              // prep the html for the collapsed, not in a heading case
-            if (headings === null) {
-              // put the new heading into the headings array
-              headings = this.handleCollapsedSelection(editor);
+            if (heading === null) {
+              // handle the collapsed selection by matching and converting to heading
+              this.handleCollapsedSelection(editor);
+              // then get a new iterator
+              // eslint-disable-next-line max-len
+              getNextHeading = CKEDITOR.plugins.structuredheadings.getNextHeadingForSelectionWithIterator(
+                editor
+              );
+              heading = getNextHeading();
             }
           }
 
-          if (headings) {
-            for (var i = 0; i < headings.length; i++) {
-              func(headings[i]);
-            }
+          while (heading) {
+            clearOrNumberHeading(heading);
+            heading = getNextHeading();
           }
 
           editor.fire("lockSnapshot");
