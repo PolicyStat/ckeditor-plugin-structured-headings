@@ -521,16 +521,16 @@
  */
 
   CKEDITOR.plugins.structuredheadings = {
-    getHeadingIteratorForSelection: function (editor) {
+    getNextHeadingForSelectionWithIterator: function (editor) {
       var selection = editor.getSelection();
       var range = selection.getRanges()[0];
-      var headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForRange(
+      var headingIterator = CKEDITOR.plugins.structuredheadings.getNextHeadingForRangeWithIterator(
             editor,
             range
       );
       return headingIterator;
     },
-    getHeadingIteratorForRange: function (editor, range) {
+    getNextHeadingForRangeWithIterator: function (editor, range) {
       var iterator = range.createIterator();
       iterator.enforceRealBlocks = true;
 
@@ -730,11 +730,11 @@
           return [CKEDITOR.plugins.structuredheadings.getCurrentBlockFromPath(editor)];
         },
         exec: function (editor, value) { // eslint-disable-line max-statements
-          var headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForSelection(
+          var getNextHeading = CKEDITOR.plugins.structuredheadings.getNextHeadingForSelectionWithIterator(
             editor
           );
           var clearOrNumberHeading;
-          var heading = headingIterator();
+          var heading = getNextHeading();
 
           if (value === "clear") {
             clearOrNumberHeading = this.clearAutonumberClassesForHeading.bind(this, editor);
@@ -746,16 +746,16 @@
               // handle the collapsed selection by matching and converting to heading
               this.handleCollapsedSelection(editor);
               // then get a new iterator
-              headingIterator = CKEDITOR.plugins.structuredheadings.getHeadingIteratorForSelection(
+              getNextHeading = CKEDITOR.plugins.structuredheadings.getNextHeadingForSelectionWithIterator(
                 editor
               );
-              heading = headingIterator();
+              heading = getNextHeading();
             }
           }
 
           while (heading) {
             clearOrNumberHeading(heading);
-            heading = headingIterator();
+            heading = getNextHeading();
           }
 
           editor.fire("lockSnapshot");
