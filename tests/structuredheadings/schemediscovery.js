@@ -190,6 +190,6 @@
       // cannot use bot.setHtmlWithSelection, it does not fire dataReady events
       editor.setData(startingHtml);
       wait();
-    },
+    }
   });
 })();
