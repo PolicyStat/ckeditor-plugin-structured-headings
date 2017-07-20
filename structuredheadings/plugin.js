@@ -432,8 +432,7 @@
         label: "Numbering",
         title: "Numbering",
         toolbar: "styles,8",
-        allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*);" +
-          "ol(list-upper-alpha,list-lower-alpha,list-decimal,list-upper-roman,list-lower-roman)",
+        allowedContent: "h1(*); h2(*); h3(*); h4(*); h5(*); h6(*)",
 
         panel: {
           css: [ CKEDITOR.skin.getPath("editor") ].concat(editor.config.contentsCss),
