@@ -8,7 +8,7 @@
 (function () {
 
   bender.editor = {
-    allowedForTests: "h1; h2; h3; h4; h5; p"
+    allowedForTests: "h1; h2; h3; h4; h5; p; ol; li;"
   };
 
   var VERY_LAST_PRIORITY = 9999;
@@ -158,7 +158,38 @@
       );
       wait();
 
-    }
+    },
 
+    "autodetect will not destroy existing list customizations in non-autonumber doc": function() {
+      var bot = this.editorBot;
+      var editor = bot.editor;
+      var startingHtml = "<h1>foo</h1>" +
+        "<h2>foo</h2>" +
+        "<ol class=\"list-decimal\">" +
+        "<li>baz</li>" +
+        "</ol>";
+
+      var listener = editor.on(
+        "dataReady",
+        function () {
+          listener.removeListener();
+          resume(function () {
+            assert.areEqual(
+              "1.1.1.1.1.",
+              getCurrentScheme(editor)
+            );
+
+            assert.areEqual(startingHtml, bot.getData());
+          });
+        },
+        null,
+        null,
+        VERY_LAST_PRIORITY
+      );
+
+      // cannot use bot.setHtmlWithSelection, it does not fire dataReady events
+      editor.setData(startingHtml);
+      wait();
+    }
   });
 })();
