@@ -197,31 +197,31 @@
 
     editor.config.listClassMappings = editor.config.listClassMappings || {
       //eslint-disable-next-line new-cap
-      "A": new CKEDITOR.style({
+      "List: A. B. C.": new CKEDITOR.style({
         name: "List: A. B. C.",
         element: "ol",
         attributes: {"class": "list-upper-alpha"}
       }),
       //eslint-disable-next-line new-cap
-      "a": new CKEDITOR.style({
+      "List: a. b. c.": new CKEDITOR.style({
         name: "List: a. b. c.",
         element: "ol",
         attributes: {"class": "list-lower-alpha"}
       }),
       //eslint-disable-next-line new-cap
-      "1": new CKEDITOR.style({
+      "List: 1. 2. 3.": new CKEDITOR.style({
         name: "List: 1. 2. 3.",
         element: "ol",
         attributes: {"class": "list-decimal"}
       }),
       //eslint-disable-next-line new-cap
-      "I": new CKEDITOR.style({
+      "List: I. II. III.": new CKEDITOR.style({
         name: "List: I. II. III.",
         element: "ol",
         attributes: {"class": "list-upper-roman"}
       }),
       //eslint-disable-next-line new-cap
-      "i": new CKEDITOR.style({
+      "List: i. ii. iii.": new CKEDITOR.style({
         name: "List: i. ii. iii.",
         element: "ol",
         attributes: {"class": "list-lower-roman"}
