@@ -63,6 +63,18 @@
       };
       this.assertComboBeforeAfter(opts);
     },
+    "applying a simple style": function() {
+      var comboItem = "1.";
+      var beforeHtmlWithSelection = "<ol><li>^foo</li></ol>";
+      var afterHtmlWithSelection = "<ol class=\"list-decimal\"><li>^foo</li></ol>";
+      // wtb destructuring
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+      this.assertComboBeforeAfter(opts);
+    },
     // TODO tests below are now irrelevant, refactor later
     "apply 1aiai style to a ordered list tag": function () {
       var comboItem = "1. a. i. a. i.";
