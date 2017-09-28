@@ -497,8 +497,9 @@
         },
 
         onOpen: function () {
+          this.showAll();
           if (isInList(editor, editor.elementPath())) {
-            this.showAll();
+            this.hideGroup("Table of Contents");
           } else {
             this.hideGroup("List Styles");
           }
