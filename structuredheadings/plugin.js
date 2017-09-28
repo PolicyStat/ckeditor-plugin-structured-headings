@@ -497,7 +497,12 @@
         },
 
         onOpen: function () {
-          this.showAll();
+          if (isInList(editor, editor.elementPath())) {
+            this.showAll();
+          } else {
+            this.hideGroup("List Styles");
+          }
+
         }
       });
 
