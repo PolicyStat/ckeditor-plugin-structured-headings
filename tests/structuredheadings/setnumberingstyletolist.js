@@ -50,6 +50,20 @@
         );
       });
     },
+    "applying the complex styles does a no-op": function() {
+      // this item would normally be hidden, but let's just make sure that it doesn't do anything
+      var comboItem = "1. a. i. a. i.";
+      var beforeHtmlWithSelection = "<ol><li>^foo</li></ol>";
+      var afterHtmlWithSelection = beforeHtmlWithSelection;
+      // wtb destructuring
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+      this.assertComboBeforeAfter(opts);
+    },
+    // TODO tests below are now irrelevant, refactor later
     "apply 1aiai style to a ordered list tag": function () {
       var comboItem = "1. a. i. a. i.";
       var beforeHtmlWithSelection = "<ol><li>^foo</li></ol>";
