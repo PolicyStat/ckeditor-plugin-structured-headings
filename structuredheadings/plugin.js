@@ -442,8 +442,15 @@
         },
 
         init: function () {
+          this.startGroup("Table of Contents");
           for (var style in editor.config.autonumberStyles) {
             this.add(style, style, style);
+          }
+
+          this.startGroup("List Styles");
+
+          for (var listStyle in editor.config.listClassMappings) {
+            this.add(listStyle, listStyle, listStyle);
           }
 
           this.startGroup("Only for Headings");
@@ -478,6 +485,9 @@
                 self.currentScheme,
                 self.currentScheme
               );
+            } else if (block && isInList(editor, elementPath)) {
+              // find the current list
+
             } else {
               this.setValue("");
             }
