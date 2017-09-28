@@ -64,10 +64,9 @@
       this.assertComboBeforeAfter(opts);
     },
     "applying a simple style": function() {
-      var comboItem = "1.";
+      var comboItem = "List: A. B. C.";
       var beforeHtmlWithSelection = "<ol><li>^foo</li></ol>";
-      var afterHtmlWithSelection = "<ol class=\"list-decimal\"><li>^foo</li></ol>";
-      // wtb destructuring
+      var afterHtmlWithSelection = "<ol class=\"list-upper-alpha\"><li>^foo</li></ol>";
       var opts = {
         comboItem: comboItem,
         beforeHtml: beforeHtmlWithSelection,
