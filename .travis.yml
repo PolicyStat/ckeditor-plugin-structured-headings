@@ -3,7 +3,7 @@ dist: precise
 addons:
   firefox: "31.0"
 node_js:
-  - "4.2.1"
+  - "4.8.0"
 before_script:
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
