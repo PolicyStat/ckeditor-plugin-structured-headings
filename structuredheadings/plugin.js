@@ -507,6 +507,7 @@
 
         onOpen: function () {
           var path = editor.elementPath();
+          var value = this.getValue();
           this.showAll();
 
           if (path && isInList(editor, path)) {
@@ -514,7 +515,9 @@
           } else {
             this.hideGroup("List Styles");
           }
-          this.mark(this.getValue());
+          if (value) {
+            this.mark(value);
+          }
         }
       });
 
