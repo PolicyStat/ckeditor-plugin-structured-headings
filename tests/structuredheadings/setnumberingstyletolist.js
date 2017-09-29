@@ -23,6 +23,7 @@
       var initialHtmlWithSelection = opts.beforeHtml || "";
       var comboItem = opts.comboItem || "1. a. i. a. i.";
       var htmlGetter;
+      var shouldUndo = opts.skipUndo || false;
 
       if (opts.ignoreSelection) {
         htmlGetter = bot.getData.bind(bot);
@@ -41,7 +42,9 @@
           "applied " + comboItem + " to html"
         );
 
-        bot.execCommand("undo");
+        if (!skipUndo) {
+          bot.execCommand("undo");
+        }
 
         assert.areSame(
             initialHtmlWithSelection,
@@ -59,7 +62,8 @@
       var opts = {
         comboItem: comboItem,
         beforeHtml: beforeHtmlWithSelection,
-        afterHtml: afterHtmlWithSelection
+        afterHtml: afterHtmlWithSelection,
+        skipUndo: true // because this is a no-op, undoing it actually undoes the adding of HTML
       };
       this.assertComboBeforeAfter(opts);
     },
