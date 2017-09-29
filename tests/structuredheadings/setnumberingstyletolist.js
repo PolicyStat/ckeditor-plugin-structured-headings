@@ -77,6 +77,18 @@
         afterHtml: afterHtmlWithSelection
       };
       this.assertComboBeforeAfter(opts);
+    },
+    "unapplying a simple style": function() {
+      var comboItem = "List: A. B. C.";
+      var beforeHtmlWithSelection = "<ol class=\"list-upper-alpha\"><li>^foo</li></ol>";
+      var afterHtmlWithSelection = "<ol><li>^foo</li></ol>";
+
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+      this.assertComboBeforeAfter(opts);
     }
   });
 })();
