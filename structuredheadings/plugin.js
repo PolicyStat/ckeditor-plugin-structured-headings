@@ -367,6 +367,7 @@
         },
 
         onClick: function (value) {
+          editor.focus();
           editor.fire("saveSnapshot");
           editor.applyStyle(elementStyles[ value ]);
           var block = editor.elementPath().block;
@@ -454,6 +455,7 @@
         },
 
         onClick: function (value) {
+          editor.focus();
           editor.fire("saveSnapshot");
 
           if (isInList(editor, editor.elementPath())) {
