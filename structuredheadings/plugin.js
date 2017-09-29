@@ -481,6 +481,7 @@
           editor.on("selectionChange", function (ev) {
             var elementPath = ev.data.path;
             var block = elementPath.block;
+            var style;
 
             if (block && isNumbered(editor, block)) {
               this.setValue(
@@ -488,8 +489,14 @@
                 self.currentScheme
               );
             } else if (block && isInList(editor, elementPath)) {
-              // find the current list
-
+              // find the current list type
+              for (var value in editor.config.listClassMappings) {
+                style = editor.config.listClassMappings[value];
+                if (style.checkActive(elementPath, editor)) {
+                  this.setValue(value);
+                  continue;
+                }
+              }
             } else {
               this.setValue("");
             }
@@ -507,7 +514,7 @@
           } else {
             this.hideGroup("List Styles");
           }
-
+          this.mark(this.getValue());
         }
       });
 
