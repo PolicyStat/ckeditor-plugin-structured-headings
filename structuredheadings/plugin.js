@@ -365,8 +365,7 @@
 
           this.add("pre", elementStyles.pre.buildPreview("Formatted Text"), "Preformatted Text");
         },
-
-        onClick: function (value) {
+        onClick: function (value) { // eslint-disable-line max-statements
           editor.focus();
           editor.fire("saveSnapshot");
           editor.applyStyle(elementStyles[ value ]);
