@@ -794,7 +794,7 @@
       applyListStyle: {
         exec: function(editor, style) {
           var elementPath = editor.elementPath();
-					editor[style.checkActive(elementPath, editor) ? "removeStyle" : "applyStyle"](style);
+          editor[style.checkActive(elementPath, editor) ? "removeStyle" : "applyStyle"](style);
         }
       }
     }
