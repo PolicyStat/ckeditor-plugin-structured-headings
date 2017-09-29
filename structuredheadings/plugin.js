@@ -127,8 +127,8 @@
       CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
     editor.addCommand("reapplyStyle",
       CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
-    editor.addCommand("applyPresetToList",
-      CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
+    editor.addCommand("applyListStyle",
+      CKEDITOR.plugins.structuredheadings.commands.applyListStyle);
     editor.addCommand("applyHeadingPreset",
       CKEDITOR.plugins.structuredheadings.commands.applyHeadingPreset);
   };
@@ -460,7 +460,7 @@
 
           if (isInList(editor, editor.elementPath())) {
             if (value in editor.config.listClassMappings) {
-              editor.execCommand("applyListStyle", value);
+              editor.execCommand("applyListStyle", editor.config.listClassMappings[value]);
               this.mark(value);
             }
           } else if (value === "restart") {
@@ -791,8 +791,15 @@
         }
       },
       applyListStyle: {
-        exec: function(editor, listStyle) {
-
+        exec: function(editor, style) {
+          var elementPath = editor.elementPath();
+          // When more then one style from the same group is active ( which is not ok ),
+					// remove all other styles from this group and apply selected style.
+					if (style.group && style.removeStylesFromSameGroup(editor)) {
+						editor.applyStyle(style);
+					} else {
+						editor[style.checkActive(elementPath, editor) ? "removeStyle" : "applyStyle"](style);
+					}
         }
       },
       applyPresetToList: {
