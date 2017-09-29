@@ -53,12 +53,25 @@
         );
       });
     },
-    "applying the complex styles does a no-op": function() {
+    "applying the heading styles does a no-op": function() {
       // this item would normally be hidden, but let's just make sure that it doesn't do anything
       var comboItem = "1. a. i. a. i.";
       var beforeHtmlWithSelection = "<ol><li>^foo</li></ol>";
       var afterHtmlWithSelection = beforeHtmlWithSelection;
       // wtb destructuring
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection,
+        skipUndo: true // because this is a no-op, undoing it actually undoes the adding of HTML
+      };
+      this.assertComboBeforeAfter(opts);
+    },
+    "applying the heading clear does a no-op": function() {
+      // this item would normally be hidden, but let's just make sure that it doesn't do anything
+      var comboItem = "Clear Numbering";
+      var beforeHtmlWithSelection = "<ol class=\"list-upper-alpha\"><li>^foo</li></ol>";
+      var afterHtmlWithSelection = beforeHtmlWithSelection;
       var opts = {
         comboItem: comboItem,
         beforeHtml: beforeHtmlWithSelection,

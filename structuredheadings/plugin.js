@@ -469,6 +469,8 @@
               editor.execCommand("applyHeadingPreset", value);
               self.currentScheme = value;
               this.mark(value);
+          } else if (value === "clear") {
+            editor.execCommand("applyHeadingPreset", value);
           }
 
           if (value !== "restart" && value !== "clear") {
