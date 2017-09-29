@@ -795,55 +795,6 @@
           var elementPath = editor.elementPath();
 					editor[style.checkActive(elementPath, editor) ? "removeStyle" : "applyStyle"](style);
         }
-      },
-      applyPresetToList: {
-        getPresetStyleArray: function (editor, presetName) {
-          if (presetName === "clear") {
-            return [editor.config.listClassMappings.clear];
-          }
-
-          var styleArray = presetName.split(".").map(function (str) {
-            var key = str.trim()[0];
-            return editor.config.listClassMappings[key];
-          }).filter(function (str) {
-            if (str) {
-              // also purge empty strings, undef, etc. because I am lazy
-              return true;
-            } else {
-              return false;
-            }
-          });
-
-          return styleArray;
-        },
-        numListsInPath: function (elementPath) {
-          var elements = elementPath.elements;
-          var ols = elements.filter(function isOl(el) {
-            return el.getName() === "ol";
-          });
-          // root would have been included, ignore it
-          return ols.length - 1;
-        },
-        exec: function (editor, presetName) {
-          var styleArray = this.getPresetStyleArray(editor, presetName);
-          // get the root ordered list
-          var path = editor.elementPath();
-          // we need to start fromTop or else this returns the leaf rather than root
-          var rootList = path.contains("ol", false, true);
-
-          styleArray[0].applyToObject(rootList, editor);
-
-          var childrenLists = rootList.find("ol");
-
-          for (var i = 0; i < childrenLists.count(); i++) {
-            var childList = childrenLists.getItem(i);
-            // eslint-disable-next-line new-cap
-            var elementPath = new CKEDITOR.dom.elementPath(childList, rootList);
-            var numLists = this.numListsInPath(elementPath);
-            var styleIndex = numLists % styleArray.length;
-            styleArray[styleIndex].applyToObject(childList, editor);
-          }
-        }
       }
     }
   };
