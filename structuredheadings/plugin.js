@@ -225,11 +225,6 @@
         name: "List: i. ii. iii.",
         element: "ol",
         attributes: {"class": "list-lower-roman"}
-      }),
-      //eslint-disable-next-line new-cap
-      "clear": new CKEDITOR.style({
-        element: "ol",
-        attributes: {"class": ""}
       })
     };
   };
