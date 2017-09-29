@@ -462,12 +462,16 @@
           editor.fire("saveSnapshot");
 
           if (isInList(editor, editor.elementPath())) {
-            editor.execCommand("applyPresetToList", value);
+            if (value in editor.config.listClassMappings) {
+              editor.execCommand("applyListStyle", value);
+              this.mark(value);
+            }
           } else if (value === "restart") {
             editor.execCommand("restartNumbering");
-          } else {
-            editor.execCommand("applyHeadingPreset", value);
-            self.currentScheme = value;
+          } else if (value in editor.config.autonumberStyles) {
+              editor.execCommand("applyHeadingPreset", value);
+              self.currentScheme = value;
+              this.mark(value);
           }
 
           if (value !== "restart" && value !== "clear") {
@@ -787,6 +791,11 @@
           // apply the correct bulletstyle for all numbered headings
           editor.execCommand("reapplyStyle", value);
           editor.fire("unlockSnapshot");
+        }
+      },
+      applyListStyle: {
+        exec: function(editor, listStyle) {
+
         }
       },
       applyPresetToList: {
