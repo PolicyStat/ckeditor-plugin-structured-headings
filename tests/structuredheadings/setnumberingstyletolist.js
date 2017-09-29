@@ -132,6 +132,6 @@
         afterHtml: afterHtmlWithSelection
       };
       this.assertComboBeforeAfter(opts);
-    },
+    }
   });
 })();
