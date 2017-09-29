@@ -57,6 +57,13 @@
     return list && limit.contains(list);
   };
 
+  var isInOrderedList = function (editor, path) {
+    var list = path.contains(["ol"], 1);
+    var limit = path.blockLimit || path.root;
+
+    return list && limit.contains(list);
+  };
+
   var cssUtils = {
     clearNumbering: function (editor, element) {
       if (element.hasClass(editor.config.autonumberBaseClass)) {
@@ -512,6 +519,10 @@
 
           if (path && isInList(editor, path)) {
             this.hideGroup("Table of Contents");
+            // kinda annoying that we have to operate by hiding
+            if (!isInOrderedList(editor, path)) {
+              this.hideGroup("List Styles");
+            }
           } else {
             this.hideGroup("List Styles");
           }
