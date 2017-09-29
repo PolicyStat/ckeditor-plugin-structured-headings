@@ -101,5 +101,16 @@
       };
       this.assertComboBeforeAfter(opts);
     },
+    "unapplying a simple style one layer deep": function() {
+      var comboItem = "List: A. B. C.";
+      var beforeHtmlWithSelection = "<ol class=\"list-decimal\"><li>foo<ol class=\"list-upper-alpha\"><li>^bar</li></ol></li></ol>";
+      var afterHtmlWithSelection = "<ol class=\"list-decimal\"><li>foo<ol><li>^bar</li></ol></li></ol>";
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+      this.assertComboBeforeAfter(opts);
+    },
   });
 })();
