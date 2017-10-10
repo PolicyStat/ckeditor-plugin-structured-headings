@@ -814,6 +814,7 @@
       },
       applyListStyle: {
         exec: function(editor, style) {
+          // see https://github.com/ckeditor/ckeditor-dev/blob/major/plugins/stylescombo/plugin.js#L110
           var elementPath = editor.elementPath();
           editor[style.checkActive(elementPath, editor) ? "removeStyle" : "applyStyle"](style);
         }
