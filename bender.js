@@ -27,6 +27,7 @@
 /* eslint-enable max-len */
 
 var config = {
+  captureTimeout: 20000,
   applications: {
     ckeditor: {
       path: "ckeditor/",

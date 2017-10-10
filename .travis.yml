@@ -1,4 +1,10 @@
 language: node_js
+dist: precise
+cache: yarn
+sudo: required
+addons:
+  firefox: "31.0"
+  phantomjs: "1.9.8"
 node_js:
   - "4.2.1"
 before_script:

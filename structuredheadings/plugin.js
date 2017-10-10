@@ -57,6 +57,13 @@
     return list && limit.contains(list);
   };
 
+  var isInOrderedList = function (editor, path) {
+    var list = path.contains(["ol"], 1);
+    var limit = path.blockLimit || path.root;
+
+    return list && limit.contains(list);
+  };
+
   var cssUtils = {
     clearNumbering: function (editor, element) {
       if (element.hasClass(editor.config.autonumberBaseClass)) {
@@ -127,8 +134,8 @@
       CKEDITOR.plugins.structuredheadings.commands.restartNumbering);
     editor.addCommand("reapplyStyle",
       CKEDITOR.plugins.structuredheadings.commands.reapplyStyle);
-    editor.addCommand("applyPresetToList",
-      CKEDITOR.plugins.structuredheadings.commands.applyPresetToList);
+    editor.addCommand("applyListStyle",
+      CKEDITOR.plugins.structuredheadings.commands.applyListStyle);
     editor.addCommand("applyHeadingPreset",
       CKEDITOR.plugins.structuredheadings.commands.applyHeadingPreset);
   };
@@ -197,39 +204,34 @@
 
     editor.config.listClassMappings = editor.config.listClassMappings || {
       //eslint-disable-next-line new-cap
-      "A": new CKEDITOR.style({
+      "List: A. B. C.": new CKEDITOR.style({
         name: "List: A. B. C.",
         element: "ol",
         attributes: {"class": "list-upper-alpha"}
       }),
       //eslint-disable-next-line new-cap
-      "a": new CKEDITOR.style({
+      "List: a. b. c.": new CKEDITOR.style({
         name: "List: a. b. c.",
         element: "ol",
         attributes: {"class": "list-lower-alpha"}
       }),
       //eslint-disable-next-line new-cap
-      "1": new CKEDITOR.style({
+      "List: 1. 2. 3.": new CKEDITOR.style({
         name: "List: 1. 2. 3.",
         element: "ol",
         attributes: {"class": "list-decimal"}
       }),
       //eslint-disable-next-line new-cap
-      "I": new CKEDITOR.style({
+      "List: I. II. III.": new CKEDITOR.style({
         name: "List: I. II. III.",
         element: "ol",
         attributes: {"class": "list-upper-roman"}
       }),
       //eslint-disable-next-line new-cap
-      "i": new CKEDITOR.style({
+      "List: i. ii. iii.": new CKEDITOR.style({
         name: "List: i. ii. iii.",
         element: "ol",
         attributes: {"class": "list-lower-roman"}
-      }),
-      //eslint-disable-next-line new-cap
-      "clear": new CKEDITOR.style({
-        element: "ol",
-        attributes: {"class": ""}
       })
     };
   };
@@ -370,8 +372,8 @@
 
           this.add("pre", elementStyles.pre.buildPreview("Formatted Text"), "Preformatted Text");
         },
-
-        onClick: function (value) {
+        onClick: function (value) { // eslint-disable-line max-statements
+          editor.focus();
           editor.fire("saveSnapshot");
           editor.applyStyle(elementStyles[ value ]);
           var block = editor.elementPath().block;
@@ -442,8 +444,15 @@
         },
 
         init: function () {
+          this.startGroup("Table of Contents");
           for (var style in editor.config.autonumberStyles) {
             this.add(style, style, style);
+          }
+
+          this.startGroup("List Styles");
+
+          for (var listStyle in editor.config.listClassMappings) {
+            this.add(listStyle, listStyle, listStyle);
           }
 
           this.startGroup("Only for Headings");
@@ -452,15 +461,22 @@
         },
 
         onClick: function (value) {
+          editor.focus();
           editor.fire("saveSnapshot");
 
           if (isInList(editor, editor.elementPath())) {
-            editor.execCommand("applyPresetToList", value);
+            if (value in editor.config.listClassMappings) {
+              editor.execCommand("applyListStyle", editor.config.listClassMappings[value]);
+              this.mark(value);
+            }
           } else if (value === "restart") {
             editor.execCommand("restartNumbering");
-          } else {
+          } else if (value in editor.config.autonumberStyles) {
+              editor.execCommand("applyHeadingPreset", value);
+              self.currentScheme = value;
+              this.mark(value);
+          } else if (value === "clear") {
             editor.execCommand("applyHeadingPreset", value);
-            self.currentScheme = value;
           }
 
           if (value !== "restart" && value !== "clear") {
@@ -472,12 +488,22 @@
           editor.on("selectionChange", function (ev) {
             var elementPath = ev.data.path;
             var block = elementPath.block;
+            var style;
 
             if (block && isNumbered(editor, block)) {
               this.setValue(
                 self.currentScheme,
                 self.currentScheme
               );
+            } else if (block && isInList(editor, elementPath)) {
+              // find the current list type
+              for (var value in editor.config.listClassMappings) {
+                style = editor.config.listClassMappings[value];
+                if (style.checkActive(elementPath, editor)) {
+                  this.setValue(value);
+                  continue;
+                }
+              }
             } else {
               this.setValue("");
             }
@@ -487,7 +513,22 @@
         },
 
         onOpen: function () {
+          var path = editor.elementPath();
+          var value = this.getValue();
           this.showAll();
+
+          if (path && isInList(editor, path)) {
+            this.hideGroup("Table of Contents");
+            // kinda annoying that we have to operate by hiding
+            if (!isInOrderedList(editor, path)) {
+              this.hideGroup("List Styles");
+            }
+          } else {
+            this.hideGroup("List Styles");
+          }
+          if (value) {
+            this.mark(value);
+          }
         }
       });
 
@@ -771,53 +812,10 @@
           editor.fire("unlockSnapshot");
         }
       },
-      applyPresetToList: {
-        getPresetStyleArray: function (editor, presetName) {
-          if (presetName === "clear") {
-            return [editor.config.listClassMappings.clear];
-          }
-
-          var styleArray = presetName.split(".").map(function (str) {
-            var key = str.trim()[0];
-            return editor.config.listClassMappings[key];
-          }).filter(function (str) {
-            if (str) {
-              // also purge empty strings, undef, etc. because I am lazy
-              return true;
-            } else {
-              return false;
-            }
-          });
-
-          return styleArray;
-        },
-        numListsInPath: function (elementPath) {
-          var elements = elementPath.elements;
-          var ols = elements.filter(function isOl(el) {
-            return el.getName() === "ol";
-          });
-          // root would have been included, ignore it
-          return ols.length - 1;
-        },
-        exec: function (editor, presetName) {
-          var styleArray = this.getPresetStyleArray(editor, presetName);
-          // get the root ordered list
-          var path = editor.elementPath();
-          // we need to start fromTop or else this returns the leaf rather than root
-          var rootList = path.contains("ol", false, true);
-
-          styleArray[0].applyToObject(rootList, editor);
-
-          var childrenLists = rootList.find("ol");
-
-          for (var i = 0; i < childrenLists.count(); i++) {
-            var childList = childrenLists.getItem(i);
-            // eslint-disable-next-line new-cap
-            var elementPath = new CKEDITOR.dom.elementPath(childList, rootList);
-            var numLists = this.numListsInPath(elementPath);
-            var styleIndex = numLists % styleArray.length;
-            styleArray[styleIndex].applyToObject(childList, editor);
-          }
+      applyListStyle: {
+        exec: function(editor, style) {
+          var elementPath = editor.elementPath();
+          editor[style.checkActive(elementPath, editor) ? "removeStyle" : "applyStyle"](style);
         }
       }
     }
