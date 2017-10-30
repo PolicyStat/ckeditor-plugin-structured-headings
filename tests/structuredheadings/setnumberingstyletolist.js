@@ -132,6 +132,33 @@
         afterHtml: afterHtmlWithSelection
       };
       this.assertComboBeforeAfter(opts);
+    },
+    "applying a simple style deeply": function() {
+      var comboItem = "List: A. B. C.";
+      var beforeHtmlWithSelection = "<ol class=\"list-upper-alpha\"><li>foo</li>" +
+        "<li><ol><li>^bar</li><ol></li></ol>";
+      var afterHtmlWithSelection = "<ol class=\"list-upper-alpha\"><li>foo</li>" +
+        "<li><ol class=\"list-upper-alpha\"><li>^bar</li><ol></li></ol>";
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+      this.assertComboBeforeAfter(opts);
+    },
+    "unapplying a simple style deeply": function() {
+      var comboItem = "List: A. B. C.";
+      var beforeHtmlWithSelection = "<ol class=\"list-upper-alpha\"><li>foo</li>" +
+        "<li><ol class=\"list-upper-alpha\"><li>^bar</li><ol></li></ol>";
+      var afterHtmlWithSelection = "<ol class=\"list-upper-alpha\"><li>foo</li>" +
+        "<li><ol><li>^bar</li><ol></li></ol>";
+
+      var opts = {
+        comboItem: comboItem,
+        beforeHtml: beforeHtmlWithSelection,
+        afterHtml: afterHtmlWithSelection
+      };
+      this.assertComboBeforeAfter(opts);
     }
   });
 })();
