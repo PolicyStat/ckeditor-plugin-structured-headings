@@ -813,9 +813,36 @@
         }
       },
       applyListStyle: {
+        getCutOffIndex: function (elements, tagNames) {
+          // given an array of elements and an array of tag names to stop on,
+          // returns the earliest index of any of the tag names, or -1
+          var minIndexes = {};
+          var cutOffIndexes = [];
+
+          for (var i = elements.length - 1; i >= 0; --i) {
+            minIndexes[elements[i].getName()] = i;
+          }
+
+          tagNames.forEach(function(tagName) {
+            if (minIndexes[tagName] !== undefined) {
+              cutOffIndexes.push(minIndexes[tagName]);
+            }
+          });
+
+          if (cutOffIndexes.length !== 0) {
+            return Math.min.apply(null, cutOffIndexes);
+          } else {
+            return -1;
+          }
+        },
         exec: function(editor, style) {
           // see https://github.com/ckeditor/ckeditor-dev/blob/major/plugins/stylescombo/plugin.js#L110
           var elementPath = editor.elementPath();
+          var cutoff = this.getCutOffIndex(elementPath.elements, ["ol", "ul"]);
+          if (cutoff !== -1) {
+            // trim the path to only the list item and parent.
+            elementPath.elements = elementPath.elements.slice(0, 1 + cutoff);
+          }
           editor[style.checkActive(elementPath, editor) ? "removeStyle" : "applyStyle"](style);
         }
       }
