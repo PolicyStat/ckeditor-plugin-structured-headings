@@ -269,6 +269,11 @@
       var headingLevels = editor.config.numberedElements;
       var disqualifiedSchemes = [];
 
+      // no headings, early exit
+      if (!editor.document.findOne("h1, h2, h3, h4, h5, h6")) {
+        return null;
+      }
+
       for (var i = 0; i < headingLevels.length; i++) {
         var autonumberedHeadingSelector = headingLevels[i] +
           "." +
