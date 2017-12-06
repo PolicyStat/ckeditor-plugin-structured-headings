@@ -46,6 +46,19 @@
       );
     },
 
+    "no headings defaults to null": function () {
+      var bot = this.editorBot;
+      var editor = bot.editor;
+      bot.setHtmlWithSelection(
+        "<p>foo</p><p>bar</p>"
+      );
+
+      assert.areEqual(
+        null,
+        detectScheme(editor)
+      );
+    },
+
     "invalid combos return numbered": function () {
       var bot = this.editorBot;
       var editor = bot.editor;
