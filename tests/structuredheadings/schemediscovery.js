@@ -32,7 +32,7 @@
       editor.plugins.structuredheadings.currentScheme = "1.1.1.1.1.";
     },
 
-    "default is numbered": function () {
+    "default is not numbered": function () {
       var bot = this.editorBot;
       var editor = bot.editor;
       bot.setHtmlWithSelection(
@@ -40,8 +40,23 @@
         "<h2 class=\"autonumber autonumber-1\">bar</h2>"
       );
 
+      // because this was mangled CSS, do non-numbered until otherwise
+      // explicitly chosen
       assert.areEqual(
-        "1.1.1.1.1.",
+        null,
+        detectScheme(editor)
+      );
+    },
+
+    "no headings defaults to null": function () {
+      var bot = this.editorBot;
+      var editor = bot.editor;
+      bot.setHtmlWithSelection(
+        "<p>foo</p><p>bar</p>"
+      );
+
+      assert.areEqual(
+        null,
         detectScheme(editor)
       );
     },

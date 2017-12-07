@@ -269,6 +269,11 @@
       var headingLevels = editor.config.numberedElements;
       var disqualifiedSchemes = [];
 
+      // no headings, early exit
+      if (!editor.editable().findOne("h1, h2, h3, h4, h5, h6")) {
+        return null;
+      }
+
       for (var i = 0; i < headingLevels.length; i++) {
         var autonumberedHeadingSelector = headingLevels[i] +
           "." +
@@ -276,7 +281,7 @@
 
         // it shouldn't matter which one we pick
         // so long as its autonumbered
-        var sampleHeading = editor.document.findOne(autonumberedHeadingSelector);
+        var sampleHeading = editor.editable().findOne(autonumberedHeadingSelector);
 
         // no headings at current level are autonumbered
         if (!sampleHeading) {
@@ -385,7 +390,7 @@
             CKEDITOR.plugins.structuredheadings.clearAllInSelection(editor);
             this.setValue(value, "Formatted Text");
           } else {
-            if (!previousHeading || isNumbered(editor, previousHeading)) {
+            if (self.currentScheme && (!previousHeading || isNumbered(editor, previousHeading))) {
               // we reuse command logic, but don't want to modify the snap
               editor.fire("lockSnapshot", { dontUpdate: true });
               editor.execCommand("applyHeadingPreset", self.currentScheme);
@@ -740,7 +745,7 @@
        */
       reapplyStyle: {
         exec: function (editor, style) {
-          var nodeList = editor.document.find("." + editor.config.autonumberBaseClass);
+          var nodeList = editor.editable().find("." + editor.config.autonumberBaseClass);
 
           for (var i = 0; i < nodeList.count(); i++) {
             var node = nodeList.getItem(i);
