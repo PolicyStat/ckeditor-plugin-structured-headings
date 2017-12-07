@@ -390,7 +390,7 @@
             CKEDITOR.plugins.structuredheadings.clearAllInSelection(editor);
             this.setValue(value, "Formatted Text");
           } else {
-            if (!previousHeading || isNumbered(editor, previousHeading)) {
+            if (self.currentScheme && (!previousHeading || isNumbered(editor, previousHeading))) {
               // we reuse command logic, but don't want to modify the snap
               editor.fire("lockSnapshot", { dontUpdate: true });
               editor.execCommand("applyHeadingPreset", self.currentScheme);

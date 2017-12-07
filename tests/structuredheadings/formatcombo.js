@@ -22,18 +22,17 @@
       editor.plugins.structuredheadings.currentScheme = "1.1.1.1.1.";
     },
 
-    "if no headings in document, the new heading is autonumbered": function () {
+    "if no headings in document, the new heading is not autonumbered": function () {
       var bot = this.editorBot;
       bot.setHtmlWithSelection("<p>^foo</p>");
 
       bot.combo(comboName, function (combo) {
         // click h2
         combo.onClick("h2");
-        // the new h2 has autonumbering set, since no prior heading exists
         assert.areSame(
-            "<h2 class=\"autonumber autonumber-1\">^foo</h2>",
+            "<h2>^foo</h2>",
             bot.htmlWithSelection(),
-            "applied h2 block autonumberstyle"
+            "applied h2 with no autonumbering"
         );
       });
     },
