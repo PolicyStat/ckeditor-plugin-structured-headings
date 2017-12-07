@@ -270,7 +270,7 @@
       var disqualifiedSchemes = [];
 
       // no headings, early exit
-      if (!editor.document.findOne("h1, h2, h3, h4, h5, h6")) {
+      if (!editor.editable().findOne("h1, h2, h3, h4, h5, h6")) {
         return null;
       }
 
@@ -281,7 +281,7 @@
 
         // it shouldn't matter which one we pick
         // so long as its autonumbered
-        var sampleHeading = editor.document.findOne(autonumberedHeadingSelector);
+        var sampleHeading = editor.editable().findOne(autonumberedHeadingSelector);
 
         // no headings at current level are autonumbered
         if (!sampleHeading) {
@@ -745,7 +745,7 @@
        */
       reapplyStyle: {
         exec: function (editor, style) {
-          var nodeList = editor.document.find("." + editor.config.autonumberBaseClass);
+          var nodeList = editor.editable().find("." + editor.config.autonumberBaseClass);
 
           for (var i = 0; i < nodeList.count(); i++) {
             var node = nodeList.getItem(i);
