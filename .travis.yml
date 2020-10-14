@@ -18,6 +18,6 @@ before_script:
 
 env:
   - NPM_CMD=test
-  - NPM_CMD=lint
+
 script:
   - "npm run-script $NPM_CMD"
