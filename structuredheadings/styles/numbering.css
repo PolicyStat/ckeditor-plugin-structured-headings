@@ -179,8 +179,13 @@ body {
     content: counter(autonumber-5, lower-roman) ". ";
 }
 
-/* styles for List: 1. 1. 1. */
-
+/*
+styles for List: 1. 1. 1.
+inspired by these:
+https://stackoverflow.com/questions/4098195/can-ordered-list-produce-result-that-looks-like-1-1-1-2-1-3-instead-of-just-1
+https://stackoverflow.com/questions/10405945/html-ordered-list-1-1-1-2-nested-counters-and-scope-not-working/10405962
+http://jsfiddle.net/qGCUk/4/
+*/
 .document .document_body ol.list-decimal-point, .document .document_body ol.list-decimal-point ol {
     counter-reset: item
 }
