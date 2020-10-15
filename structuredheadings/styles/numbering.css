@@ -186,12 +186,12 @@ https://stackoverflow.com/questions/4098195/can-ordered-list-produce-result-that
 https://stackoverflow.com/questions/10405945/html-ordered-list-1-1-1-2-nested-counters-and-scope-not-working/10405962
 http://jsfiddle.net/qGCUk/4/
 */
-.document .document_body ol.list-decimal-point, .document .document_body ol.list-decimal-point ol {
+ol.list-decimal-point, ol.list-decimal-point ol {
     counter-reset: item
 }
-.document .document_body ol.list-decimal-point li {
+ol.list-decimal-point li {
     display: block
 }
-.document .document_body ol.list-decimal-point li:before {
+ol.list-decimal-point li:before {
     content: counters(item, ".") " "; counter-increment: item
 }

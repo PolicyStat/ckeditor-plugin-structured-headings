@@ -5,10 +5,10 @@ services:
 
 addons:
   firefox: "latest"
-  chrome: stable
+  chrome: "stable"
 
 node_js:
-  - 10
+  - "10"
 
 before_script:
   - 'export DISPLAY=:99.0'
