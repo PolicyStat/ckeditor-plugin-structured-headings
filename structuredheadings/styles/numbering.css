@@ -178,3 +178,15 @@ body {
 .autonumber.autonumber-5.autonumber-r:before {
     content: counter(autonumber-5, lower-roman) ". ";
 }
+
+/* styles for List: 1. 1. 1. */
+
+.document .document_body ol.list-decimal-point, .document .document_body ol.list-decimal-point ol {
+    counter-reset: item
+}
+.document .document_body ol.list-decimal-point li {
+    display: block
+}
+.document .document_body ol.list-decimal-point li:before {
+    content: counters(item, ".") " "; counter-increment: item
+}
