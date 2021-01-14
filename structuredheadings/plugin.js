@@ -490,7 +490,7 @@
             editor.execCommand("applyHeadingPreset", value);
           }
 
-          if (value !== "restart" && value !== "clear") {structuredheadings/plugin.js
+          if (value !== "restart" && value !== "clear") {
             this.setValue(value);
           }
         },
