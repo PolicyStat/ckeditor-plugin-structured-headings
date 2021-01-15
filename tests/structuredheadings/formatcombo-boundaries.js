@@ -26,7 +26,7 @@
       bot.editor.plugins.structuredheadings.currentScheme = "1. a. i. a. i.";
       // this is the odd selection that occurs if you
       // triple click "foo"
-      bot.setHtmlWithSelection("<p>[foo</p><p>]bar</p>");
+      bot.setHtmlWithSelection("[<p>foo</p><p>bar</p>]");
 
 
       bot.combo(comboName, function (combo) {
