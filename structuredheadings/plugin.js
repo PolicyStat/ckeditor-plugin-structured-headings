@@ -222,12 +222,6 @@
         attributes: {"class": "list-decimal"}
       }),
       //eslint-disable-next-line new-cap
-      "List: 1. 1. 1.": new CKEDITOR.style({
-        name: "List: 1. 1. 1.",
-        element: "ol",
-        attributes: {"class": "list-decimal-point"}
-      }),
-      //eslint-disable-next-line new-cap
       "List: I. II. III.": new CKEDITOR.style({
         name: "List: I. II. III.",
         element: "ol",
